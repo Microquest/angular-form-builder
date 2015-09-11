@@ -2,10 +2,10 @@
   "name": "angular-form-builder",
   "version": "1.16.2",
   "description": "AngularJS form builder.",
-  "homepage": "https://github.com/jkerrwilson/angular-form-builder",
+  "homepage": "https://github.com/Microquest/angular-form-builder",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jkerrwilson/angular-form-builder.git"
+    "url": "git://github.com/Microquest/angular-form-builder.git"
   },
   "keywords": [
     "AngularJS",

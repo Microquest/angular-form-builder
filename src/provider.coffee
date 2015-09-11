@@ -271,5 +271,8 @@ angular.module 'builder.provider', []
         insertFormObject: @insertFormObject
         removeFormObject: @removeFormObject
         updateFormObjectIndex: @updateFormObjectIndex
+        loadFromArray: @loadFromArray
+        resetProviderData: @resetProviderData
+        clearForm: @clearForm
     ]
     return
