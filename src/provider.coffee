@@ -199,55 +199,29 @@ angular.module 'builder.provider', []
         ###
         forms = @forms
         reindexFormObject = @reindexFormObject
-        $modal = $injector.get '$modal'
-        id = @forms[name][index].id
-        elems = []
-        for key,value of @forms
-          value.forEach (elem) ->
-            if elem.id isnt id and elem.logic and elem.logic.component and angular.fromJson(elem.logic.component).id is id
-              elems.push elem
-        if elems.length >= 0
-          modal = $modal.open({
-            template: """
-            <div class="inmodal" auto-focus>
-              <form ng-submit="$close()">
-                <div class="modal-header">
-                  <a type="button" class="close x-close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
-                  <i class="fa fa-question modal-icon"></i>
-                  <h4 class="modal-title">Delete Component?</h4>
-                </div>
-                <div class="modal-body text-center">
-                  <p class="no-margins" ng-if="!elems.length"><b>Warning!</b><br>You are about to delete this element!</p>
-                  <p class="no-margins" ng-if="elems.length"><b>Warning!</b><br>The following elements are logically dependent on the element you are trying to delete!</p>
-                  <ul class="list-group m-t-md" ng-if="elems.length">
-                    <li class="list-group-item list-group-item-warning" ng-repeat="elem in elems">
-                      {{elem.label}}
-                    </li>
-                  </ul>
-                </div>
-                <div class="modal-footer">
-                  <btn class="btn btn-default pull-left" ng-click="$dismiss()">Cancel</btn>
-                  <input type="submit" class="btn btn-primary pull-right" value="OK"></input>
-                </div>
-              </form>
-            </div>
-            """,
-            controller: ($scope, $modal) ->
-              $scope.elems = elems
-            elems: () ->
-              elems
-            })
+        formObjects = forms[name]
+        formObjects.splice index, 1
+        reindexFormObject name
 
-          modal.result.then () ->
-            elems.forEach (elem) ->
-              elem.logic = {action: 'Hide'}
-            formObjects = forms[name]
-            formObjects.splice index, 1
-            reindexFormObject name
-        else
-          formObjects = forms[name]
-          formObjects.splice index, 1
-          reindexFormObject name
+    @clearForm = (name) =>
+        ###
+        Clears all components from the form object.
+        @param name: The form name.
+        ###
+        forms = @forms
+        formObjects = @forms[name]
+        formObjects.splice 0, formObjects.length
+        @reindexFormObject name
+
+    @loadFromArray = (name, formObjects) =>
+        ###
+        Adds a list of objects to the specified form
+        @param name: The form name.
+        @param formObjects: The form compoennts to add.
+        ###
+        forms = @forms
+        for component of formObjects
+          addFormObject(name, component)
 
     @updateFormObjectIndex = (name, oldIndex, newIndex) =>
         ###
@@ -261,6 +235,23 @@ angular.module 'builder.provider', []
         formObject = formObjects.splice(oldIndex, 1)[0]
         formObjects.splice newIndex, 0, formObject
         @reindexFormObject name
+
+    @resetProviderData = () =>
+        ###
+        Clears the data of this provider. Resets as if forst load.
+        ###
+        $injector = null
+        $http = null
+        $templateCache = null
+        @config =
+            popoverPlacement: 'right'
+            max_id: 0
+        @components = {}
+        @groups = []
+        @broadcastChannel =
+            updateInput: '$updateInput'
+        @skipLogicComponents = []
+        @forms = {}
 
     # ----------------------------------------
     # $get
