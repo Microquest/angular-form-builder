@@ -1,19 +1,19 @@
 {
   "name": "angular-form-builder",
-  "version": "1.16.1",
+  "version": "1.16.2",
   "description": "AngularJS form builder.",
-  "homepage": "https://github.com/luminos-software/angular-form-builder",
+  "homepage": "https://github.com/jkerrwilson/angular-form-builder",
   "repository": {
     "type": "git",
-    "url": "git://github.com/luminos-software/angular-form-builder.git"
+    "url": "git://github.com/jkerrwilson/angular-form-builder.git"
   },
   "keywords": [
     "AngularJS",
     "CoffeeScript"
   ],
   "author": {
-    "name": "Luminos Software",
-    "url": "https://github.com/luminos-software"
+    "name": "Microquest",
+    "url": "https://github.com/Microquest"
   },
   "contributors": [
     {
