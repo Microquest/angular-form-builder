@@ -1874,47 +1874,43 @@
         @param name: The form name.
         @param index: The form object index.
          */
-        var $modal, elems, formObjects, forms, id, key, modal, reindexFormObject, value, _ref;
+        var formObjects, forms, reindexFormObject;
         forms = _this.forms;
         reindexFormObject = _this.reindexFormObject;
-        $modal = $injector.get('$modal');
-        id = _this.forms[name][index].id;
-        elems = [];
-        _ref = _this.forms;
-        for (key in _ref) {
-          value = _ref[key];
-          value.forEach(function(elem) {
-            if (elem.id !== id && elem.logic && elem.logic.component && angular.fromJson(elem.logic.component).id === id) {
-              return elems.push(elem);
-            }
-          });
+        formObjects = forms[name];
+        formObjects.splice(index, 1);
+        return reindexFormObject(name);
+      };
+    })(this);
+    this.clearForm = (function(_this) {
+      return function(name) {
+
+        /*
+        Clears all components from the form object.
+        @param name: The form name.
+         */
+        var formObjects, forms;
+        forms = _this.forms;
+        formObjects = _this.forms[name];
+        formObjects.splice(0, formObjects.length);
+        return _this.reindexFormObject(name);
+      };
+    })(this);
+    this.loadFromArray = (function(_this) {
+      return function(name, formObjects) {
+
+        /*
+        Adds a list of objects to the specified form
+        @param name: The form name.
+        @param formObjects: The form compoennts to add.
+         */
+        var component, forms, _results;
+        forms = _this.forms;
+        _results = [];
+        for (component in formObjects) {
+          _results.push(addFormObject(name, component));
         }
-        if (elems.length >= 0) {
-          modal = $modal.open({
-            template: "<div class=\"inmodal\" auto-focus>\n  <form ng-submit=\"$close()\">\n    <div class=\"modal-header\">\n      <a type=\"button\" class=\"close x-close\" ng-click=\"$dismiss()\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></a>\n      <i class=\"fa fa-question modal-icon\"></i>\n      <h4 class=\"modal-title\">Delete Component?</h4>\n    </div>\n    <div class=\"modal-body text-center\">\n      <p class=\"no-margins\" ng-if=\"!elems.length\"><b>Warning!</b><br>You are about to delete this element!</p>\n      <p class=\"no-margins\" ng-if=\"elems.length\"><b>Warning!</b><br>The following elements are logically dependent on the element you are trying to delete!</p>\n      <ul class=\"list-group m-t-md\" ng-if=\"elems.length\">\n        <li class=\"list-group-item list-group-item-warning\" ng-repeat=\"elem in elems\">\n          {{elem.label}}\n        </li>\n      </ul>\n    </div>\n    <div class=\"modal-footer\">\n      <btn class=\"btn btn-default pull-left\" ng-click=\"$dismiss()\">Cancel</btn>\n      <input type=\"submit\" class=\"btn btn-primary pull-right\" value=\"OK\"></input>\n    </div>\n  </form>\n</div>",
-            controller: function($scope, $modal) {
-              return $scope.elems = elems;
-            },
-            elems: function() {
-              return elems;
-            }
-          });
-          return modal.result.then(function() {
-            var formObjects;
-            elems.forEach(function(elem) {
-              return elem.logic = {
-                action: 'Hide'
-              };
-            });
-            formObjects = forms[name];
-            formObjects.splice(index, 1);
-            return reindexFormObject(name);
-          });
-        } else {
-          formObjects = forms[name];
-          formObjects.splice(index, 1);
-          return reindexFormObject(name);
-        }
+        return _results;
       };
     })(this);
     this.updateFormObjectIndex = (function(_this) {
@@ -1934,6 +1930,28 @@
         formObject = formObjects.splice(oldIndex, 1)[0];
         formObjects.splice(newIndex, 0, formObject);
         return _this.reindexFormObject(name);
+      };
+    })(this);
+    this.resetProviderData = (function(_this) {
+      return function() {
+
+        /*
+        Clears the data of this provider. Resets as if forst load.
+         */
+        $injector = null;
+        $http = null;
+        $templateCache = null;
+        _this.config = {
+          popoverPlacement: 'right',
+          max_id: 0
+        };
+        _this.components = {};
+        _this.groups = [];
+        _this.broadcastChannel = {
+          updateInput: '$updateInput'
+        };
+        _this.skipLogicComponents = [];
+        return _this.forms = {};
       };
     })(this);
     this.$get = [
@@ -1956,7 +1974,10 @@
             addFormObject: _this.addFormObject,
             insertFormObject: _this.insertFormObject,
             removeFormObject: _this.removeFormObject,
-            updateFormObjectIndex: _this.updateFormObjectIndex
+            updateFormObjectIndex: _this.updateFormObjectIndex,
+            loadFromArray: _this.loadFromArray,
+            resetProviderData: _this.resetProviderData,
+            clearForm: _this.clearForm
           };
         };
       })(this)
