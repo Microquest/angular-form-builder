@@ -21,6 +21,153 @@ angular.module 'builder.controller', ['builder.provider']
 # ----------------------------------------
 .controller 'fbFormObjectEditableController', ['$scope', '$injector', ($scope, $injector) ->
     $builder = $injector.get '$builder'
+    $modal = $injector.get '$modal'
+    $filter = $injector.get '$filter'
+
+    $scope.newRule = {}
+
+    if !$scope.formObject.pointRules?
+      $scope.formObject.pointRules = []
+
+    switch $scope.formObject.component
+      when 'checkbox'
+        $scope.predicates = [{value: 'in',label: 'In'  },{value: 'not_in',label: 'Not in'},{value: 'null',label: 'Empty'},{value: 'not_null', label: 'Not Empty'}]
+      when 'radio'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'matches',label: 'Matches'},{value: 'does_not_match',label: 'Does not match'},{value: 'contains',label: 'Contains'},{value: 'does_not_contain',label: 'Does not contain'},{value: 'lt',label: 'Less than'},{value: 'lteq',label: 'Less than or equal to'},{value: 'gt',label: 'Greater than'},{value: 'gteq',label: 'Greater than or equal to'}]
+      when 'select'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'matches',label: 'Matches'},{value: 'does_not_match',label: 'Does not match'},{value: 'contains',label: 'Contains'},{value: 'does_not_contain',label: 'Does not contain'},{value: 'lt',label: 'Less than'},{value: 'lteq',label: 'Less than or equal to'},{value: 'gt',label: 'Greater than'},{value: 'gteq',label: 'Greater than or equal to'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'product'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'email'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'matches',label: 'Matches'},{value: 'does_not_match',label: 'Does not match'},{value: 'contains',label: 'Contains'},{value: 'does_not_contain',label: 'Does not contain'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'area'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'matches',label: 'Matches'},{value: 'does_not_match',label: 'Does not match'},{value: 'contains',label: 'Contains'},{value: 'does_not_contain',label: 'Does not contain'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'phone'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'matches',label: 'Matches'},{value: 'does_not_match',label: 'Does not match'},{value: 'contains',label: 'Contains'},{value: 'does_not_contain',label: 'Does not contain'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'text'
+        $scope.predicates = [{value: 'eq',label: 'Equals'},{value: 'not_eq',label: 'Does not equal'},{value: 'matches',label: 'Matches'},{value: 'does_not_match',label: 'Does not match'},{value: 'contains',label: 'Contains'},{value: 'does_not_contain',label: 'Does not contain'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'},{value: 'lt',label: 'Less than'},{value: 'lteq',label: 'Less than or equal to'},{value: 'gt',label: 'Greater than'},{value: 'gteq',label: 'Greater than or equal to'}]
+      when 'date'
+        $scope.predicates = [{value: 'lt',label: 'Less than'},{value: 'lteq',label: 'Less than or equal to'},{value: 'gt',label: 'Greater than'},{value: 'gteq',label: 'Greater than or equal to'},{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'signature'
+        $scope.predicates = [{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'upload'
+        $scope.predicates = [{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'cpr'
+        $scope.predicates = [{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+      when 'address'
+        $scope.predicates = [{value: 'null',label: 'Empty'},{value: 'not_null',label: 'Not empty'}]
+
+    $scope.addRule = ->
+      if !$scope.newRule.predicate? or !$scope.newRule.points or (!$scope.newRule.value? and $scope.newRule.predicate isnt 'null' and $scope.newRule.predicate isnt 'not_null')
+          $scope.rulesErrorMessage = 'Please update all fields.'
+      else
+        $scope.rulesErrorMessage = ''
+        if (angular.isDate($scope.newRule.value))
+          $scope.newRule.value = $filter('date')($scope.newRule.value, 'dd-MM-yyyy')
+        $scope.formObject.pointRules.push $scope.newRule
+        $scope.newRule = {}
+
+    $scope.removeRule = (rule) ->
+      $scope.formObject.pointRules.splice($scope.formObject.pointRules.indexOf(rule),1)
+
+    if !$scope.formObject.logic?
+      $scope.formObject.logic = {
+        action: 'Hide'
+      }
+    else
+      if $scope.formObject.logic.component?
+        $scope.formObject.logic.component = angular.fromJson($scope.formObject.logic.component)
+
+    # initialize formObject id
+    if $scope.formObject.id is undefined
+      $scope.formObject.id = $builder.config.max_id
+      $builder.config.max_id = $builder.config.max_id + 1
+
+    $scope.actions = ['Hide', 'Show']
+
+    $scope.$watch 'formObject.logic.component', ->
+      if $scope.formObject.logic.component?
+        objectized = angular.fromJson($scope.formObject.logic.component)
+        switch objectized.component
+          when 'message'
+            $scope.comparatorChoices = []
+          when 'email'
+            $scope.comparatorChoices = []
+          when 'date'
+            $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to']
+          when 'text'
+            $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to']
+          when 'area'
+            $scope.comparatorChoices = ['Contains', 'Does not contain']
+          when 'checkbox'
+            $scope.comparatorChoices = ['Contains', 'Does not contain']
+          when 'radio'
+            $scope.comparatorChoices = ['Equal to', 'Not equal to']
+          when 'select'
+            $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain']
+          when 'upload'
+            $scope.comparatorChoices = []
+          when 'signature'
+            $scope.comparatorChoices = []
+          when 'address'
+            $scope.comparatorChoices = ['Contains', 'Does not contain']
+          when 'cpr'
+            $scope.comparatorChoices = ['Contains', 'Does not contain']
+          when 'graphic'
+            $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain']
+          when 'product'
+            $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain']
+
+    $scope.cancel = ->
+      $scope.modalInstance.dismiss('cancel')
+
+    $scope.save = (text) ->
+      $scope.placeholder = text
+      $scope.modalInstance.close()
+
+    $scope.openPoints = ($event) ->
+      $event.preventDefault()
+      $event.stopPropagation()
+      $scope.openedPoints = yes
+
+    $scope.resetLogic = () ->
+      $scope.formObject.logic = {
+        action: 'Hide'
+      }
+
+    $scope.openSummerNote = ->
+      $scope.summerNoteText = $scope.formObject.placeholder;
+      $scope.modalInstance = $modal.open({
+        template:   '<div class="modal-header">'+
+                        '<button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>'+
+                        '<h4 class="modal-title">Edit Rich Content</div>'+
+                    '</div>'+
+                    '<div class="modal-body no-padding">'+
+                        '<div summernote ng-model="summerNoteText"></div>' +
+                    '</div>'+
+                    '<div class="modal-footer">'+
+                        '<button class="btn btn-white pull-left" ng-click="cancel()">Cancel</button>' +
+                        '<button class="btn btn-primary pull-right" ng-click="save(summerNoteText)">Apply</button>'+
+                    '</div>',
+        scope: $scope
+      })
+
+    $scope.date = Date.now()
+
+    # if i can get the name of the current form
+    # then i can see the previous forms
+    # i can get previous elements from $builder.forms by their index
+    for form of $builder.forms
+
+      # comment this afterwards
+      inThisForm = $builder.forms[form].filter (item) ->
+        item.id is $scope.formObject.id
+
+      if inThisForm.length > 0
+        $scope.currentForm = form
+
+    # old canSee func, moved to inline
+    $scope.keys = Object.keys $builder.forms
 
     $scope.setupScope = (formObject) ->
         ###
@@ -34,13 +181,32 @@ angular.module 'builder.controller', ['builder.provider']
 
         $scope.optionsText = formObject.options.join '\n'
 
-        $scope.$watch '[label, description, placeholder, required, options, validation]', ->
+        $scope.$watch '[label, description, placeholder, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', ->
             formObject.label = $scope.label
             formObject.description = $scope.description
             formObject.placeholder = $scope.placeholder
             formObject.required = $scope.required
             formObject.options = $scope.options
+            formObject.multiple = $scope.multiple
             formObject.validation = $scope.validation
+            formObject.minLength = $scope.minLength
+            formObject.maxLength = $scope.maxLength
+            formObject.dateRangeStart = $scope.dateRangeStart
+            formObject.dateRangeEnd = $scope.dateRangeEnd
+            formObject.disableWeekends = $scope.disableWeekends
+            formObject.maxDate = $scope.maxDate
+            formObject.requireConfirmation = $scope.requireConfirmation
+            formObject.readOnly = $scope.readOnly
+            formObject.minRange = $scope.minRange
+            formObject.maxRange = $scope.maxRange
+            formObject.nextXDays = $scope.nextXDays
+            formObject.performCreditCheck = $scope.performCreditCheck
+            formObject.cprCountry = $scope.cprCountry
+            formObject.logic = $scope.logic
+            formObject.category = $scope.category
+            formObject.pointRules = $scope.pointRules
+            formObject.conversionType = $scope.conversionType
+
         , yes
 
         $scope.$watch 'optionsText', (text) ->
@@ -63,6 +229,24 @@ angular.module 'builder.controller', ['builder.provider']
                 required: $scope.required
                 optionsText: $scope.optionsText
                 validation: $scope.validation
+                multiple: $scope.multiple
+                minLength: $scope.minLength
+                maxLength: $scope.maxLength
+                dateRangeStart: $scope.dateRangeStart
+                dateRangeEnd: $scope.dateRangeEnd
+                disableWeekends: $scope.disableWeekends
+                maxDate: $scope.maxDate
+                requireConfirmation: $scope.requireConfirmation
+                readOnly: $scope.readOnly
+                minRange: $scope.minRange
+                maxRange: $scope.maxRange
+                nextXDays: $scope.nextXDays
+                performCreditCheck: $scope.performCreditCheck
+                cprCountry: $scope.cprCountry
+                logic: $scope.logic
+                category: $scope.category
+                pointRules: $scope.pointRules
+                conversionType: $scope.conversionType
         rollback: ->
             ###
             Rollback input value.
@@ -74,8 +258,25 @@ angular.module 'builder.controller', ['builder.provider']
             $scope.required = @model.required
             $scope.optionsText = @model.optionsText
             $scope.validation = @model.validation
+            $scope.multiple = @model.multiple
+            $scope.minLength = @model.minLength
+            $scope.maxLength = @model.maxLength
+            $scope.dateRangeStart = @model.dateRangeStart
+            $scope.dateRangeEnd = @model.dateRangeEnd
+            $scope.disableWeekends = @model.disableWeekends
+            $scope.maxDate = @model.maxDate
+            $scope.requireConfirmation = @model.requireConfirmation
+            $scope.readOnly = @model.readOnly
+            $scope.minRange = @model.minRange
+            $scope.maxRange = @model.maxRange
+            $scope.nextXDays = @model.nextXDays
+            $scope.performCreditCheck = @model.performCreditCheck
+            $scope.cprCountry = @model.cprCountry
+            $scope.logic = @model.logic
+            $scope.category = @model.category
+            $scope.pointRules = @model.pointRules
+            $scope.conversionType = @model.conversionType
 ]
-
 
 # ----------------------------------------
 # fbComponentsController
@@ -114,6 +315,9 @@ angular.module 'builder.controller', ['builder.provider']
     # providers
     $builder = $injector.get '$builder'
     $timeout = $injector.get '$timeout'
+    $rootScope = $injector.get '$rootScope'
+
+    $rootScope.fields = $builder.forms
 
     # set default for input
     $scope.input ?= []

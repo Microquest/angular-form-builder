@@ -1,24 +1,24 @@
 {
   "name": "angular-form-builder",
-  "version": "0.1.0",
+  "version": "1.16.1",
   "description": "AngularJS form builder.",
-  "homepage": "https://github.com/kelp404/angular-form-builder",
+  "homepage": "https://github.com/luminos-software/angular-form-builder",
   "repository": {
     "type": "git",
-    "url": "git://github.com/kelp404/angular-form-builder.git"
+    "url": "git://github.com/luminos-software/angular-form-builder.git"
   },
   "keywords": [
     "AngularJS",
     "CoffeeScript"
   ],
   "author": {
-    "name": "Kelp",
-    "url": "https://github.com/kelp404"
+    "name": "Luminos Software",
+    "url": "https://github.com/luminos-software"
   },
   "contributors": [
     {
       "name": "others",
-      "url": "https://github.com/kelp404/angular-form-builder/graphs/contributors"
+      "url": "https://github.com/luminos-software/angular-form-builder/graphs/contributors"
     }
   ],
   "licenses": [

@@ -9,6 +9,109 @@ angular.module 'builder.directive', [
     'validator'
 ]
 
+# ----------------------------------------
+# rich text directive
+# ----------------------------------------
+.directive 'richText', ['$injector', ($injector) ->
+  restrict: 'E',
+  link: (scope, elem, attrs) ->
+    scope.text = scope.placeholder
+    scope.$watch('placeholder', ->
+        scope.text = scope.placeholder
+      )
+
+    scope.$watch('text', ->
+      unless scope.text is 'Rich Content'
+        elem[0].innerHTML = scope.text
+      )
+]
+
+.filter 'nospace', ->
+  (input) ->
+    if input? and angular.isString(input)
+      input.replace(/[^A-Z0-9]/ig, "")
+
+.filter 'predicate', ->
+  (input) ->
+    switch input
+      when 'eq'
+        input = 'Equals'
+      when 'not_eq'
+        input = 'Does not equal'
+      when 'matches'
+        input = 'Matches'
+      when 'does_not_match'
+        input = 'Does not match'
+      when 'contains'
+        input = 'Contains'
+      when 'does_not_contain'
+        input = 'Does not contain'
+      when 'lt'
+        input = 'Less than'
+      when 'lteq'
+        input = 'Less than or equal to'
+      when 'gt'
+        input = 'Greater than'
+      when 'gteq'
+        input = 'Greater than or equal to'
+      when 'not_in'
+        input = 'Not in'
+      when 'not_null'
+        input = 'is Not Empty'
+      when 'null'
+        input = 'is Empty'
+    return input
+
+# ----------------------------------------
+# date picker directive
+# ----------------------------------------
+.directive 'uiDate', ['$injector', ($injector) ->
+    restrict: 'E'
+    template:
+        """
+        <p class="input-group">
+          <input type="text" class="form-control" max-date="maxDate" datepicker-popup="{{format}}" ng-model="inputText" is-open="opened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close"  validator-required="{{required}}" validator-group="{{required}}" id="{{formName+index}}" disabled/>
+          <span class="input-group-btn">
+            <button ng-disabled="readOnly" type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+        """
+    link: (scope, element, attrs) ->
+
+        scope.inputText = ''
+
+        scope.open = ($event) ->
+            $event.preventDefault()
+            $event.stopPropagation()
+            scope.opened = yes
+
+        extendPastWeekend = (from, daysOffset) ->
+            dayInRange = moment();
+            count = 0;
+            for i in [0..daysOffset]
+                if dayInRange.isoWeekday() == 6 || dayInRange.isoWeekday() == 7
+                    count++;
+                dayInRange.add(1, 'days');
+            moment(from).add(count, 'days').format('YYYY-MM-DD')
+
+        if scope.dateRangeStart
+            scope.minDate = moment().add(scope.dateRangeStart, 'days').format('YYYY-MM-DD')
+        else
+            scope.minDate = moment().format('YYYY-MM-DD')
+
+        if scope.dateRangeEnd
+            scope.maxDate = moment().add(scope.dateRangeEnd, 'days').format('YYYY-MM-DD')
+
+        if scope.disableWeekends
+            if scope.dateRangeStart
+                scope.minDate = extendPastWeekend(scope.minDate, scope.dateRangeStart);
+            if scope.dateRangeEnd
+                scope.maxDate = extendPastWeekend(scope.maxDate, scope.dateRangeEnd);
+            scope.disabled = (date, mode) ->
+                mode is 'day' && ( date.getDay() is 0 || date.getDay() is 6 )
+        else
+            scope.disabled = (date, mode) ->
+]
 
 # ----------------------------------------
 # fb-builder
@@ -20,7 +123,7 @@ angular.module 'builder.directive', [
 
     restrict: 'A'
     scope:
-        fbBuilder: '='
+        fbBuilder: '@'
     template:
         """
         <div class='form-horizontal'>
@@ -92,8 +195,6 @@ angular.module 'builder.directive', [
                 if not isHover and draggable.mode is 'drag'
                     # remove the form object by draggin out
                     formObject = draggable.object.formObject
-                    if formObject.editable
-                        $builder.removeFormObject attrs.fbBuilder, formObject.index
                 else if isHover
                     if draggable.mode is 'mirror'
                         # insert a form object
@@ -253,6 +354,29 @@ angular.module 'builder.directive', [
             no
 ]
 
+.directive 'componentSelector', ['$injector', ($injector) ->
+  $builder = $injector.get '$builder'
+  restrict: 'E'
+  template:
+    """
+    <select ng-model="formObject.logic.component" class="form-control custom-m-b">
+      <optgroup ng-repeat="(groupName, items) in fields()" label="{{'Page: ' + groupName}}">
+          <option ng-selected="item.id === componentize(formObject.logic.component)" ng-if="keys.indexOf(groupName) < keys.indexOf(currentForm) || (keys.indexOf(groupName) === keys.indexOf(currentForm) && item.index < formObject.index)" ng-repeat="item in fields()[groupName]" value="{{item}}">{{item.component}} - {{item.label}}</option>
+      </optgroup>
+    </select>
+    """
+  link: (scope, elem, attrs) ->
+    scope.fields = () ->
+      if elem.parent().parent().parent().parent().parent().is(':visible') is true
+        $builder.forms
+      else
+        []
+
+    scope.componentize = (component) ->
+      if component?
+        return angular.fromJson(component).id
+
+]
 
 # ----------------------------------------
 # fb-components
@@ -301,6 +425,54 @@ angular.module 'builder.directive', [
             $(element).html view
 ]
 
+# ----------------------------------------
+# signature pad
+# ----------------------------------------
+.directive 'signaturePad', ['$injector', ($injector) ->
+  restrict: 'E'
+  template: '<form method="post" action="" class="">
+      <canvas class="pad" width="198" height="100" style="border: 1px solid black"></canvas>
+      <input type="text" ng-model="inputText"  name="output" class="output" id="{{formName+index}}" hidden>
+    <div class col-lg-12 no-padding m-t-xs"><button type="button" ng-click="clearSig()" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i></button></div>
+    </form>'
+  link: (scope, elem, attrs) ->
+
+    scope.clearSig = ->
+      scope.inputText = ''
+      sigPad.regenerate()
+
+    saveSig = ->
+      scope.$apply(->
+          scope.inputText = sigPad.getSignatureString()
+        )
+    # scope.$watch('readOnly', ->
+    #     unless scope.readOnly is undefined
+    #       if scope.readOnly
+    #         sigPad.updateOptions({displayOnly: true})
+    #       else
+    #         sigPad.updateOptions({displayOnly: false})
+    #   )
+    sigPad = elem.signaturePad({drawOnly: true, lineColour: '#fff', onDrawEnd: saveSig})
+
+
+]
+# ----------------------------------------
+# fb-multiple
+# ----------------------------------------
+.directive 'fbMultiple', ['$injector', ($injector) ->
+    $builder = $injector.get '$builder'
+
+    restrict: 'E'
+    scope: {array: '='}
+    templateUrl: 'src/ngMultiple.html'
+    link: (scope, element, attrs) ->
+        scope.seeForms = ->
+            console.log $builder.forms
+        scope.select = (item) ->
+            scope.selected = item
+        scope.addPage = ->
+            scope.array.push(scope.array.length + 1)
+]
 
 # ----------------------------------------
 # fb-form
@@ -358,7 +530,8 @@ angular.module 'builder.directive', [
                 return if newValue is oldValue
                 checked = []
                 for index of scope.inputArray when scope.inputArray[index]
-                    checked.push scope.options[index] ? scope.inputArray[index]
+                    unless index is 'diff'
+                      checked.push scope.options[index] ? scope.inputArray[index]
                 scope.inputText = checked.join ', '
             , yes
         scope.$watch 'inputText', -> scope.updateInput scope.inputText
@@ -390,3 +563,9 @@ angular.module 'builder.directive', [
             else
                 scope.inputText = value
 ]
+
+.directive 'uploadPhoto', ->
+  restrict: 'A'
+  link: (scope, element, attrs) ->
+    angular.element('#uploadBtn').onchange = ->
+      angular.element('#uploadFile').value = this.value

@@ -46,10 +46,12 @@
 
 
 .popover {
+    max-width: 500px;
     .control-label {
         text-align: left;
     }
     form {
-        width: 240px;
+        width: auto;
+        max-width: 500px;
     }
 }

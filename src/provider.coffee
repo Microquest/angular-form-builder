@@ -20,6 +20,7 @@ angular.module 'builder.provider', []
 
     @config =
         popoverPlacement: 'right'
+        max_id: 0
     # all components
     @components = {}
     # all groups of components
@@ -27,11 +28,13 @@ angular.module 'builder.provider', []
     @broadcastChannel =
         updateInput: '$updateInput'
 
+    @skipLogicComponents = []
+
     # forms
     #   builder mode: `fb-builder` you could drag and drop to build the form.
     #   form mode: `fb-form` this is the form for end-user to input value.
-    @forms =
-        default: []
+    @forms = {}
+        # skipLogic: []
 
 
     # ----------------------------------------
@@ -74,6 +77,24 @@ angular.module 'builder.provider', []
             options: formObject.options ? component.options
             required: formObject.required ? component.required
             validation: formObject.validation ? component.validation
+            multiple: formObject.multiple ? component.multiple
+            minLength: formObject.minLength ? component.minLength
+            maxLength: formObject.maxLength ? component.maxLength
+            dateRangeStart: formObject.dateRangeStart ? component.dateRangeStart
+            dateRangeEnd: formObject.dateRangeEnd ? component.dateRangeEnd
+            disableWeekends: formObject.disableWeekends ? component.disableWeekends
+            readOnly: formObject.readOnly ? component.readOnly
+            nextXDays: formObject.nextXDays ? component.nextXDays
+            maxDate: formObject.maxDate ? component.maxDate
+            requireConfirmation: formObject.requireConfirmation ? component.requireConfirmation
+            minRange: formObject.minRange ? component.minRange
+            maxRange: formObject.maxRange ? component.maxRange
+            performCreditCheck: formObject.performCreditCheck ? component.performCreditCheck
+            cprCountry: formObject.cprCountry ? component.cprCountry
+            logic: formObject.logic ? component.logic
+            category: formObject.category ? component.category
+            pointRules: formObject.pointRules ? component.pointRules
+            conversionType: formObject.conversionType ? component.conversionType
         result
 
     @reindexFormObject = (name) =>
@@ -86,6 +107,7 @@ angular.module 'builder.provider', []
         $injector = injector
         $http = $injector.get '$http'
         $templateCache = $injector.get '$templateCache'
+        $modal = $injector.get '$modal'
 
     @loadTemplate = (component) ->
         ###
@@ -175,9 +197,57 @@ angular.module 'builder.provider', []
         @param name: The form name.
         @param index: The form object index.
         ###
-        formObjects = @forms[name]
-        formObjects.splice index, 1
-        @reindexFormObject name
+        forms = @forms
+        reindexFormObject = @reindexFormObject
+        $modal = $injector.get '$modal'
+        id = @forms[name][index].id
+        elems = []
+        for key,value of @forms
+          value.forEach (elem) ->
+            if elem.id isnt id and elem.logic and elem.logic.component and angular.fromJson(elem.logic.component).id is id
+              elems.push elem
+        if elems.length >= 0
+          modal = $modal.open({
+            template: """
+            <div class="inmodal" auto-focus>
+              <form ng-submit="$close()">
+                <div class="modal-header">
+                  <a type="button" class="close x-close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+                  <i class="fa fa-question modal-icon"></i>
+                  <h4 class="modal-title">Delete Component?</h4>
+                </div>
+                <div class="modal-body text-center">
+                  <p class="no-margins" ng-if="!elems.length"><b>Warning!</b><br>You are about to delete this element!</p>
+                  <p class="no-margins" ng-if="elems.length"><b>Warning!</b><br>The following elements are logically dependent on the element you are trying to delete!</p>
+                  <ul class="list-group m-t-md" ng-if="elems.length">
+                    <li class="list-group-item list-group-item-warning" ng-repeat="elem in elems">
+                      {{elem.label}}
+                    </li>
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <btn class="btn btn-default pull-left" ng-click="$dismiss()">Cancel</btn>
+                  <input type="submit" class="btn btn-primary pull-right" value="OK"></input>
+                </div>
+              </form>
+            </div>
+            """,
+            controller: ($scope, $modal) ->
+              $scope.elems = elems
+            elems: () ->
+              elems
+            })
+
+          modal.result.then () ->
+            elems.forEach (elem) ->
+              elem.logic = {action: 'Hide'}
+            formObjects = forms[name]
+            formObjects.splice index, 1
+            reindexFormObject name
+        else
+          formObjects = forms[name]
+          formObjects.splice index, 1
+          reindexFormObject name
 
     @updateFormObjectIndex = (name, oldIndex, newIndex) =>
         ###

@@ -17,8 +17,419 @@
 
   angular.module('builder.controller', ['builder.provider']).controller('fbFormObjectEditableController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $builder;
+      var $builder, $filter, $modal, form, inThisForm;
       $builder = $injector.get('$builder');
+      $modal = $injector.get('$modal');
+      $filter = $injector.get('$filter');
+      $scope.newRule = {};
+      if ($scope.formObject.pointRules == null) {
+        $scope.formObject.pointRules = [];
+      }
+      switch ($scope.formObject.component) {
+        case 'checkbox':
+          $scope.predicates = [
+            {
+              value: 'in',
+              label: 'In'
+            }, {
+              value: 'not_in',
+              label: 'Not in'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not Empty'
+            }
+          ];
+          break;
+        case 'radio':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'matches',
+              label: 'Matches'
+            }, {
+              value: 'does_not_match',
+              label: 'Does not match'
+            }, {
+              value: 'contains',
+              label: 'Contains'
+            }, {
+              value: 'does_not_contain',
+              label: 'Does not contain'
+            }, {
+              value: 'lt',
+              label: 'Less than'
+            }, {
+              value: 'lteq',
+              label: 'Less than or equal to'
+            }, {
+              value: 'gt',
+              label: 'Greater than'
+            }, {
+              value: 'gteq',
+              label: 'Greater than or equal to'
+            }
+          ];
+          break;
+        case 'select':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'matches',
+              label: 'Matches'
+            }, {
+              value: 'does_not_match',
+              label: 'Does not match'
+            }, {
+              value: 'contains',
+              label: 'Contains'
+            }, {
+              value: 'does_not_contain',
+              label: 'Does not contain'
+            }, {
+              value: 'lt',
+              label: 'Less than'
+            }, {
+              value: 'lteq',
+              label: 'Less than or equal to'
+            }, {
+              value: 'gt',
+              label: 'Greater than'
+            }, {
+              value: 'gteq',
+              label: 'Greater than or equal to'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'product':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'email':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'matches',
+              label: 'Matches'
+            }, {
+              value: 'does_not_match',
+              label: 'Does not match'
+            }, {
+              value: 'contains',
+              label: 'Contains'
+            }, {
+              value: 'does_not_contain',
+              label: 'Does not contain'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'area':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'matches',
+              label: 'Matches'
+            }, {
+              value: 'does_not_match',
+              label: 'Does not match'
+            }, {
+              value: 'contains',
+              label: 'Contains'
+            }, {
+              value: 'does_not_contain',
+              label: 'Does not contain'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'phone':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'matches',
+              label: 'Matches'
+            }, {
+              value: 'does_not_match',
+              label: 'Does not match'
+            }, {
+              value: 'contains',
+              label: 'Contains'
+            }, {
+              value: 'does_not_contain',
+              label: 'Does not contain'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'text':
+          $scope.predicates = [
+            {
+              value: 'eq',
+              label: 'Equals'
+            }, {
+              value: 'not_eq',
+              label: 'Does not equal'
+            }, {
+              value: 'matches',
+              label: 'Matches'
+            }, {
+              value: 'does_not_match',
+              label: 'Does not match'
+            }, {
+              value: 'contains',
+              label: 'Contains'
+            }, {
+              value: 'does_not_contain',
+              label: 'Does not contain'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }, {
+              value: 'lt',
+              label: 'Less than'
+            }, {
+              value: 'lteq',
+              label: 'Less than or equal to'
+            }, {
+              value: 'gt',
+              label: 'Greater than'
+            }, {
+              value: 'gteq',
+              label: 'Greater than or equal to'
+            }
+          ];
+          break;
+        case 'date':
+          $scope.predicates = [
+            {
+              value: 'lt',
+              label: 'Less than'
+            }, {
+              value: 'lteq',
+              label: 'Less than or equal to'
+            }, {
+              value: 'gt',
+              label: 'Greater than'
+            }, {
+              value: 'gteq',
+              label: 'Greater than or equal to'
+            }, {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'signature':
+          $scope.predicates = [
+            {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'upload':
+          $scope.predicates = [
+            {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'cpr':
+          $scope.predicates = [
+            {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+          break;
+        case 'address':
+          $scope.predicates = [
+            {
+              value: 'null',
+              label: 'Empty'
+            }, {
+              value: 'not_null',
+              label: 'Not empty'
+            }
+          ];
+      }
+      $scope.addRule = function() {
+        if (($scope.newRule.predicate == null) || !$scope.newRule.points || (($scope.newRule.value == null) && $scope.newRule.predicate !== 'null' && $scope.newRule.predicate !== 'not_null')) {
+          return $scope.rulesErrorMessage = 'Please update all fields.';
+        } else {
+          $scope.rulesErrorMessage = '';
+          if (angular.isDate($scope.newRule.value)) {
+            $scope.newRule.value = $filter('date')($scope.newRule.value, 'dd-MM-yyyy');
+          }
+          $scope.formObject.pointRules.push($scope.newRule);
+          return $scope.newRule = {};
+        }
+      };
+      $scope.removeRule = function(rule) {
+        return $scope.formObject.pointRules.splice($scope.formObject.pointRules.indexOf(rule), 1);
+      };
+      if ($scope.formObject.logic == null) {
+        $scope.formObject.logic = {
+          action: 'Hide'
+        };
+      } else {
+        if ($scope.formObject.logic.component != null) {
+          $scope.formObject.logic.component = angular.fromJson($scope.formObject.logic.component);
+        }
+      }
+      if ($scope.formObject.id === void 0) {
+        $scope.formObject.id = $builder.config.max_id;
+        $builder.config.max_id = $builder.config.max_id + 1;
+      }
+      $scope.actions = ['Hide', 'Show'];
+      $scope.$watch('formObject.logic.component', function() {
+        var objectized;
+        if ($scope.formObject.logic.component != null) {
+          objectized = angular.fromJson($scope.formObject.logic.component);
+          switch (objectized.component) {
+            case 'message':
+              return $scope.comparatorChoices = [];
+            case 'email':
+              return $scope.comparatorChoices = [];
+            case 'date':
+              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to'];
+            case 'text':
+              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to'];
+            case 'area':
+              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
+            case 'checkbox':
+              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
+            case 'radio':
+              return $scope.comparatorChoices = ['Equal to', 'Not equal to'];
+            case 'select':
+              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain'];
+            case 'upload':
+              return $scope.comparatorChoices = [];
+            case 'signature':
+              return $scope.comparatorChoices = [];
+            case 'address':
+              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
+            case 'cpr':
+              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
+            case 'graphic':
+              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain'];
+            case 'product':
+              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain'];
+          }
+        }
+      });
+      $scope.cancel = function() {
+        return $scope.modalInstance.dismiss('cancel');
+      };
+      $scope.save = function(text) {
+        $scope.placeholder = text;
+        return $scope.modalInstance.close();
+      };
+      $scope.openPoints = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return $scope.openedPoints = true;
+      };
+      $scope.resetLogic = function() {
+        return $scope.formObject.logic = {
+          action: 'Hide'
+        };
+      };
+      $scope.openSummerNote = function() {
+        $scope.summerNoteText = $scope.formObject.placeholder;
+        return $scope.modalInstance = $modal.open({
+          template: '<div class="modal-header">' + '<button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + '<h4 class="modal-title">Edit Rich Content</div>' + '</div>' + '<div class="modal-body no-padding">' + '<div summernote ng-model="summerNoteText"></div>' + '</div>' + '<div class="modal-footer">' + '<button class="btn btn-white pull-left" ng-click="cancel()">Cancel</button>' + '<button class="btn btn-primary pull-right" ng-click="save(summerNoteText)">Apply</button>' + '</div>',
+          scope: $scope
+        });
+      };
+      $scope.date = Date.now();
+      for (form in $builder.forms) {
+        inThisForm = $builder.forms[form].filter(function(item) {
+          return item.id === $scope.formObject.id;
+        });
+        if (inThisForm.length > 0) {
+          $scope.currentForm = form;
+        }
+      }
+      $scope.keys = Object.keys($builder.forms);
       $scope.setupScope = function(formObject) {
 
         /*
@@ -31,13 +442,31 @@
         var component;
         copyObjectToScope(formObject, $scope);
         $scope.optionsText = formObject.options.join('\n');
-        $scope.$watch('[label, description, placeholder, required, options, validation]', function() {
+        $scope.$watch('[label, description, placeholder, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', function() {
           formObject.label = $scope.label;
           formObject.description = $scope.description;
           formObject.placeholder = $scope.placeholder;
           formObject.required = $scope.required;
           formObject.options = $scope.options;
-          return formObject.validation = $scope.validation;
+          formObject.multiple = $scope.multiple;
+          formObject.validation = $scope.validation;
+          formObject.minLength = $scope.minLength;
+          formObject.maxLength = $scope.maxLength;
+          formObject.dateRangeStart = $scope.dateRangeStart;
+          formObject.dateRangeEnd = $scope.dateRangeEnd;
+          formObject.disableWeekends = $scope.disableWeekends;
+          formObject.maxDate = $scope.maxDate;
+          formObject.requireConfirmation = $scope.requireConfirmation;
+          formObject.readOnly = $scope.readOnly;
+          formObject.minRange = $scope.minRange;
+          formObject.maxRange = $scope.maxRange;
+          formObject.nextXDays = $scope.nextXDays;
+          formObject.performCreditCheck = $scope.performCreditCheck;
+          formObject.cprCountry = $scope.cprCountry;
+          formObject.logic = $scope.logic;
+          formObject.category = $scope.category;
+          formObject.pointRules = $scope.pointRules;
+          return formObject.conversionType = $scope.conversionType;
         }, true);
         $scope.$watch('optionsText', function(text) {
           var x;
@@ -71,7 +500,25 @@
             placeholder: $scope.placeholder,
             required: $scope.required,
             optionsText: $scope.optionsText,
-            validation: $scope.validation
+            validation: $scope.validation,
+            multiple: $scope.multiple,
+            minLength: $scope.minLength,
+            maxLength: $scope.maxLength,
+            dateRangeStart: $scope.dateRangeStart,
+            dateRangeEnd: $scope.dateRangeEnd,
+            disableWeekends: $scope.disableWeekends,
+            maxDate: $scope.maxDate,
+            requireConfirmation: $scope.requireConfirmation,
+            readOnly: $scope.readOnly,
+            minRange: $scope.minRange,
+            maxRange: $scope.maxRange,
+            nextXDays: $scope.nextXDays,
+            performCreditCheck: $scope.performCreditCheck,
+            cprCountry: $scope.cprCountry,
+            logic: $scope.logic,
+            category: $scope.category,
+            pointRules: $scope.pointRules,
+            conversionType: $scope.conversionType
           };
         },
         rollback: function() {
@@ -87,7 +534,25 @@
           $scope.placeholder = this.model.placeholder;
           $scope.required = this.model.required;
           $scope.optionsText = this.model.optionsText;
-          return $scope.validation = this.model.validation;
+          $scope.validation = this.model.validation;
+          $scope.multiple = this.model.multiple;
+          $scope.minLength = this.model.minLength;
+          $scope.maxLength = this.model.maxLength;
+          $scope.dateRangeStart = this.model.dateRangeStart;
+          $scope.dateRangeEnd = this.model.dateRangeEnd;
+          $scope.disableWeekends = this.model.disableWeekends;
+          $scope.maxDate = this.model.maxDate;
+          $scope.requireConfirmation = this.model.requireConfirmation;
+          $scope.readOnly = this.model.readOnly;
+          $scope.minRange = this.model.minRange;
+          $scope.maxRange = this.model.maxRange;
+          $scope.nextXDays = this.model.nextXDays;
+          $scope.performCreditCheck = this.model.performCreditCheck;
+          $scope.cprCountry = this.model.cprCountry;
+          $scope.logic = this.model.logic;
+          $scope.category = this.model.category;
+          $scope.pointRules = this.model.pointRules;
+          return $scope.conversionType = this.model.conversionType;
         }
       };
     }
@@ -127,9 +592,11 @@
     }
   ]).controller('fbFormController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $builder, $timeout;
+      var $builder, $rootScope, $timeout;
       $builder = $injector.get('$builder');
       $timeout = $injector.get('$timeout');
+      $rootScope = $injector.get('$rootScope');
+      $rootScope.fields = $builder.forms;
       if ($scope.input == null) {
         $scope.input = [];
       }
@@ -169,7 +636,123 @@
 }).call(this);
 
 (function() {
-  angular.module('builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator']).directive('fbBuilder', [
+  angular.module('builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator']).directive('richText', [
+    '$injector', function($injector) {
+      return {
+        restrict: 'E',
+        link: function(scope, elem, attrs) {
+          scope.text = scope.placeholder;
+          scope.$watch('placeholder', function() {
+            return scope.text = scope.placeholder;
+          });
+          return scope.$watch('text', function() {
+            if (scope.text !== 'Rich Content') {
+              return elem[0].innerHTML = scope.text;
+            }
+          });
+        }
+      };
+    }
+  ]).filter('nospace', function() {
+    return function(input) {
+      if ((input != null) && angular.isString(input)) {
+        return input.replace(/[^A-Z0-9]/ig, "");
+      }
+    };
+  }).filter('predicate', function() {
+    return function(input) {
+      switch (input) {
+        case 'eq':
+          input = 'Equals';
+          break;
+        case 'not_eq':
+          input = 'Does not equal';
+          break;
+        case 'matches':
+          input = 'Matches';
+          break;
+        case 'does_not_match':
+          input = 'Does not match';
+          break;
+        case 'contains':
+          input = 'Contains';
+          break;
+        case 'does_not_contain':
+          input = 'Does not contain';
+          break;
+        case 'lt':
+          input = 'Less than';
+          break;
+        case 'lteq':
+          input = 'Less than or equal to';
+          break;
+        case 'gt':
+          input = 'Greater than';
+          break;
+        case 'gteq':
+          input = 'Greater than or equal to';
+          break;
+        case 'not_in':
+          input = 'Not in';
+          break;
+        case 'not_null':
+          input = 'is Not Empty';
+          break;
+        case 'null':
+          input = 'is Empty';
+      }
+      return input;
+    };
+  }).directive('uiDate', [
+    '$injector', function($injector) {
+      return {
+        restrict: 'E',
+        template: "<p class=\"input-group\">\n  <input type=\"text\" class=\"form-control\" max-date=\"maxDate\" datepicker-popup=\"{{format}}\" ng-model=\"inputText\" is-open=\"opened\" min-date=\"minDate\" datepicker-options=\"dateOptions\" date-disabled=\"disabled(date, mode)\" close-text=\"Close\"  validator-required=\"{{required}}\" validator-group=\"{{required}}\" id=\"{{formName+index}}\" disabled/>\n  <span class=\"input-group-btn\">\n    <button ng-disabled=\"readOnly\" type=\"button\" class=\"btn btn-default\" ng-click=\"open($event)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>\n  </span>\n</p>",
+        link: function(scope, element, attrs) {
+          var extendPastWeekend;
+          scope.inputText = '';
+          scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            return scope.opened = true;
+          };
+          extendPastWeekend = function(from, daysOffset) {
+            var count, dayInRange, i, _i;
+            dayInRange = moment();
+            count = 0;
+            for (i = _i = 0; 0 <= daysOffset ? _i <= daysOffset : _i >= daysOffset; i = 0 <= daysOffset ? ++_i : --_i) {
+              if (dayInRange.isoWeekday() === 6 || dayInRange.isoWeekday() === 7) {
+                count++;
+              }
+              dayInRange.add(1, 'days');
+            }
+            return moment(from).add(count, 'days').format('YYYY-MM-DD');
+          };
+          if (scope.dateRangeStart) {
+            scope.minDate = moment().add(scope.dateRangeStart, 'days').format('YYYY-MM-DD');
+          } else {
+            scope.minDate = moment().format('YYYY-MM-DD');
+          }
+          if (scope.dateRangeEnd) {
+            scope.maxDate = moment().add(scope.dateRangeEnd, 'days').format('YYYY-MM-DD');
+          }
+          if (scope.disableWeekends) {
+            if (scope.dateRangeStart) {
+              scope.minDate = extendPastWeekend(scope.minDate, scope.dateRangeStart);
+            }
+            if (scope.dateRangeEnd) {
+              scope.maxDate = extendPastWeekend(scope.maxDate, scope.dateRangeEnd);
+            }
+            return scope.disabled = function(date, mode) {
+              return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+            };
+          } else {
+            return scope.disabled = function(date, mode) {};
+          }
+        }
+      };
+    }
+  ]).directive('fbBuilder', [
     '$injector', function($injector) {
       var $builder, $drag;
       $builder = $injector.get('$builder');
@@ -177,7 +760,7 @@
       return {
         restrict: 'A',
         scope: {
-          fbBuilder: '='
+          fbBuilder: '@'
         },
         template: "<div class='form-horizontal'>\n    <div class='fb-form-object-editable' ng-repeat=\"object in formObjects\"\n        fb-form-object-editable=\"object\"></div>\n</div>",
         link: function(scope, element, attrs) {
@@ -241,9 +824,6 @@
               }
               if (!isHover && draggable.mode === 'drag') {
                 formObject = draggable.object.formObject;
-                if (formObject.editable) {
-                  $builder.removeFormObject(attrs.fbBuilder, formObject.index);
-                }
               } else if (isHover) {
                 if (draggable.mode === 'mirror') {
                   $builder.insertFormObject(scope.formName, $(element).find('.empty').index('.fb-form-object-editable'), {
@@ -415,6 +995,29 @@
         }
       };
     }
+  ]).directive('componentSelector', [
+    '$injector', function($injector) {
+      var $builder;
+      $builder = $injector.get('$builder');
+      return {
+        restrict: 'E',
+        template: "<select ng-model=\"formObject.logic.component\" class=\"form-control custom-m-b\">\n  <optgroup ng-repeat=\"(groupName, items) in fields()\" label=\"{{'Page: ' + groupName}}\">\n      <option ng-selected=\"item.id === componentize(formObject.logic.component)\" ng-if=\"keys.indexOf(groupName) < keys.indexOf(currentForm) || (keys.indexOf(groupName) === keys.indexOf(currentForm) && item.index < formObject.index)\" ng-repeat=\"item in fields()[groupName]\" value=\"{{item}}\">{{item.component}} - {{item.label}}</option>\n  </optgroup>\n</select>",
+        link: function(scope, elem, attrs) {
+          scope.fields = function() {
+            if (elem.parent().parent().parent().parent().parent().is(':visible') === true) {
+              return $builder.forms;
+            } else {
+              return [];
+            }
+          };
+          return scope.componentize = function(component) {
+            if (component != null) {
+              return angular.fromJson(component).id;
+            }
+          };
+        }
+      };
+    }
   ]).directive('fbComponents', function() {
     return {
       restrict: 'A',
@@ -450,6 +1053,53 @@
             view = $compile(template)(scope);
             return $(element).html(view);
           });
+        }
+      };
+    }
+  ]).directive('signaturePad', [
+    '$injector', function($injector) {
+      return {
+        restrict: 'E',
+        template: '<form method="post" action="" class=""> <canvas class="pad" width="198" height="100" style="border: 1px solid black"></canvas> <input type="text" ng-model="inputText"  name="output" class="output" id="{{formName+index}}" hidden> <div class col-lg-12 no-padding m-t-xs"><button type="button" ng-click="clearSig()" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i></button></div> </form>',
+        link: function(scope, elem, attrs) {
+          var saveSig, sigPad;
+          scope.clearSig = function() {
+            scope.inputText = '';
+            return sigPad.regenerate();
+          };
+          saveSig = function() {
+            return scope.$apply(function() {
+              return scope.inputText = sigPad.getSignatureString();
+            });
+          };
+          return sigPad = elem.signaturePad({
+            drawOnly: true,
+            lineColour: '#fff',
+            onDrawEnd: saveSig
+          });
+        }
+      };
+    }
+  ]).directive('fbMultiple', [
+    '$injector', function($injector) {
+      var $builder;
+      $builder = $injector.get('$builder');
+      return {
+        restrict: 'E',
+        scope: {
+          array: '='
+        },
+        templateUrl: 'src/ngMultiple.html',
+        link: function(scope, element, attrs) {
+          scope.seeForms = function() {
+            return console.log($builder.forms);
+          };
+          scope.select = function(item) {
+            return scope.selected = item;
+          };
+          return scope.addPage = function() {
+            return scope.array.push(scope.array.length + 1);
+          };
         }
       };
     }
@@ -500,7 +1150,9 @@
               checked = [];
               for (index in scope.inputArray) {
                 if (scope.inputArray[index]) {
-                  checked.push((_ref = scope.options[index]) != null ? _ref : scope.inputArray[index]);
+                  if (index !== 'diff') {
+                    checked.push((_ref = scope.options[index]) != null ? _ref : scope.inputArray[index]);
+                  }
                 }
               }
               return scope.inputText = checked.join(', ');
@@ -541,7 +1193,16 @@
         }
       };
     }
-  ]);
+  ]).directive('uploadPhoto', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        return angular.element('#uploadBtn').onchange = function() {
+          return angular.element('#uploadFile').value = this.value;
+        };
+      }
+    };
+  });
 
 }).call(this);
 
@@ -955,7 +1616,20 @@
 }).call(this);
 
 (function() {
-  angular.module('builder', ['builder.directive']);
+  angular.module('builder', ['builder.directive']).run(function($validator) {
+    $validator.register('text', {
+      invoke: 'watch',
+      validator: function(value, scope, element, attrs, $injector) {
+        return scope.minLength === 0 || (value.length >= scope.minLength && value.length <= scope.maxLength);
+      }
+    });
+    return $validator.register('numberRange', {
+      invoke: 'watch',
+      validator: function(value, scope, element, attrs, $injector) {
+        return value >= scope.minRange && value <= scope.maxRange;
+      }
+    });
+  });
 
 }).call(this);
 
@@ -982,16 +1656,16 @@
     $http = null;
     $templateCache = null;
     this.config = {
-      popoverPlacement: 'right'
+      popoverPlacement: 'right',
+      max_id: 0
     };
     this.components = {};
     this.groups = [];
     this.broadcastChannel = {
       updateInput: '$updateInput'
     };
-    this.forms = {
-      "default": []
-    };
+    this.skipLogicComponents = [];
+    this.forms = {};
     this.convertComponent = function(name, component) {
       var result, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       result = {
@@ -1020,7 +1694,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1038,7 +1712,25 @@
         placeholder: (_ref4 = formObject.placeholder) != null ? _ref4 : component.placeholder,
         options: (_ref5 = formObject.options) != null ? _ref5 : component.options,
         required: (_ref6 = formObject.required) != null ? _ref6 : component.required,
-        validation: (_ref7 = formObject.validation) != null ? _ref7 : component.validation
+        validation: (_ref7 = formObject.validation) != null ? _ref7 : component.validation,
+        multiple: (_ref8 = formObject.multiple) != null ? _ref8 : component.multiple,
+        minLength: (_ref9 = formObject.minLength) != null ? _ref9 : component.minLength,
+        maxLength: (_ref10 = formObject.maxLength) != null ? _ref10 : component.maxLength,
+        dateRangeStart: (_ref11 = formObject.dateRangeStart) != null ? _ref11 : component.dateRangeStart,
+        dateRangeEnd: (_ref12 = formObject.dateRangeEnd) != null ? _ref12 : component.dateRangeEnd,
+        disableWeekends: (_ref13 = formObject.disableWeekends) != null ? _ref13 : component.disableWeekends,
+        readOnly: (_ref14 = formObject.readOnly) != null ? _ref14 : component.readOnly,
+        nextXDays: (_ref15 = formObject.nextXDays) != null ? _ref15 : component.nextXDays,
+        maxDate: (_ref16 = formObject.maxDate) != null ? _ref16 : component.maxDate,
+        requireConfirmation: (_ref17 = formObject.requireConfirmation) != null ? _ref17 : component.requireConfirmation,
+        minRange: (_ref18 = formObject.minRange) != null ? _ref18 : component.minRange,
+        maxRange: (_ref19 = formObject.maxRange) != null ? _ref19 : component.maxRange,
+        performCreditCheck: (_ref20 = formObject.performCreditCheck) != null ? _ref20 : component.performCreditCheck,
+        cprCountry: (_ref21 = formObject.cprCountry) != null ? _ref21 : component.cprCountry,
+        logic: (_ref22 = formObject.logic) != null ? _ref22 : component.logic,
+        category: (_ref23 = formObject.category) != null ? _ref23 : component.category,
+        pointRules: (_ref24 = formObject.pointRules) != null ? _ref24 : component.pointRules,
+        conversionType: (_ref25 = formObject.conversionType) != null ? _ref25 : component.conversionType
       };
       return result;
     };
@@ -1053,9 +1745,11 @@
     })(this);
     this.setupProviders = (function(_this) {
       return function(injector) {
+        var $modal;
         $injector = injector;
         $http = $injector.get('$http');
-        return $templateCache = $injector.get('$templateCache');
+        $templateCache = $injector.get('$templateCache');
+        return $modal = $injector.get('$modal');
       };
     })(this);
     this.loadTemplate = function(component) {
@@ -1180,10 +1874,47 @@
         @param name: The form name.
         @param index: The form object index.
          */
-        var formObjects;
-        formObjects = _this.forms[name];
-        formObjects.splice(index, 1);
-        return _this.reindexFormObject(name);
+        var $modal, elems, formObjects, forms, id, key, modal, reindexFormObject, value, _ref;
+        forms = _this.forms;
+        reindexFormObject = _this.reindexFormObject;
+        $modal = $injector.get('$modal');
+        id = _this.forms[name][index].id;
+        elems = [];
+        _ref = _this.forms;
+        for (key in _ref) {
+          value = _ref[key];
+          value.forEach(function(elem) {
+            if (elem.id !== id && elem.logic && elem.logic.component && angular.fromJson(elem.logic.component).id === id) {
+              return elems.push(elem);
+            }
+          });
+        }
+        if (elems.length >= 0) {
+          modal = $modal.open({
+            template: "<div class=\"inmodal\" auto-focus>\n  <form ng-submit=\"$close()\">\n    <div class=\"modal-header\">\n      <a type=\"button\" class=\"close x-close\" ng-click=\"$dismiss()\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></a>\n      <i class=\"fa fa-question modal-icon\"></i>\n      <h4 class=\"modal-title\">Delete Component?</h4>\n    </div>\n    <div class=\"modal-body text-center\">\n      <p class=\"no-margins\" ng-if=\"!elems.length\"><b>Warning!</b><br>You are about to delete this element!</p>\n      <p class=\"no-margins\" ng-if=\"elems.length\"><b>Warning!</b><br>The following elements are logically dependent on the element you are trying to delete!</p>\n      <ul class=\"list-group m-t-md\" ng-if=\"elems.length\">\n        <li class=\"list-group-item list-group-item-warning\" ng-repeat=\"elem in elems\">\n          {{elem.label}}\n        </li>\n      </ul>\n    </div>\n    <div class=\"modal-footer\">\n      <btn class=\"btn btn-default pull-left\" ng-click=\"$dismiss()\">Cancel</btn>\n      <input type=\"submit\" class=\"btn btn-primary pull-right\" value=\"OK\"></input>\n    </div>\n  </form>\n</div>",
+            controller: function($scope, $modal) {
+              return $scope.elems = elems;
+            },
+            elems: function() {
+              return elems;
+            }
+          });
+          return modal.result.then(function() {
+            var formObjects;
+            elems.forEach(function(elem) {
+              return elem.logic = {
+                action: 'Hide'
+              };
+            });
+            formObjects = forms[name];
+            formObjects.splice(index, 1);
+            return reindexFormObject(name);
+          });
+        } else {
+          formObjects = forms[name];
+          formObjects.splice(index, 1);
+          return reindexFormObject(name);
+        }
       };
     })(this);
     this.updateFormObjectIndex = (function(_this) {
