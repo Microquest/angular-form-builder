@@ -1978,7 +1978,8 @@
             updateFormObjectIndex: _this.updateFormObjectIndex,
             loadFromArray: _this.loadFromArray,
             resetProviderData: _this.resetProviderData,
-            clearForm: _this.clearForm
+            clearForm: _this.clearForm,
+            setFormData: _this.setFormData
           };
         };
       })(this)

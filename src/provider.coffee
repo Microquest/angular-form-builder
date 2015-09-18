@@ -277,5 +277,6 @@ angular.module 'builder.provider', []
         loadFromArray: @loadFromArray
         resetProviderData: @resetProviderData
         clearForm: @clearForm
+        setFormData: @setFormData
     ]
     return
