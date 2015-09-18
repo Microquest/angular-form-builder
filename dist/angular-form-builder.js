@@ -17,7 +17,7 @@
 
   angular.module('builder.controller', ['builder.provider']).controller('fbFormObjectEditableController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $builder, $filter, $modal, form, inThisForm;
+      var $builder, $filter, $modal;
       $builder = $injector.get('$builder');
       $modal = $injector.get('$modal');
       $filter = $injector.get('$filter');
@@ -421,14 +421,6 @@
         });
       };
       $scope.date = Date.now();
-      for (form in $builder.forms) {
-        inThisForm = $builder.forms[form].filter(function(item) {
-          return item.id === $scope.formObject.id;
-        });
-        if (inThisForm.length > 0) {
-          $scope.currentForm = form;
-        }
-      }
       $scope.keys = Object.keys($builder.forms);
       $scope.setupScope = function(formObject) {
 
@@ -1889,10 +1881,14 @@
         Clears all components from the form object.
         @param name: The form name.
          */
-        var formObjects, forms;
-        forms = _this.forms;
+        var formObjects, _base;
+        if ((_base = _this.forms)[name] == null) {
+          _base[name] = [];
+        }
         formObjects = _this.forms[name];
-        formObjects.splice(0, formObjects.length);
+        if (formObjects) {
+          formObjects.splice(0, formObjects.length);
+        }
         return _this.reindexFormObject(name);
       };
     })(this);
@@ -1908,7 +1904,7 @@
         forms = _this.forms;
         _results = [];
         for (component in formObjects) {
-          _results.push(addFormObject(name, component));
+          _results.push(_this.addFormObject(name, component));
         }
         return _results;
       };

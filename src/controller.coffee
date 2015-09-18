@@ -154,18 +154,6 @@ angular.module 'builder.controller', ['builder.provider']
 
     $scope.date = Date.now()
 
-    # if i can get the name of the current form
-    # then i can see the previous forms
-    # i can get previous elements from $builder.forms by their index
-    for form of $builder.forms
-
-      # comment this afterwards
-      inThisForm = $builder.forms[form].filter (item) ->
-        item.id is $scope.formObject.id
-
-      if inThisForm.length > 0
-        $scope.currentForm = form
-
     # old canSee func, moved to inline
     $scope.keys = Object.keys $builder.forms
 
