@@ -221,7 +221,7 @@ angular.module 'builder.provider', []
         ###
         forms = @forms
         for component of formObjects
-          @addFormObject(name, component)
+          @addFormObject(name, formObjects[component])
 
     @updateFormObjectIndex = (name, oldIndex, newIndex) =>
         ###

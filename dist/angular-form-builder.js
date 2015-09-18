@@ -1904,7 +1904,7 @@
         forms = _this.forms;
         _results = [];
         for (component in formObjects) {
-          _results.push(_this.addFormObject(name, component));
+          _results.push(_this.addFormObject(name, formObjects[component]));
         }
         return _results;
       };
