@@ -1950,6 +1950,11 @@
         return _this.forms = {};
       };
     })(this);
+    this.setFormData = (function(_this) {
+      return function() {
+        return $scope.$broadcast($builder.broadcastChannel.updateInput);
+      };
+    })(this);
     this.$get = [
       '$injector', (function(_this) {
         return function($injector) {
