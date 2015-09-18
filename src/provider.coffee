@@ -208,9 +208,9 @@ angular.module 'builder.provider', []
         Clears all components from the form object.
         @param name: The form name.
         ###
-        forms = @forms
+        @forms[name] ?= []
         formObjects = @forms[name]
-        formObjects.splice 0, formObjects.length
+        if formObjects then formObjects.splice 0, formObjects.length
         @reindexFormObject name
 
     @loadFromArray = (name, formObjects) =>
@@ -221,7 +221,7 @@ angular.module 'builder.provider', []
         ###
         forms = @forms
         for component of formObjects
-          addFormObject(name, component)
+          @addFormObject(name, component)
 
     @updateFormObjectIndex = (name, oldIndex, newIndex) =>
         ###
