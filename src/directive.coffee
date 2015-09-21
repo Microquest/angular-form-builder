@@ -497,6 +497,7 @@ angular.module 'builder.directive', [
         # get the form for controller
         $builder.forms[scope.formName] ?= []
         scope.form = $builder.forms[scope.formName]
+        scope.$watch 'input', -> scope.$broadcast '$directive.formModelChanged'
 ]
 
 # ----------------------------------------
@@ -539,6 +540,8 @@ angular.module 'builder.directive', [
         scope.$watch attrs.fbFormObject, ->
             scope.copyObjectToScope scope.formObject
         , yes
+
+        scope.$on '$directive.formModelChanged', () -> scope.updateInput scope.inputText
 
         scope.$watch '$component.template', (template) ->
             return if not template

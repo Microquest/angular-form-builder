@@ -253,9 +253,6 @@ angular.module 'builder.provider', []
         @skipLogicComponents = []
         @forms = {}
 
-    @setFormData = () =>
-        $scope.$broadcast $builder.broadcastChannel.updateInput
-
     # ----------------------------------------
     # $get
     # ----------------------------------------

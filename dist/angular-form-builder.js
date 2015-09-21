@@ -1113,7 +1113,10 @@
           if ((_base = $builder.forms)[_name = scope.formName] == null) {
             _base[_name] = [];
           }
-          return scope.form = $builder.forms[scope.formName];
+          scope.form = $builder.forms[scope.formName];
+          return scope.$watch('input', function() {
+            return scope.$broadcast('$directive.formModelChanged');
+          });
         }
       };
     }
@@ -1156,6 +1159,9 @@
           scope.$watch(attrs.fbFormObject, function() {
             return scope.copyObjectToScope(scope.formObject);
           }, true);
+          scope.$on('$directive.formModelChanged', function() {
+            return scope.updateInput(scope.inputText);
+          });
           scope.$watch('$component.template', function(template) {
             var $input, $template, view;
             if (!template) {
@@ -1948,11 +1954,6 @@
         };
         _this.skipLogicComponents = [];
         return _this.forms = {};
-      };
-    })(this);
-    this.setFormData = (function(_this) {
-      return function() {
-        return $scope.$broadcast($builder.broadcastChannel.updateInput);
       };
     })(this);
     this.$get = [
