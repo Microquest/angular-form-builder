@@ -22,6 +22,8 @@ angular.module 'builder.drag', []
     # event hooks
     # ----------------------------------------
     @mouseMoved = no
+    @mx = 0;
+    @my = 0;
     @isMouseMoved = => @mouseMoved
     @hooks =
         down: {}
@@ -35,6 +37,10 @@ angular.module 'builder.drag', []
             func(e) for key, func of @hooks.down
             return
         $(document).on 'mousemove', (e) =>
+            if e.pageX == @mx && e.pageY == @my
+                return
+            @mx = e.pageX;
+            @my = e.pageY;
             @mouseMoved = yes
             func(e) for key, func of @hooks.move
             return

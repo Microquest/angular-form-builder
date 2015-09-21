@@ -1212,6 +1212,8 @@
       droppables: {}
     };
     this.mouseMoved = false;
+    this.mx = 0;
+    this.my = 0;
     this.isMouseMoved = (function(_this) {
       return function() {
         return _this.mouseMoved;
@@ -1237,6 +1239,11 @@
         });
         $(document).on('mousemove', function(e) {
           var func, key, _ref;
+          if (e.pageX === _this.mx && e.pageY === _this.my) {
+            return;
+          }
+          _this.mx = e.pageX;
+          _this.my = e.pageY;
           _this.mouseMoved = true;
           _ref = _this.hooks.move;
           for (key in _ref) {
