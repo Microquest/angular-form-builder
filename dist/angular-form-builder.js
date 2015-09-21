@@ -1113,10 +1113,7 @@
           if ((_base = $builder.forms)[_name = scope.formName] == null) {
             _base[_name] = [];
           }
-          scope.form = $builder.forms[scope.formName];
-          return scope.$watch('input', function() {
-            return scope.$broadcast('$directive.formModelChanged');
-          });
+          return scope.form = $builder.forms[scope.formName];
         }
       };
     }
@@ -1133,6 +1130,10 @@
           scope.formObject = $parse(attrs.fbFormObject)(scope);
           scope.$component = $builder.components[scope.formObject.component];
           scope.$on($builder.broadcastChannel.updateInput, function() {
+            return scope.updateInput(scope.inputText);
+          });
+          scope.$on('$builder.$directive.valuesChanged', function(event, values) {
+            scope.inputText = values[scope.index].value;
             return scope.updateInput(scope.inputText);
           });
           if (scope.$component.arrayToText) {
@@ -1159,9 +1160,6 @@
           scope.$watch(attrs.fbFormObject, function() {
             return scope.copyObjectToScope(scope.formObject);
           }, true);
-          scope.$on('$directive.formModelChanged', function() {
-            return scope.updateInput(scope.inputText);
-          });
           scope.$watch('$component.template', function(template) {
             var $input, $template, view;
             if (!template) {
