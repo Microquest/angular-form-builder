@@ -129,6 +129,10 @@ angular.module 'builder.directive', [
         <div class='form-horizontal'>
             <div class='fb-form-object-editable' ng-repeat="object in formObjects"
                 fb-form-object-editable="object"></div>
+            <div ng-if='formObjects.length === 0'>
+                <h4> Form is empty </h4>
+                <p> Drap and drop components here to build intake forms </p>
+            </div>
         </div>
         """
     link: (scope, element, attrs) ->
@@ -385,12 +389,12 @@ angular.module 'builder.directive', [
     restrict: 'A'
     template:
         """
-        <ul ng-if="groups.length > 1" class="nav nav-tabs nav-justified">
+        <ul ng-if="groups.length > 1" class="nav nav-tabs nav-justified" style='margin-top:10px'>
             <li ng-repeat="group in groups" ng-class="{active:activeGroup==group}">
                 <a href='#' ng-click="selectGroup($event, group)">{{group}}</a>
             </li>
         </ul>
-        <div class='form-horizontal'>
+        <div class='form-horizontal' style='margin:10px'>
             <div class='fb-component' ng-repeat="component in components"
                 fb-component="component"></div>
         </div>
