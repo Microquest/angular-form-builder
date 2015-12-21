@@ -699,7 +699,7 @@
     '$injector', function($injector) {
       return {
         restrict: 'E',
-        template: "<p class=\"input-group\">\n  <input type=\"text\" class=\"form-control\" max-date=\"maxDate\" datepicker-popup=\"{{format}}\" ng-model=\"inputText\" is-open=\"opened\" min-date=\"minDate\" datepicker-options=\"dateOptions\" date-disabled=\"disabled(date, mode)\" close-text=\"Close\"  validator-required=\"{{required}}\" validator-group=\"{{required}}\" id=\"{{formName+index}}\" disabled/>\n  <span class=\"input-group-btn\">\n    <button ng-disabled=\"readOnly\" type=\"button\" class=\"btn btn-default\" ng-click=\"open($event)\"><i class=\"glyphicon glyphicon-calendar\"></i></button>\n  </span>\n</p>",
+        template: "<p class=\"input-group\">\n  <input type=\"text\" class=\"form-control\" max-date=\"maxDate\" datepicker-popup=\"{{format}}\" ng-model=\"inputText\" is-open=\"opened\" min-date=\"minDate\" datepicker-options=\"dateOptions\" date-disabled=\"disabled(date, mode)\" close-text=\"Close\"  validator-required=\"{{required}}\" validator-group=\"{{required}}\" id=\"{{formName+index}}\" disabled/>\n  <span class=\"input-group-btn\">\n    <button ng-disabled=\"readOnly\" type=\"button\" class=\"btn btn-default\" ng-click=\"open($event)\"><i class=\"glyphicons glyphicons-calendar\"></i></button>\n  </span>\n</p>",
         link: function(scope, element, attrs) {
           var extendPastWeekend;
           scope.inputText = '';
@@ -1105,7 +1105,7 @@
           input: '=ngModel',
           "default": '=fbDefault'
         },
-        template: "<div class='fb-form-object' ng-repeat=\"object in form\" fb-form-object=\"object\"></div>",
+        template: "<div class='fb-form-object' ng-repeat=\"object in form\" fb-form-object=\"object\"></div>\n<div ng-if='form.length === 0'>\n    <h4> This form is empty </h4>\n</div>",
         controller: 'fbFormController',
         link: function(scope, element, attrs) {
           var $builder, _base, _name;

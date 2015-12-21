@@ -45,7 +45,7 @@ module.exports = (grunt) ->
             server:
                 options:
                     protocol: 'http'
-                    hostname: '*'
+                    hostname: 'localhost'
                     port: 8000
                     base: '.'
 

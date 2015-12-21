@@ -1,4 +1,3 @@
-
 # ----------------------------------------
 # builder.directive
 # ----------------------------------------
@@ -72,7 +71,7 @@ angular.module 'builder.directive', [
         <p class="input-group">
           <input type="text" class="form-control" max-date="maxDate" datepicker-popup="{{format}}" ng-model="inputText" is-open="opened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close"  validator-required="{{required}}" validator-group="{{required}}" id="{{formName+index}}" disabled/>
           <span class="input-group-btn">
-            <button ng-disabled="readOnly" type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button ng-disabled="readOnly" type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicons glyphicons-calendar"></i></button>
           </span>
         </p>
         """
@@ -492,6 +491,9 @@ angular.module 'builder.directive', [
     template:
         """
         <div class='fb-form-object' ng-repeat="object in form" fb-form-object="object"></div>
+        <div ng-if='form.length === 0'>
+            <h4> This form is empty </h4>
+        </div>
         """
     controller: 'fbFormController'
     link: (scope, element, attrs) ->
