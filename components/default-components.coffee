@@ -223,7 +223,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}}</label>
+                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required?"*":""}}</label>
                   <div class="col-sm-10">
                     <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText'\>
                   </div>
@@ -381,7 +381,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}}</label>
+                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required?"*":""}}</label>
                 <div class="col-sm-10">
                     <input type="text" ng-show="validation != '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                     <input type="tel" ng-show="validation === '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
