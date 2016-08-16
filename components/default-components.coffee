@@ -225,7 +225,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
             <div class="row" id="{{formName+index | nospace}}">
                   <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}}</label>
                   <div class="col-sm-10">
-                    <input type="date" class="form-control" required="{'fb-required':required}" \>
+                    <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText'\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
