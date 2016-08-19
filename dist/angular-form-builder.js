@@ -1048,30 +1048,6 @@
         }
       };
     }
-  ]).directive('signaturePad', [
-    '$injector', function($injector) {
-      return {
-        restrict: 'E',
-        template: '<form method="post" action="" class=""> <canvas class="pad" width="198" height="100" style="border: 1px solid black"></canvas> <input type="text" ng-model="inputText"  name="output" class="output" id="{{formName+index}}" hidden> <div class col-lg-12 no-padding m-t-xs"><button type="button" ng-click="clearSig()" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i></button></div> </form>',
-        link: function(scope, elem, attrs) {
-          var saveSig, sigPad;
-          scope.clearSig = function() {
-            scope.inputText = '';
-            return sigPad.regenerate();
-          };
-          saveSig = function() {
-            return scope.$apply(function() {
-              return scope.inputText = sigPad.getSignatureString();
-            });
-          };
-          return sigPad = elem.signaturePad({
-            drawOnly: true,
-            lineColour: '#fff',
-            onDrawEnd: saveSig
-          });
-        }
-      };
-    }
   ]).directive('fbMultiple', [
     '$injector', function($injector) {
       var $builder;

@@ -429,37 +429,6 @@ angular.module 'builder.directive', [
 ]
 
 # ----------------------------------------
-# signature pad
-# ----------------------------------------
-.directive 'signaturePad', ['$injector', ($injector) ->
-  restrict: 'E'
-  template: '<form method="post" action="" class="">
-      <canvas class="pad" width="198" height="100" style="border: 1px solid black"></canvas>
-      <input type="text" ng-model="inputText"  name="output" class="output" id="{{formName+index}}" hidden>
-    <div class col-lg-12 no-padding m-t-xs"><button type="button" ng-click="clearSig()" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i></button></div>
-    </form>'
-  link: (scope, elem, attrs) ->
-
-    scope.clearSig = ->
-      scope.inputText = ''
-      sigPad.regenerate()
-
-    saveSig = ->
-      scope.$apply(->
-          scope.inputText = sigPad.getSignatureString()
-        )
-    # scope.$watch('readOnly', ->
-    #     unless scope.readOnly is undefined
-    #       if scope.readOnly
-    #         sigPad.updateOptions({displayOnly: true})
-    #       else
-    #         sigPad.updateOptions({displayOnly: false})
-    #   )
-    sigPad = elem.signaturePad({drawOnly: true, lineColour: '#fff', onDrawEnd: saveSig})
-
-
-]
-# ----------------------------------------
 # fb-multiple
 # ----------------------------------------
 .directive 'fbMultiple', ['$injector', ($injector) ->
