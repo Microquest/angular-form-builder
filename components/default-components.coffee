@@ -86,7 +86,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}
+                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "<span style='color:red'>*</span>":""}}
                   </label>
                     <div class="col-sm-10">
                         <div class="input-group m-b">
