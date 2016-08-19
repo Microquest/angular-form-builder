@@ -86,7 +86,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "<span style='color:red'>*</span>":""}}
+                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span>
                   </label>
                     <div class="col-sm-10">
                         <div class="input-group m-b">
@@ -223,7 +223,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required?"*":""}}</label>
+                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                   <div class="col-sm-10">
                     <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText'\>
                   </div>
@@ -381,7 +381,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div class="col-sm-10">
                     <input type="text" ng-show="validation != '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                     <input type="tel" ng-show="validation === '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
@@ -528,7 +528,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div class="col-sm-10">
                     <textarea type="text" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" rows='6' placeholder="{{placeholder}}"/>
                 </div>
@@ -648,7 +648,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" class="col-sm-2 control-label" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                <label for="{{formName+index}}" class="col-sm-2 control-label" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div class="col-sm-10">
                     <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
                     <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
@@ -772,7 +772,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" class="col-sm-2 control-label" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                <label for="{{formName+index}}" class="col-sm-2 control-label" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div class="col-sm-10">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
 
@@ -900,7 +900,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div class="col-sm-10 dropdown">
                     <select ng-show="!multiple" ng-readonly="readOnly" ng-options="value for value in options" class="form-control m-b"
                         ng-model="inputText" ng-init="inputText = ''">
@@ -1039,7 +1039,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
             template:
                 """
                 <div class="row" id="{{formName+index | nospace}}">
-                    <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                    <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                     <div class="col-sm-10">
                         <input type="text" ng-readonly="readOnly" ng-model="inputText.StreetName" class="form-control custom-m-b" placeholder="{{placeholder.StreetName}}"/>
                         <input type="tel" ng-readonly="readOnly" ng-model="inputText.Number" class="form-control custom-m-b" placeholder="{{placeholder.Number}}"/>
@@ -1265,7 +1265,7 @@ angular.module 'builder.components', ['builder', 'validator.rules']
                 template:
                     """
                     <div class="row" id="{{formName+index | nospace}}">
-                        <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} {{required ? "*":""}}</label>
+                        <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
 
                         <div class="col-sm-10">
                             <div class="m-b">
