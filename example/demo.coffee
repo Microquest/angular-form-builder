@@ -1,4 +1,4 @@
-angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.bootstrap', 'summernote']
+angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.bootstrap', 'summernote', 'ngFileUpload']
 
 .run ['$builder', ($builder) ->
     # $builder.registerComponent 'sampleInput',

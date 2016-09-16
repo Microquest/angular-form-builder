@@ -95,6 +95,7 @@ angular.module 'builder.provider', []
             category: formObject.category ? component.category
             pointRules: formObject.pointRules ? component.pointRules
             conversionType: formObject.conversionType ? component.conversionType
+            backgroundImage: formObject.backgroundImage ? component.backgroundImage
         result
 
     @reindexFormObject = (name) =>

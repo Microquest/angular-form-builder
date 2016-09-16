@@ -32,9 +32,21 @@
     "angular-summernote": "~0.3.2",
     "font-awesome": "~4.3.0",
     "iCheck": "~1.0.2",
-    "moment": "~2.10"
+    "moment": "~2.10",
+    "ngMask": "angular-mask#^3.1.1",
+    "angular-signature": "^0.1.8",
+    "angular-canvas-painter": "jkerrwilson/angular-canvas-painter#master",
+    "viscompass": "compass#^0.7.1",
+    "angular-file-upload": "^2.3.4",
+    "ng-file-upload": "^12.2.9"
   },
   "resolutions": {
     "angular": ">=1.2.18"
+  },
+  "devDependencies": {
+    "ngMask": "angular-mask#^3.1.1",
+    "angular-signature": "^0.1.8",
+    "angular-canvas-painter": "jkerrwilson/angular-canvas-painter#master",
+    "viscompass": "compass#^0.7.1"
   }
 }

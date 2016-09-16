@@ -6,6 +6,7 @@ angular.module 'builder.directive', [
     'builder.controller'
     'builder.drag'
     'validator'
+    'ngFileUpload'
 ]
 
 # ----------------------------------------

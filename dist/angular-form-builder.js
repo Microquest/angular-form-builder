@@ -16,7 +16,7 @@
   };
 
   angular.module('builder.controller', ['builder.provider']).controller('fbFormObjectEditableController', [
-    '$scope', '$injector', function($scope, $injector) {
+    '$scope', '$injector', 'Upload', function($scope, $injector, Upload) {
       var $builder, $filter, $modal;
       $builder = $injector.get('$builder');
       $modal = $injector.get('$modal');
@@ -420,6 +420,12 @@
           scope: $scope
         });
       };
+      $scope.convertFileToData = function(file, invalid, scope) {
+        console.log(scope);
+        return Upload.dataUrl(file, true).then(function(url) {
+          return $scope.backgroundImage = url;
+        });
+      };
       $scope.date = Date.now();
       $scope.keys = Object.keys($builder.forms);
       $scope.setupScope = function(formObject) {
@@ -434,10 +440,11 @@
         var component;
         copyObjectToScope(formObject, $scope);
         $scope.optionsText = formObject.options.join('\n');
-        $scope.$watch('[label, description, placeholder, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', function() {
+        $scope.$watch('[label, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', function() {
           formObject.label = $scope.label;
           formObject.description = $scope.description;
           formObject.placeholder = $scope.placeholder;
+          formObject.backgroundImage = $scope.backgroundImage;
           formObject.required = $scope.required;
           formObject.options = $scope.options;
           formObject.multiple = $scope.multiple;
@@ -490,6 +497,7 @@
             label: $scope.label,
             description: $scope.description,
             placeholder: $scope.placeholder,
+            backgroundImage: $scope.backgroundImage,
             required: $scope.required,
             optionsText: $scope.optionsText,
             validation: $scope.validation,
@@ -524,6 +532,7 @@
           $scope.label = this.model.label;
           $scope.description = this.model.description;
           $scope.placeholder = this.model.placeholder;
+          $scope.backgroundImage = this.model.backgroundImage;
           $scope.required = this.model.required;
           $scope.optionsText = this.model.optionsText;
           $scope.validation = this.model.validation;
@@ -628,7 +637,7 @@
 }).call(this);
 
 (function() {
-  angular.module('builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator']).directive('richText', [
+  angular.module('builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator', 'ngFileUpload']).directive('richText', [
     '$injector', function($injector) {
       return {
         restrict: 'E',
@@ -1673,7 +1682,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1709,7 +1718,8 @@
         logic: (_ref22 = formObject.logic) != null ? _ref22 : component.logic,
         category: (_ref23 = formObject.category) != null ? _ref23 : component.category,
         pointRules: (_ref24 = formObject.pointRules) != null ? _ref24 : component.pointRules,
-        conversionType: (_ref25 = formObject.conversionType) != null ? _ref25 : component.conversionType
+        conversionType: (_ref25 = formObject.conversionType) != null ? _ref25 : component.conversionType,
+        backgroundImage: (_ref26 = formObject.backgroundImage) != null ? _ref26 : component.backgroundImage
       };
       return result;
     };

@@ -19,7 +19,7 @@ angular.module 'builder.controller', ['builder.provider']
 # ----------------------------------------
 # fbFormObjectEditableController
 # ----------------------------------------
-.controller 'fbFormObjectEditableController', ['$scope', '$injector', ($scope, $injector) ->
+.controller 'fbFormObjectEditableController', ['$scope', '$injector', 'Upload', ($scope, $injector, Upload) ->
     $builder = $injector.get '$builder'
     $modal = $injector.get '$modal'
     $filter = $injector.get '$filter'
@@ -152,6 +152,12 @@ angular.module 'builder.controller', ['builder.provider']
         scope: $scope
       })
 
+    $scope.convertFileToData = (file, invalid, scope) ->
+      console.log(scope);
+      Upload.dataUrl(file, true).then((url) ->
+          $scope.backgroundImage = url;
+      )
+
     $scope.date = Date.now()
 
     # old canSee func, moved to inline
@@ -169,10 +175,11 @@ angular.module 'builder.controller', ['builder.provider']
 
         $scope.optionsText = formObject.options.join '\n'
 
-        $scope.$watch '[label, description, placeholder, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', ->
+        $scope.$watch '[label, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', ->
             formObject.label = $scope.label
             formObject.description = $scope.description
             formObject.placeholder = $scope.placeholder
+            formObject.backgroundImage = $scope.backgroundImage
             formObject.required = $scope.required
             formObject.options = $scope.options
             formObject.multiple = $scope.multiple
@@ -214,6 +221,7 @@ angular.module 'builder.controller', ['builder.provider']
                 label: $scope.label
                 description: $scope.description
                 placeholder: $scope.placeholder
+                backgroundImage: $scope.backgroundImage
                 required: $scope.required
                 optionsText: $scope.optionsText
                 validation: $scope.validation
@@ -243,6 +251,7 @@ angular.module 'builder.controller', ['builder.provider']
             $scope.label = @model.label
             $scope.description = @model.description
             $scope.placeholder = @model.placeholder
+            $scope.backgroundImage = @model.backgroundImage
             $scope.required = @model.required
             $scope.optionsText = @model.optionsText
             $scope.validation = @model.validation
