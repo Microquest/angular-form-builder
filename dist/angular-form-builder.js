@@ -612,8 +612,11 @@
       return $scope.updateCanvasValue = function(id) {
         var canvas, url;
         canvas = document.getElementById(id);
-        url = canvas.toDataURL();
-        return url;
+        if (canvas) {
+          url = canvas.toDataURL();
+          return url;
+        }
+        return '';
       };
     }
   ]).controller('fbFormObjectController', [

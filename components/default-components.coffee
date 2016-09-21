@@ -1031,7 +1031,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div class="col-sm-10" ng-style="{'background-image':'url('+formObject.backgroundImage+')', 'background-size':'cover', 'width': '400px', 'height': '300px'}" >
                     <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: 400, height: 300, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3}" version="formObject.drawVersion" imageSrc="formObject.backgroundImage"></div>
-                    <input type='hidden' ng-model='inputText' ng-value="updateCanvasValue(formName+index+'_canvas')"/>
+                    <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
                 </div>
               <div class="col-sm-10 col-sm-offset-2">
                 <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>

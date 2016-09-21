@@ -330,8 +330,10 @@ angular.module 'builder.controller', ['builder.provider']
 
     $scope.updateCanvasValue = (id) ->
       canvas = document.getElementById(id)
-      url = canvas.toDataURL()
-      return url
+      if(canvas)
+        url = canvas.toDataURL()
+        return url
+      return ''
 ]
 
 
