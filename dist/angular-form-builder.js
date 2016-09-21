@@ -16,7 +16,7 @@
   };
 
   angular.module('builder.controller', ['builder.provider']).controller('fbFormObjectEditableController', [
-    '$scope', '$injector', 'Upload', function($scope, $injector, Upload) {
+    '$scope', '$injector', '$document', 'Upload', function($scope, $injector, $document, Upload) {
       var $builder, $filter, $modal;
       $builder = $injector.get('$builder');
       $modal = $injector.get('$modal');
@@ -601,7 +601,7 @@
       if ($scope.input == null) {
         $scope.input = [];
       }
-      return $scope.$watch('form', function() {
+      $scope.$watch('form', function() {
         if ($scope.input.length > $scope.form.length) {
           $scope.input.splice($scope.form.length);
         }
@@ -609,6 +609,12 @@
           return $scope.$broadcast($builder.broadcastChannel.updateInput);
         });
       }, true);
+      return $scope.updateCanvasValue = function(id) {
+        var canvas, url;
+        canvas = document.getElementById(id);
+        url = canvas.toDataURL();
+        return url;
+      };
     }
   ]).controller('fbFormObjectController', [
     '$scope', '$injector', function($scope, $injector) {

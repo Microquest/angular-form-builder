@@ -19,7 +19,7 @@ angular.module 'builder.controller', ['builder.provider']
 # ----------------------------------------
 # fbFormObjectEditableController
 # ----------------------------------------
-.controller 'fbFormObjectEditableController', ['$scope', '$injector', 'Upload', ($scope, $injector, Upload) ->
+.controller 'fbFormObjectEditableController', ['$scope', '$injector', '$document', 'Upload', ($scope, $injector, $document, Upload) ->
     $builder = $injector.get '$builder'
     $modal = $injector.get '$modal'
     $filter = $injector.get '$filter'
@@ -327,6 +327,11 @@ angular.module 'builder.controller', ['builder.provider']
         $timeout ->
             $scope.$broadcast $builder.broadcastChannel.updateInput
     , yes
+
+    $scope.updateCanvasValue = (id) ->
+      canvas = document.getElementById(id)
+      url = canvas.toDataURL()
+      return url
 ]
 
 
