@@ -609,6 +609,10 @@
           return $scope.$broadcast($builder.broadcastChannel.updateInput);
         });
       }, true);
+      $scope.broadcastMessage = function(message) {
+        console.log("broadcasting from rootscope", message);
+        return $rootScope.$broadcast(message);
+      };
       return $scope.updateCanvasValue = function(id) {
         var canvas, url;
         canvas = document.getElementById(id);

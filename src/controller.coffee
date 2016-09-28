@@ -329,6 +329,7 @@ angular.module 'builder.controller', ['builder.provider']
     , yes
 
     $scope.broadcastMessage = (message) ->
+      console.log("broadcasting from rootscope", message)
       $rootScope.$broadcast(message)
 
     $scope.updateCanvasValue = (id) ->
