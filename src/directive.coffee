@@ -237,11 +237,37 @@ angular.module 'builder.directive', [
         # compile formObject
         scope.$watch '$component.template', (template) ->
             return if not template
-            view = $compile(template) scope
+            complete =
+                  """
+                  <div class="row">
+                    <div class="col-sm-10" style='pointer-events: none;'>
+                  """ +
+                  template +
+                  """
+                    </div>
+                    <div class="col-sm-2">
+                      <div class='row'>
+                        <button type="button" class="btn btn-xs btn-info">
+                          <i class="glyphicon glyphicon-edit"></i>
+                        </button>
+                        <button type="button" ng-click="" class="btn btn-xs btn-danger">
+                          <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  """
+            view = $compile(complete) scope
             $(element).html view
+            $(element).find('.btn-info').click ->
+              $(element).popover 'toggle'
+
+            $(element).find('.btn-danger').click ->
+              $builder.removeFormObject scope.$parent.formName, scope.$parent.$index
+              $(element).popover 'hide'
 
         # disable click event
-        $(element).on 'click', -> no
+        #$(element).on 'click', -> no
 
         # draggable
         $drag.draggable $(element),
@@ -273,6 +299,7 @@ angular.module 'builder.directive', [
                 content: popover.view
                 container: 'body'
                 placement: $builder.config.popoverPlacement
+                trigger: 'manual'
         scope.popover =
             save: ($event) ->
                 ###

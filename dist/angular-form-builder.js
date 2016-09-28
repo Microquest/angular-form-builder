@@ -874,15 +874,20 @@
           scope.$component = $builder.components[scope.formObject.component];
           scope.setupScope(scope.formObject);
           scope.$watch('$component.template', function(template) {
-            var view;
+            var complete, view;
             if (!template) {
               return;
             }
-            view = $compile(template)(scope);
-            return $(element).html(view);
-          });
-          $(element).on('click', function() {
-            return false;
+            complete = "<div class=\"row\">\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\">\n    <div class='row'>\n      <button type=\"button\" class=\"btn btn-xs btn-info\">\n        <i class=\"glyphicon glyphicon-edit\"></i>\n      </button>\n      <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n        <i class=\"glyphicon glyphicon-remove\"></i>\n      </button>\n    </div>\n  </div>\n</div>";
+            view = $compile(complete)(scope);
+            $(element).html(view);
+            $(element).find('.btn-info').click(function() {
+              return $(element).popover('toggle');
+            });
+            return $(element).find('.btn-danger').click(function() {
+              $builder.removeFormObject(scope.$parent.formName, scope.$parent.$index);
+              return $(element).popover('hide');
+            });
           });
           $drag.draggable($(element), {
             object: {
@@ -912,7 +917,8 @@
               title: scope.$component.label,
               content: popover.view,
               container: 'body',
-              placement: $builder.config.popoverPlacement
+              placement: $builder.config.popoverPlacement,
+              trigger: 'manual'
             });
           });
           scope.popover = {
