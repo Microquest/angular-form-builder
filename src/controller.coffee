@@ -328,6 +328,9 @@ angular.module 'builder.controller', ['builder.provider']
             $scope.$broadcast $builder.broadcastChannel.updateInput
     , yes
 
+    $scope.broadcastMessage = (message) ->
+      $rootScope.$broadcast(message)
+
     $scope.updateCanvasValue = (id) ->
       canvas = document.getElementById(id)
       if(canvas)
