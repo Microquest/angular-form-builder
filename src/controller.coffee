@@ -329,7 +329,6 @@ angular.module 'builder.controller', ['builder.provider']
     , yes
 
     $scope.broadcastMessage = (message) ->
-      console.log("broadcasting from rootscope", message)
       $rootScope.$broadcast(message)
 
     $scope.updateCanvasValue = (id) ->
@@ -338,6 +337,32 @@ angular.module 'builder.controller', ['builder.provider']
         url = canvas.toDataURL()
         return url
       return ''
+]
+
+
+# ----------------------------------------
+# fbFormRowController
+# ----------------------------------------
+.controller 'fbFormRowController', ['$scope', '$injector', ($scope, $injector) ->
+  # providers
+  # TODO: There's probably stuff that needs to happen here
+  $builder = $injector.get '$builder'
+  $timeout = $injector.get '$timeout'
+  $rootScope = $injector.get '$rootScope'
+
+  $rootScope.fields = $builder.forms
+
+  # set default for input
+  $scope.input ?= []
+  $scope.$watch 'row', ->
+    # remove superfluous input
+    if $scope.input.length > $scope.form.length
+      $scope.input.splice $scope.form.length
+    # tell children to update input value.
+    # ! use $timeout for waiting $scope updated.
+    $timeout ->
+      $scope.$broadcast $builder.broadcastChannel.updateInput
+  , yes
 ]
 
 

@@ -71,6 +71,7 @@ angular.module 'builder.provider', []
             component: formObject.component
             editable: formObject.editable ? component.editable
             index: formObject.index ? 0
+            row: formObject.row ? 0
             label: formObject.label ? component.label
             description: formObject.description ? component.description
             placeholder: formObject.placeholder ? component.placeholder
@@ -98,11 +99,17 @@ angular.module 'builder.provider', []
             backgroundImage: formObject.backgroundImage ? component.backgroundImage
         result
 
-    @reindexFormObject = (name) =>
-        formObjects = @forms[name]
+    @reindexFormObject = (name, row) =>
+        formObjects = @forms[name][row].formObjects
         for index in [0...formObjects.length] by 1
             formObjects[index].index = index
         return
+
+    @reindexFormRows = (name) =>
+      formRows = @forms[name]
+      for index in [0...formRows.length] by 1
+        formRows[index].index = index
+      return
 
     @setupProviders = (injector) =>
         $injector = injector
@@ -160,14 +167,21 @@ angular.module 'builder.provider', []
             console.error "The component #{name} was registered."
         return
 
-    @addFormObject = (name, formObject={}) =>
+    @addFormRow = (name) =>
+        ###
+        Insert the form row into the form at last.
+        ###
+        @forms[name] ?= []
+        @insertFormRow name, @forms[name].length
+
+    @addFormObject = (name, row, formObject={}) =>
         ###
         Insert the form object into the form at last.
         ###
-        @forms[name] ?= []
-        @insertFormObject name, @forms[name].length, formObject
+        @forms[name] ?= [{index: 0, formObjects: []}]
+        @insertFormObject name, row, @forms[name].length, formObject
 
-    @insertFormObject = (name, index, formObject={}) =>
+    @insertFormObject = (name, row, index, formObject={}) =>
         ###
         Insert the form object into the form at {index}.
         @param name: The form name.
@@ -185,14 +199,23 @@ angular.module 'builder.provider', []
             [index]: {int} The form object index. It will be updated by $builder.
         @return: The form object.
         ###
+        @forms[name] ?= [{index: 0, formObjects: []}]
+        if index > @forms[name][row].formObjects.length then index = @forms[name][row].formObjects.length
+        else if index < 0 then index = 0
+        formObject.row = parseInt(row)
+        @forms[name][row].formObjects.splice index, 0, @convertFormObject(name, formObject)
+        @reindexFormObject name, row
+        @forms[name][row].formObjects[index]
+
+    @insertFormRow = (name, index) =>
         @forms[name] ?= []
         if index > @forms[name].length then index = @forms[name].length
         else if index < 0 then index = 0
-        @forms[name].splice index, 0, @convertFormObject(name, formObject)
-        @reindexFormObject name
+        @forms[name].splice index, 0, {index: index, formObjects: []}
+        @reindexFormRows name
         @forms[name][index]
 
-    @removeFormObject = (name, index) =>
+    @removeFormObject = (name, row, index) =>
         ###
         Remove the form object by the index.
         @param name: The form name.
@@ -200,42 +223,53 @@ angular.module 'builder.provider', []
         ###
         forms = @forms
         reindexFormObject = @reindexFormObject
-        formObjects = forms[name]
+        formObjects = forms[name][row].formObjects
         formObjects.splice index, 1
-        reindexFormObject name
+        reindexFormObject name, row
 
     @clearForm = (name) =>
         ###
         Clears all components from the form object.
         @param name: The form name.
         ###
-        @forms[name] ?= []
-        formObjects = @forms[name]
-        if formObjects then formObjects.splice 0, formObjects.length
-        @reindexFormObject name
+        @forms[name] = [{index: 0, formObjects: []}]
 
-    @loadFromArray = (name, formObjects) =>
+    @loadFromArray = (name, formRows) =>
         ###
         Adds a list of objects to the specified form
         @param name: The form name.
         @param formObjects: The form compoennts to add.
         ###
         forms = @forms
-        for component of formObjects
-          @addFormObject(name, formObjects[component])
+        for row of formRows
+          @addFormRow name
+          for component of formRows[row].formObjects
+            @addFormObject(name, row, formRows[row].formObjects[component])
 
-    @updateFormObjectIndex = (name, oldIndex, newIndex) =>
+    @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
         ###
         Update the index of the form object.
         @param name: The form name.
         @param oldIndex: The old index.
         @param newIndex: The new index.
         ###
-        return if oldIndex is newIndex
-        formObjects = @forms[name]
+        return if oldIndex is newIndex and oldRow is newRow
+        formRows = @forms[name]
+        formRow = formRows[oldRow]
+        formObjects = formRow.formObjects
+        #remove from old position
         formObject = formObjects.splice(oldIndex, 1)[0]
-        formObjects.splice newIndex, 0, formObject
-        @reindexFormObject name
+        if oldRow is newRow
+          #if its in the same row just move it
+          formObjects.splice newIndex, 0, formObject
+        else
+          #if its in a different row get that row
+          newFormRow = formRows[newRow]
+          newFormObjects = newFormRow.formObjects
+          #add it to the new row
+          newFormObjects.splice newIndex, 0, formObject
+        @reindexFormObject name, oldRow
+        @reindexFormObject name, newRow
 
     @resetProviderData = () =>
         ###
@@ -258,23 +292,25 @@ angular.module 'builder.provider', []
     # $get
     # ----------------------------------------
     @$get = ['$injector', ($injector) =>
-        @setupProviders($injector)
-        for name, component of @components
-            @loadTemplate component
+      @setupProviders($injector)
+      for name, component of @components
+        @loadTemplate component
 
-        config: @config
-        components: @components
-        groups: @groups
-        forms: @forms
-        broadcastChannel: @broadcastChannel
-        registerComponent: @registerComponent
-        addFormObject: @addFormObject
-        insertFormObject: @insertFormObject
-        removeFormObject: @removeFormObject
-        updateFormObjectIndex: @updateFormObjectIndex
-        loadFromArray: @loadFromArray
-        resetProviderData: @resetProviderData
-        clearForm: @clearForm
-        setFormData: @setFormData
+      config: @config
+      components: @components
+      groups: @groups
+      forms: @forms
+      broadcastChannel: @broadcastChannel
+      registerComponent: @registerComponent
+      addFormObject: @addFormObject
+      insertFormObject: @insertFormObject
+      removeFormObject: @removeFormObject
+      updateFormObjectIndex: @updateFormObjectIndex
+      loadFromArray: @loadFromArray
+      resetProviderData: @resetProviderData
+      clearForm: @clearForm
+      setFormData: @setFormData
+      insertFormRow: @insertFormRow
+      addFormRow: @addFormRow
     ]
     return

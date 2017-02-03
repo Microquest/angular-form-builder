@@ -610,7 +610,6 @@
         });
       }, true);
       $scope.broadcastMessage = function(message) {
-        console.log("broadcasting from rootscope", message);
         return $rootScope.$broadcast(message);
       };
       return $scope.updateCanvasValue = function(id) {
@@ -622,6 +621,25 @@
         }
         return '';
       };
+    }
+  ]).controller('fbFormRowController', [
+    '$scope', '$injector', function($scope, $injector) {
+      var $builder, $rootScope, $timeout;
+      $builder = $injector.get('$builder');
+      $timeout = $injector.get('$timeout');
+      $rootScope = $injector.get('$rootScope');
+      $rootScope.fields = $builder.forms;
+      if ($scope.input == null) {
+        $scope.input = [];
+      }
+      return $scope.$watch('row', function() {
+        if ($scope.input.length > $scope.form.length) {
+          $scope.input.splice($scope.form.length);
+        }
+        return $timeout(function() {
+          return $scope.$broadcast($builder.broadcastChannel.updateInput);
+        });
+      }, true);
     }
   ]).controller('fbFormObjectController', [
     '$scope', '$injector', function($scope, $injector) {
@@ -776,27 +794,61 @@
         scope: {
           fbBuilder: '@'
         },
-        template: "<div class='form-horizontal'>\n    <div class='fb-form-object-editable' ng-repeat=\"object in formObjects\"\n        fb-form-object-editable=\"object\"></div>\n    <div ng-if='formObjects.length === 0'>\n        <h4> Form is empty </h4>\n        <p> Drap and drop components here to build intake forms </p>\n    </div>\n</div>",
+        template: "<div class='form-horizontal'>\n    <div class='fb-form-row-editable' ng-repeat=\"row in formRows\"\n        fb-form-row-editable=\"row\" fb-form-row-index='{{$index}}'></div>\n    <div ng-if='formRows.length === 0'>\n        <h4> Form is empty </h4>\n        <p> Add a new row to start building your form </p>\n    </div>\n    <div class='row'>\n      <div class='col col-sm-12'>\n        <button type='button' ng-click='addRow()' class='btn btn-primary'>+ Add Row</button>\n      </div>\n    </div>\n</div>",
         link: function(scope, element, attrs) {
           var beginMove, _base, _name;
           scope.formName = attrs.fbBuilder;
           if ((_base = $builder.forms)[_name = scope.formName] == null) {
             _base[_name] = [];
           }
-          scope.formObjects = $builder.forms[scope.formName];
+          scope.formRows = $builder.forms[scope.formName];
           beginMove = true;
+          $(element).find('.btn-primary').click(function() {
+            $builder.addFormRow(scope.formName);
+            return scope.$apply();
+          });
           $(element).addClass('fb-builder');
           return $drag.droppable($(element), {
             move: function(e) {
-              var $empty, $formObject, $formObjects, height, index, offset, positions, _i, _j, _ref, _ref1;
               if (beginMove) {
                 $("div.fb-form-object-editable").popover('hide');
-                beginMove = false;
+                return beginMove = false;
               }
+            },
+            up: function(e, isHover, draggable) {
+              beginMove = true;
+              if (!$drag.isMouseMoved()) {
+                $(element).find('.empty').remove();
+              }
+            }
+          });
+        }
+      };
+    }
+  ]).directive('fbFormRowEditable', [
+    '$injector', function($injector) {
+      var $builder, $drag;
+      $builder = $injector.get('$builder');
+      $drag = $injector.get('$drag');
+      return {
+        restrict: 'A',
+        scope: {
+          fbFormRowEditable: '@',
+          fbFormRowIndex: '@'
+        },
+        template: "<div class='row'>\n    <div class='col col-sm-4 fb-form-object-editable' ng-repeat=\"object in formObjects\"\n        fb-form-object-editable=\"object\"></div>\n    <div class=\"col col-sm-12 notify\" ng-if='formObjects.length === 0'>\n        <h4> Row is empty </h4>\n        <p> Drap and drop components here to fill this row </p>\n    </div>\n</div>",
+        link: function(scope, element, attrs) {
+          scope.formName = scope.$parent.formName;
+          scope.formObjects = $builder.forms[scope.formName][scope.fbFormRowIndex].formObjects;
+          $(element).addClass('fb-form-row-editable');
+          return $drag.droppable($(element), {
+            move: function(e) {
+              var $empty, $formObject, $formObjects, index, offset, positions, width, _i, _j, _ref, _ref1;
               $formObjects = $(element).find('.fb-form-object-editable:not(.empty,.dragging)');
               if ($formObjects.length === 0) {
                 if ($(element).find('.fb-form-object-editable.empty').length === 0) {
-                  $(element).find('>div:first').append($("<div class='fb-form-object-editable empty'></div>"));
+                  $(element).find('.notify').hide();
+                  $(element).find('>div:first').append($("<div class='col col-sm-12 fb-form-object-editable empty'></div>"));
                 }
                 return;
               }
@@ -805,14 +857,14 @@
               for (index = _i = 0, _ref = $formObjects.length; _i < _ref; index = _i += 1) {
                 $formObject = $($formObjects[index]);
                 offset = $formObject.offset();
-                height = $formObject.height();
-                positions.push(offset.top + height / 2);
+                width = $formObject.width();
+                positions.push(offset.left + width / 2);
               }
               positions.push(positions[positions.length - 1] + 1000);
               for (index = _j = 1, _ref1 = positions.length; _j < _ref1; index = _j += 1) {
-                if (e.pageY > positions[index - 1] && e.pageY <= positions[index]) {
+                if (e.pageX > positions[index - 1] && e.pageX <= positions[index]) {
                   $(element).find('.empty').remove();
-                  $empty = $("<div class='fb-form-object-editable empty'></div>");
+                  $empty = $("<div class='col col-sm-4 fb-form-object-editable empty'></div>");
                   if (index - 1 < $formObjects.length) {
                     $empty.insertBefore($($formObjects[index - 1]));
                   } else {
@@ -823,34 +875,32 @@
               }
             },
             out: function() {
+              var beginMove;
               if (beginMove) {
                 $("div.fb-form-object-editable").popover('hide');
                 beginMove = false;
               }
-              return $(element).find('.empty').remove();
+              $(element).find('.empty').remove();
+              return $(element).find('.notify').show();
             },
             up: function(e, isHover, draggable) {
-              var formObject, newIndex, oldIndex;
-              beginMove = true;
-              if (!$drag.isMouseMoved()) {
-                $(element).find('.empty').remove();
-                return;
-              }
-              if (!isHover && draggable.mode === 'drag') {
-                formObject = draggable.object.formObject;
-              } else if (isHover) {
+              var newIndex, newRow, oldIndex, oldRow;
+              if (isHover) {
                 if (draggable.mode === 'mirror') {
-                  $builder.insertFormObject(scope.formName, $(element).find('.empty').index('.fb-form-object-editable'), {
+                  $builder.insertFormObject(scope.formName, scope.fbFormRowIndex, $(element).find('.empty').index('.fb-form-object-editable'), {
                     component: draggable.object.componentName
                   });
                 }
                 if (draggable.mode === 'drag') {
+                  console.log(draggable.object.formObject);
                   oldIndex = draggable.object.formObject.index;
                   newIndex = $(element).find('.empty').index('.fb-form-object-editable');
                   if (oldIndex < newIndex) {
                     newIndex--;
                   }
-                  $builder.updateFormObjectIndex(scope.formName, oldIndex, newIndex);
+                  newRow = scope.fbFormRowIndex;
+                  oldRow = draggable.object.formObject.row;
+                  $builder.updateFormObjectIndex(scope.formName, oldRow, newRow, oldIndex, newIndex);
                 }
               }
               return $(element).find('.empty').remove();
@@ -882,14 +932,15 @@
             if (!template) {
               return;
             }
-            complete = "<div class=\"row\">\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\">\n    <div class='row'>\n      <button type=\"button\" class=\"btn btn-xs btn-info\">\n        <i class=\"glyphicon glyphicon-edit\"></i>\n      </button>\n      <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n        <i class=\"glyphicon glyphicon-remove\"></i>\n      </button>\n    </div>\n  </div>\n</div>";
+            complete = "<div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "</div>\n<div class=\"col-sm-2\">\n  <div class='row'>\n    <button type=\"button\" class=\"btn btn-xs btn-info\">\n      <i class=\"glyphicon glyphicon-edit\"></i>\n    </button>\n    <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n      <i class=\"glyphicon glyphicon-remove\"></i>\n    </button>\n  </div>\n</div>";
             view = $compile(complete)(scope);
             $(element).html(view);
             $(element).find('.btn-info').click(function() {
               return $(element).popover('toggle');
             });
             return $(element).find('.btn-danger').click(function() {
-              $builder.removeFormObject(scope.$parent.formName, scope.$parent.$index);
+              console.log(scope.$parent.$index + " " + scope.$parent.$parent.$parent.$index + " " + scope.$parent.row);
+              $builder.removeFormObject(scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index);
               return $(element).popover('hide');
             });
           });
@@ -1109,7 +1160,7 @@
           input: '=ngModel',
           "default": '=fbDefault'
         },
-        template: "<div class='fb-form-object' ng-repeat=\"object in form\" fb-form-object=\"object\"></div>\n<div ng-if='form.length === 0'>\n    <h4> This form is empty </h4>\n</div>",
+        template: "<div class='fb-form-row' ng-repeat=\"row in form\" fb-form-row=\"row\"></div>\n<div ng-if='form.length === 0'>\n    <h4> This form is empty </h4>\n</div>",
         controller: 'fbFormController',
         link: function(scope, element, attrs) {
           var $builder, _base, _name;
@@ -1118,6 +1169,21 @@
             _base[_name] = [];
           }
           return scope.form = $builder.forms[scope.formName];
+        }
+      };
+    }
+  ]).directive('fbFormRow', [
+    '$injector', function($injector) {
+      var $builder, $compile, $parse;
+      $builder = $injector.get('$builder');
+      $compile = $injector.get('$compile');
+      $parse = $injector.get('$parse');
+      return {
+        restrict: 'A',
+        template: "<div class='row fb-form-row'>\n  <div class='col col-sm-4 fb-form-object' ng-repeat=\"object in formRow\" fb-form-object=\"object\"></div>\n  <div ng-if='form.length === 0'>\n      <h4> This row is empty </h4>\n  </div>\n</div>",
+        controller: 'fbFormRowController',
+        link: function(scope, element, attrs) {
+          return scope.formRow = $parse(attrs.fbFormRow)(scope);
         }
       };
     }
@@ -1701,7 +1767,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1714,40 +1780,50 @@
         component: formObject.component,
         editable: (_ref = formObject.editable) != null ? _ref : component.editable,
         index: (_ref1 = formObject.index) != null ? _ref1 : 0,
-        label: (_ref2 = formObject.label) != null ? _ref2 : component.label,
-        description: (_ref3 = formObject.description) != null ? _ref3 : component.description,
-        placeholder: (_ref4 = formObject.placeholder) != null ? _ref4 : component.placeholder,
-        options: (_ref5 = formObject.options) != null ? _ref5 : component.options,
-        required: (_ref6 = formObject.required) != null ? _ref6 : component.required,
-        validation: (_ref7 = formObject.validation) != null ? _ref7 : component.validation,
-        multiple: (_ref8 = formObject.multiple) != null ? _ref8 : component.multiple,
-        minLength: (_ref9 = formObject.minLength) != null ? _ref9 : component.minLength,
-        maxLength: (_ref10 = formObject.maxLength) != null ? _ref10 : component.maxLength,
-        dateRangeStart: (_ref11 = formObject.dateRangeStart) != null ? _ref11 : component.dateRangeStart,
-        dateRangeEnd: (_ref12 = formObject.dateRangeEnd) != null ? _ref12 : component.dateRangeEnd,
-        disableWeekends: (_ref13 = formObject.disableWeekends) != null ? _ref13 : component.disableWeekends,
-        readOnly: (_ref14 = formObject.readOnly) != null ? _ref14 : component.readOnly,
-        nextXDays: (_ref15 = formObject.nextXDays) != null ? _ref15 : component.nextXDays,
-        maxDate: (_ref16 = formObject.maxDate) != null ? _ref16 : component.maxDate,
-        requireConfirmation: (_ref17 = formObject.requireConfirmation) != null ? _ref17 : component.requireConfirmation,
-        minRange: (_ref18 = formObject.minRange) != null ? _ref18 : component.minRange,
-        maxRange: (_ref19 = formObject.maxRange) != null ? _ref19 : component.maxRange,
-        performCreditCheck: (_ref20 = formObject.performCreditCheck) != null ? _ref20 : component.performCreditCheck,
-        cprCountry: (_ref21 = formObject.cprCountry) != null ? _ref21 : component.cprCountry,
-        logic: (_ref22 = formObject.logic) != null ? _ref22 : component.logic,
-        category: (_ref23 = formObject.category) != null ? _ref23 : component.category,
-        pointRules: (_ref24 = formObject.pointRules) != null ? _ref24 : component.pointRules,
-        conversionType: (_ref25 = formObject.conversionType) != null ? _ref25 : component.conversionType,
-        backgroundImage: (_ref26 = formObject.backgroundImage) != null ? _ref26 : component.backgroundImage
+        row: (_ref2 = formObject.row) != null ? _ref2 : 0,
+        label: (_ref3 = formObject.label) != null ? _ref3 : component.label,
+        description: (_ref4 = formObject.description) != null ? _ref4 : component.description,
+        placeholder: (_ref5 = formObject.placeholder) != null ? _ref5 : component.placeholder,
+        options: (_ref6 = formObject.options) != null ? _ref6 : component.options,
+        required: (_ref7 = formObject.required) != null ? _ref7 : component.required,
+        validation: (_ref8 = formObject.validation) != null ? _ref8 : component.validation,
+        multiple: (_ref9 = formObject.multiple) != null ? _ref9 : component.multiple,
+        minLength: (_ref10 = formObject.minLength) != null ? _ref10 : component.minLength,
+        maxLength: (_ref11 = formObject.maxLength) != null ? _ref11 : component.maxLength,
+        dateRangeStart: (_ref12 = formObject.dateRangeStart) != null ? _ref12 : component.dateRangeStart,
+        dateRangeEnd: (_ref13 = formObject.dateRangeEnd) != null ? _ref13 : component.dateRangeEnd,
+        disableWeekends: (_ref14 = formObject.disableWeekends) != null ? _ref14 : component.disableWeekends,
+        readOnly: (_ref15 = formObject.readOnly) != null ? _ref15 : component.readOnly,
+        nextXDays: (_ref16 = formObject.nextXDays) != null ? _ref16 : component.nextXDays,
+        maxDate: (_ref17 = formObject.maxDate) != null ? _ref17 : component.maxDate,
+        requireConfirmation: (_ref18 = formObject.requireConfirmation) != null ? _ref18 : component.requireConfirmation,
+        minRange: (_ref19 = formObject.minRange) != null ? _ref19 : component.minRange,
+        maxRange: (_ref20 = formObject.maxRange) != null ? _ref20 : component.maxRange,
+        performCreditCheck: (_ref21 = formObject.performCreditCheck) != null ? _ref21 : component.performCreditCheck,
+        cprCountry: (_ref22 = formObject.cprCountry) != null ? _ref22 : component.cprCountry,
+        logic: (_ref23 = formObject.logic) != null ? _ref23 : component.logic,
+        category: (_ref24 = formObject.category) != null ? _ref24 : component.category,
+        pointRules: (_ref25 = formObject.pointRules) != null ? _ref25 : component.pointRules,
+        conversionType: (_ref26 = formObject.conversionType) != null ? _ref26 : component.conversionType,
+        backgroundImage: (_ref27 = formObject.backgroundImage) != null ? _ref27 : component.backgroundImage
       };
       return result;
     };
     this.reindexFormObject = (function(_this) {
-      return function(name) {
+      return function(name, row) {
         var formObjects, index, _i, _ref;
-        formObjects = _this.forms[name];
+        formObjects = _this.forms[name][row].formObjects;
         for (index = _i = 0, _ref = formObjects.length; _i < _ref; index = _i += 1) {
           formObjects[index].index = index;
+        }
+      };
+    })(this);
+    this.reindexFormRows = (function(_this) {
+      return function(name) {
+        var formRows, index, _i, _ref;
+        formRows = _this.forms[name];
+        for (index = _i = 0, _ref = formRows.length; _i < _ref; index = _i += 1) {
+          formRows[index].index = index;
         }
       };
     })(this);
@@ -1821,8 +1897,21 @@
         }
       };
     })(this);
+    this.addFormRow = (function(_this) {
+      return function(name) {
+
+        /*
+        Insert the form row into the form at last.
+         */
+        var _base;
+        if ((_base = _this.forms)[name] == null) {
+          _base[name] = [];
+        }
+        return _this.insertFormRow(name, _this.forms[name].length);
+      };
+    })(this);
     this.addFormObject = (function(_this) {
-      return function(name, formObject) {
+      return function(name, row, formObject) {
         var _base;
         if (formObject == null) {
           formObject = {};
@@ -1832,13 +1921,18 @@
         Insert the form object into the form at last.
          */
         if ((_base = _this.forms)[name] == null) {
-          _base[name] = [];
+          _base[name] = [
+            {
+              index: 0,
+              formObjects: []
+            }
+          ];
         }
-        return _this.insertFormObject(name, _this.forms[name].length, formObject);
+        return _this.insertFormObject(name, row, _this.forms[name].length, formObject);
       };
     })(this);
     this.insertFormObject = (function(_this) {
-      return function(name, index, formObject) {
+      return function(name, row, index, formObject) {
         var _base;
         if (formObject == null) {
           formObject = {};
@@ -1862,6 +1956,28 @@
         @return: The form object.
          */
         if ((_base = _this.forms)[name] == null) {
+          _base[name] = [
+            {
+              index: 0,
+              formObjects: []
+            }
+          ];
+        }
+        if (index > _this.forms[name][row].formObjects.length) {
+          index = _this.forms[name][row].formObjects.length;
+        } else if (index < 0) {
+          index = 0;
+        }
+        formObject.row = parseInt(row);
+        _this.forms[name][row].formObjects.splice(index, 0, _this.convertFormObject(name, formObject));
+        _this.reindexFormObject(name, row);
+        return _this.forms[name][row].formObjects[index];
+      };
+    })(this);
+    this.insertFormRow = (function(_this) {
+      return function(name, index) {
+        var _base;
+        if ((_base = _this.forms)[name] == null) {
           _base[name] = [];
         }
         if (index > _this.forms[name].length) {
@@ -1869,13 +1985,16 @@
         } else if (index < 0) {
           index = 0;
         }
-        _this.forms[name].splice(index, 0, _this.convertFormObject(name, formObject));
-        _this.reindexFormObject(name);
+        _this.forms[name].splice(index, 0, {
+          index: index,
+          formObjects: []
+        });
+        _this.reindexFormRows(name);
         return _this.forms[name][index];
       };
     })(this);
     this.removeFormObject = (function(_this) {
-      return function(name, index) {
+      return function(name, row, index) {
 
         /*
         Remove the form object by the index.
@@ -1885,9 +2004,9 @@
         var formObjects, forms, reindexFormObject;
         forms = _this.forms;
         reindexFormObject = _this.reindexFormObject;
-        formObjects = forms[name];
+        formObjects = forms[name][row].formObjects;
         formObjects.splice(index, 1);
-        return reindexFormObject(name);
+        return reindexFormObject(name, row);
       };
     })(this);
     this.clearForm = (function(_this) {
@@ -1897,36 +2016,41 @@
         Clears all components from the form object.
         @param name: The form name.
          */
-        var formObjects, _base;
-        if ((_base = _this.forms)[name] == null) {
-          _base[name] = [];
-        }
-        formObjects = _this.forms[name];
-        if (formObjects) {
-          formObjects.splice(0, formObjects.length);
-        }
-        return _this.reindexFormObject(name);
+        return _this.forms[name] = [
+          {
+            index: 0,
+            formObjects: []
+          }
+        ];
       };
     })(this);
     this.loadFromArray = (function(_this) {
-      return function(name, formObjects) {
+      return function(name, formRows) {
 
         /*
         Adds a list of objects to the specified form
         @param name: The form name.
         @param formObjects: The form compoennts to add.
          */
-        var component, forms, _results;
+        var component, forms, row, _results;
         forms = _this.forms;
         _results = [];
-        for (component in formObjects) {
-          _results.push(_this.addFormObject(name, formObjects[component]));
+        for (row in formRows) {
+          _this.addFormRow(name);
+          _results.push((function() {
+            var _results1;
+            _results1 = [];
+            for (component in formRows[row].formObjects) {
+              _results1.push(this.addFormObject(name, row, formRows[row].formObjects[component]));
+            }
+            return _results1;
+          }).call(_this));
         }
         return _results;
       };
     })(this);
     this.updateFormObjectIndex = (function(_this) {
-      return function(name, oldIndex, newIndex) {
+      return function(name, oldRow, newRow, oldIndex, newIndex) {
 
         /*
         Update the index of the form object.
@@ -1934,14 +2058,23 @@
         @param oldIndex: The old index.
         @param newIndex: The new index.
          */
-        var formObject, formObjects;
-        if (oldIndex === newIndex) {
+        var formObject, formObjects, formRow, formRows, newFormObjects, newFormRow;
+        if (oldIndex === newIndex && oldRow === newRow) {
           return;
         }
-        formObjects = _this.forms[name];
+        formRows = _this.forms[name];
+        formRow = formRows[oldRow];
+        formObjects = formRow.formObjects;
         formObject = formObjects.splice(oldIndex, 1)[0];
-        formObjects.splice(newIndex, 0, formObject);
-        return _this.reindexFormObject(name);
+        if (oldRow === newRow) {
+          formObjects.splice(newIndex, 0, formObject);
+        } else {
+          newFormRow = formRows[newRow];
+          newFormObjects = newFormRow.formObjects;
+          newFormObjects.splice(newIndex, 0, formObject);
+        }
+        _this.reindexFormObject(name, oldRow);
+        return _this.reindexFormObject(name, newRow);
       };
     })(this);
     this.resetProviderData = (function(_this) {
@@ -1990,7 +2123,9 @@
             loadFromArray: _this.loadFromArray,
             resetProviderData: _this.resetProviderData,
             clearForm: _this.clearForm,
-            setFormData: _this.setFormData
+            setFormData: _this.setFormData,
+            insertFormRow: _this.insertFormRow,
+            addFormRow: _this.addFormRow
           };
         };
       })(this)

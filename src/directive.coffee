@@ -127,11 +127,16 @@ angular.module 'builder.directive', [
     template:
         """
         <div class='form-horizontal'>
-            <div class='fb-form-object-editable' ng-repeat="object in formObjects"
-                fb-form-object-editable="object"></div>
-            <div ng-if='formObjects.length === 0'>
+            <div class='fb-form-row-editable' ng-repeat="row in formRows"
+                fb-form-row-editable="row" fb-form-row-index='{{$index}}'></div>
+            <div ng-if='formRows.length === 0'>
                 <h4> Form is empty </h4>
-                <p> Drap and drop components here to build intake forms </p>
+                <p> Add a new row to start building your form </p>
+            </div>
+            <div class='row'>
+              <div class='col col-sm-12'>
+                <button type='button' ng-click='addRow()' class='btn btn-primary'>+ Add Row</button>
+              </div>
             </div>
         </div>
         """
@@ -141,76 +146,124 @@ angular.module 'builder.directive', [
         # ----------------------------------------
         scope.formName = attrs.fbBuilder
         $builder.forms[scope.formName] ?= []
-        scope.formObjects = $builder.forms[scope.formName]
+        scope.formRows = $builder.forms[scope.formName]
         beginMove = yes
 
+        $(element).find('.btn-primary').click ->
+          $builder.addFormRow scope.formName
+          scope.$apply()
+
         $(element).addClass 'fb-builder'
+        #Moving drag calculations to rows.
         $drag.droppable $(element),
             move: (e) ->
                 if beginMove
                     # hide all popovers
                     $("div.fb-form-object-editable").popover 'hide'
                     beginMove = no
-
-                $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
-                if $formObjects.length is 0
-                    # there are no components in the builder.
-                    if $(element).find('.fb-form-object-editable.empty').length is 0
-                        $(element).find('>div:first').append $("<div class='fb-form-object-editable empty'></div>")
-                    return
-
-                # the positions could added .empty div.
-                positions = []
-                # first
-                positions.push -1000
-                for index in [0...$formObjects.length] by 1
-                    $formObject = $($formObjects[index])
-                    offset = $formObject.offset()
-                    height = $formObject.height()
-                    positions.push offset.top + height / 2
-                positions.push positions[positions.length - 1] + 1000   # last
-
-                # search where should I insert the .empty
-                for index in [1...positions.length] by 1
-                    if e.pageY > positions[index - 1] and e.pageY <= positions[index]
-                        # you known, this one
-                        $(element).find('.empty').remove()
-                        $empty = $ "<div class='fb-form-object-editable empty'></div>"
-                        if index - 1 < $formObjects.length
-                            $empty.insertBefore $($formObjects[index - 1])
-                        else
-                            $empty.insertAfter $($formObjects[index - 2])
-                        break
-                return
-            out: ->
-                if beginMove
-                    # hide all popovers
-                    $("div.fb-form-object-editable").popover 'hide'
-                    beginMove = no
-
-                $(element).find('.empty').remove()
             up: (e, isHover, draggable) ->
                 beginMove = yes
                 if not $drag.isMouseMoved()
                     # click event
                     $(element).find('.empty').remove()
                     return
+]
 
-                if not isHover and draggable.mode is 'drag'
-                    # remove the form object by draggin out
-                    formObject = draggable.object.formObject
-                else if isHover
-                    if draggable.mode is 'mirror'
-                        # insert a form object
-                        $builder.insertFormObject scope.formName, $(element).find('.empty').index('.fb-form-object-editable'),
-                            component: draggable.object.componentName
-                    if draggable.mode is 'drag'
-                        # update the index of form objects
-                        oldIndex = draggable.object.formObject.index
-                        newIndex = $(element).find('.empty').index('.fb-form-object-editable')
-                        newIndex-- if oldIndex < newIndex
-                        $builder.updateFormObjectIndex scope.formName, oldIndex, newIndex
-                $(element).find('.empty').remove()
+
+# ----------------------------------------
+# fb-builder-row
+# ----------------------------------------
+.directive 'fbFormRowEditable', ['$injector', ($injector) ->
+# providers
+  $builder = $injector.get '$builder'
+  $drag = $injector.get '$drag'
+
+  restrict: 'A'
+  scope:
+    fbFormRowEditable: '@'
+    fbFormRowIndex: '@'
+  template:
+        """
+        <div class='row'>
+            <div class='col col-sm-4 fb-form-object-editable' ng-repeat="object in formObjects"
+                fb-form-object-editable="object"></div>
+            <div class="col col-sm-12 notify" ng-if='formObjects.length === 0'>
+                <h4> Row is empty </h4>
+                <p> Drap and drop components here to fill this row </p>
+            </div>
+        </div>
+        """
+  link: (scope, element, attrs) ->
+    # ----------------------------------------
+    # valuables
+    # ----------------------------------------
+    scope.formName = scope.$parent.formName
+    scope.formObjects = $builder.forms[scope.formName][scope.fbFormRowIndex].formObjects
+    $(element).addClass 'fb-form-row-editable'
+    $drag.droppable $(element),
+        move: (e) ->
+            #Popovers hidden in form drag
+            #element_pageY_bottom = $(element).position().top + $(element).offset().top
+            #element_pageY_top = $(element).position().top + $(element).offset().top - $(element).height()
+            #if(e.pageY < element_pageY_top - 15 or e.pageY > element_pageY_bottom + 15)
+            #  console.log("close call")
+            #  return
+
+            $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
+            if $formObjects.length is 0
+                # there are no components in the row.
+                if $(element).find('.fb-form-object-editable.empty').length is 0
+                    $(element).find('.notify').hide()
+                    $(element).find('>div:first').append $("<div class='col col-sm-12 fb-form-object-editable empty'></div>")
+                return
+
+            # the positions could added .empty div.
+            positions = []
+            # first
+            positions.push -1000
+            for index in [0...$formObjects.length] by 1
+                $formObject = $($formObjects[index])
+                offset = $formObject.offset()
+                width = $formObject.width()
+                positions.push offset.left + width / 2
+            positions.push positions[positions.length - 1] + 1000   # last
+
+            # search where should I insert the .empty
+            for index in [1...positions.length] by 1
+                if e.pageX > positions[index - 1] and e.pageX <= positions[index]
+                    # you known, this one
+                    $(element).find('.empty').remove()
+                    $empty = $ "<div class='col col-sm-4 fb-form-object-editable empty'></div>"
+                    if index - 1 < $formObjects.length
+                        $empty.insertBefore $($formObjects[index - 1])
+                    else
+                        $empty.insertAfter $($formObjects[index - 2])
+                    break
+            return
+        out: ->
+            if beginMove
+                # hide all popovers
+                $("div.fb-form-object-editable").popover 'hide'
+                beginMove = no
+
+            $(element).find('.empty').remove()
+            $(element).find('.notify').show()
+        up: (e, isHover, draggable) ->
+            if isHover
+                if draggable.mode is 'mirror'
+                    # insert a form object
+                    $builder.insertFormObject scope.formName, scope.fbFormRowIndex, $(element).find('.empty').index('.fb-form-object-editable'),
+                      component: draggable.object.componentName
+                if draggable.mode is 'drag'
+                    # update the index of form objects
+                    console.log(draggable.object.formObject)
+                    oldIndex = draggable.object.formObject.index
+                    newIndex = $(element).find('.empty').index('.fb-form-object-editable')
+                    newIndex-- if oldIndex < newIndex
+                    newRow = scope.fbFormRowIndex
+                    oldRow = draggable.object.formObject.row
+                    $builder.updateFormObjectIndex scope.formName, oldRow, newRow, oldIndex, newIndex
+            $(element).find('.empty').remove()
 ]
 
 # ----------------------------------------
@@ -239,7 +292,6 @@ angular.module 'builder.directive', [
             return if not template
             complete =
                   """
-                  <div class="row">
                     <div class="col-sm-10" style='pointer-events: none;'>
                   """ +
                   template +
@@ -255,7 +307,6 @@ angular.module 'builder.directive', [
                         </button>
                       </div>
                     </div>
-                  </div>
                   """
             view = $compile(complete) scope
             $(element).html view
@@ -263,7 +314,8 @@ angular.module 'builder.directive', [
               $(element).popover 'toggle'
 
             $(element).find('.btn-danger').click ->
-              $builder.removeFormObject scope.$parent.formName, scope.$parent.$index
+              console.log(scope.$parent.$index + " " + scope.$parent.$parent.$parent.$index + " " + scope.$parent.row)
+              $builder.removeFormObject scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index
               $(element).popover 'hide'
 
         # disable click event
@@ -487,7 +539,7 @@ angular.module 'builder.directive', [
         default: '=fbDefault'
     template:
         """
-        <div class='fb-form-object' ng-repeat="object in form" fb-form-object="object"></div>
+        <div class='fb-form-row' ng-repeat="row in form" fb-form-row="row"></div>
         <div ng-if='form.length === 0'>
             <h4> This form is empty </h4>
         </div>
@@ -501,6 +553,35 @@ angular.module 'builder.directive', [
         $builder.forms[scope.formName] ?= []
         scope.form = $builder.forms[scope.formName]
 ]
+
+
+# ----------------------------------------
+# fb-form-row
+# ----------------------------------------
+.directive 'fbFormRow', ['$injector', ($injector) ->
+  # providers
+  $builder = $injector.get '$builder'
+  $compile = $injector.get '$compile'
+  $parse = $injector.get '$parse'
+
+  restrict: 'A'
+  template:
+        """
+        <div class='row fb-form-row'>
+          <div class='col col-sm-4 fb-form-object' ng-repeat="object in formRow" fb-form-object="object"></div>
+          <div ng-if='form.length === 0'>
+              <h4> This row is empty </h4>
+          </div>
+        </div>
+        """
+  controller: 'fbFormRowController'
+  link: (scope, element, attrs) ->
+    # ----------------------------------------
+    # variables
+    # ----------------------------------------
+    scope.formRow = $parse(attrs.fbFormRow) scope
+]
+
 
 # ----------------------------------------
 # fb-form-object
