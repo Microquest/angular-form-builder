@@ -133,11 +133,6 @@ angular.module 'builder.directive', [
                 <h4> Form is empty </h4>
                 <p> Add a new row to start building your form </p>
             </div>
-            <div class='row'>
-              <div class='col col-sm-12'>
-                <button type='button' ng-click='addRow()' class='btn btn-primary'>+ Add Row</button>
-              </div>
-            </div>
         </div>
         """
     link: (scope, element, attrs) ->
@@ -147,6 +142,8 @@ angular.module 'builder.directive', [
         scope.formName = attrs.fbBuilder
         $builder.forms[scope.formName] ?= []
         scope.formRows = $builder.forms[scope.formName]
+        #Always have a row
+        $builder.addFormRow scope.formName
         beginMove = yes
 
         $(element).find('.btn-primary').click ->
@@ -185,11 +182,14 @@ angular.module 'builder.directive', [
   template:
         """
         <div class='row'>
-            <div class='col col-sm-4 fb-form-object-editable' ng-repeat="object in formObjects"
+            <button type="button" ng-click="" class="btn btn-xs btn-danger pull-right delete-row">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+            <div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat="object in formObjects"
                 fb-form-object-editable="object"></div>
-            <div class="col col-sm-12 notify" ng-if='formObjects.length === 0'>
-                <h4> Row is empty </h4>
-                <p> Drap and drop components here to fill this row </p>
+            <div class="col col-sm-12 notify fb-form-row-empty" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>
+                <h4>Empty Row</h4>
+                <p> Drag and drop components here </p>
             </div>
         </div>
         """
@@ -197,26 +197,30 @@ angular.module 'builder.directive', [
     # ----------------------------------------
     # valuables
     # ----------------------------------------
+    scope.width = 12
     scope.formName = scope.$parent.formName
     scope.formObjects = $builder.forms[scope.formName][scope.fbFormRowIndex].formObjects
+    beginMove = yes
+
+
+    $(element).find('.delete-row').click ->
+        $builder.removeFormRow scope.formName, scope.fbFormRowIndex
+        scope.$apply()
+
     $(element).addClass 'fb-form-row-editable'
     $drag.droppable $(element),
         move: (e) ->
-            #Popovers hidden in form drag
-            #element_pageY_bottom = $(element).position().top + $(element).offset().top
-            #element_pageY_top = $(element).position().top + $(element).offset().top - $(element).height()
-            #if(e.pageY < element_pageY_top - 15 or e.pageY > element_pageY_bottom + 15)
-            #  console.log("close call")
-            #  return
 
             $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
             if $formObjects.length is 0
                 # there are no components in the row.
                 if $(element).find('.fb-form-object-editable.empty').length is 0
                     $(element).find('.notify').hide()
-                    $(element).find('>div:first').append $("<div class='col col-sm-12 fb-form-object-editable empty'></div>")
+                    $(element).find('>div:first').prepend $("<div class='col col-sm-" + scope.width + " fb-form-object-editable empty'></div>")
                 return
 
+            #calculate the new width
+            scope.width = 12/($formObjects.length + 1)
             # the positions could added .empty div.
             positions = []
             # first
@@ -233,7 +237,7 @@ angular.module 'builder.directive', [
                 if e.pageX > positions[index - 1] and e.pageX <= positions[index]
                     # you known, this one
                     $(element).find('.empty').remove()
-                    $empty = $ "<div class='col col-sm-4 fb-form-object-editable empty'></div>"
+                    $empty = $ "<div class='col col-sm-" + (scope.width-1) + " fb-form-object-editable empty'></div>"
                     if index - 1 < $formObjects.length
                         $empty.insertBefore $($formObjects[index - 1])
                     else
@@ -241,14 +245,21 @@ angular.module 'builder.directive', [
                     break
             return
         out: ->
+            #reset width
+            $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
+            scope.width = 12/($formObjects.length)
             if beginMove
                 # hide all popovers
                 $("div.fb-form-object-editable").popover 'hide'
                 beginMove = no
-
-            $(element).find('.empty').remove()
             $(element).find('.notify').show()
+            $(element).find('.empty').remove()
         up: (e, isHover, draggable) ->
+            beginMove = yes
+            if not $drag.isMouseMoved()
+                # click event
+                $(element).find('.empty').remove()
+                return
             if isHover
                 if draggable.mode is 'mirror'
                     # insert a form object
@@ -256,7 +267,6 @@ angular.module 'builder.directive', [
                       component: draggable.object.componentName
                 if draggable.mode is 'drag'
                     # update the index of form objects
-                    console.log(draggable.object.formObject)
                     oldIndex = draggable.object.formObject.index
                     newIndex = $(element).find('.empty').index('.fb-form-object-editable')
                     newIndex-- if oldIndex < newIndex
@@ -264,6 +274,11 @@ angular.module 'builder.directive', [
                     oldRow = draggable.object.formObject.row
                     $builder.updateFormObjectIndex scope.formName, oldRow, newRow, oldIndex, newIndex
             $(element).find('.empty').remove()
+
+    scope.$on "formBuilder:formObjectRemoved", ->
+        $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
+        scope.width = 12/($formObjects.length-1)
+        #scope.$apply()
 ]
 
 # ----------------------------------------
@@ -314,8 +329,8 @@ angular.module 'builder.directive', [
               $(element).popover 'toggle'
 
             $(element).find('.btn-danger').click ->
-              console.log(scope.$parent.$index + " " + scope.$parent.$parent.$parent.$index + " " + scope.$parent.row)
               $builder.removeFormObject scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index
+              scope.$emit("formBuilder:formObjectRemoved")
               $(element).popover 'hide'
 
         # disable click event
@@ -539,9 +554,11 @@ angular.module 'builder.directive', [
         default: '=fbDefault'
     template:
         """
-        <div class='fb-form-row' ng-repeat="row in form" fb-form-row="row"></div>
-        <div ng-if='form.length === 0'>
-            <h4> This form is empty </h4>
+        <div class='form-horizontal'>
+          <div class='fb-form-row' ng-repeat="row in form" fb-form-row form-row="row"></div>
+          <div ng-if='form.length === 0'>
+              <h4> This form is empty </h4>
+          </div>
         </div>
         """
     controller: 'fbFormController'
@@ -565,10 +582,13 @@ angular.module 'builder.directive', [
   $parse = $injector.get '$parse'
 
   restrict: 'A'
+  scope:
+      # input model for scopes in ng-repeat
+      formRow: '='
   template:
         """
         <div class='row fb-form-row'>
-          <div class='col col-sm-4 fb-form-object' ng-repeat="object in formRow" fb-form-object="object"></div>
+          <div class='col col-sm-{{width}} fb-form-object' ng-repeat="object in formRow.formObjects" fb-form-object="object"></div>
           <div ng-if='form.length === 0'>
               <h4> This row is empty </h4>
           </div>
@@ -579,7 +599,7 @@ angular.module 'builder.directive', [
     # ----------------------------------------
     # variables
     # ----------------------------------------
-    scope.formRow = $parse(attrs.fbFormRow) scope
+    scope.width = if scope.formRow.formObjects.length == 0 then 12 else 12/scope.formRow.formObjects.length
 ]
 
 

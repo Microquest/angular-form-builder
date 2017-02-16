@@ -153,7 +153,6 @@ angular.module 'builder.controller', ['builder.provider']
       })
 
     $scope.convertFileToData = (file, invalid, scope) ->
-      console.log(scope);
       Upload.dataUrl(file, true).then((url) ->
           $scope.backgroundImage = url;
       )
@@ -319,6 +318,7 @@ angular.module 'builder.controller', ['builder.provider']
     # set default for input
     $scope.input ?= []
     $scope.$watch 'form', ->
+        console.log($scope.form)
         # remove superfluous input
         if $scope.input.length > $scope.form.length
             $scope.input.splice $scope.form.length
@@ -350,18 +350,8 @@ angular.module 'builder.controller', ['builder.provider']
   $timeout = $injector.get '$timeout'
   $rootScope = $injector.get '$rootScope'
 
-  $rootScope.fields = $builder.forms
-
-  # set default for input
-  $scope.input ?= []
-  $scope.$watch 'row', ->
-    # remove superfluous input
-    if $scope.input.length > $scope.form.length
-      $scope.input.splice $scope.form.length
-    # tell children to update input value.
-    # ! use $timeout for waiting $scope updated.
-    $timeout ->
-      $scope.$broadcast $builder.broadcastChannel.updateInput
+  $scope.$watch 'formRow', ->
+    $scope.width = if $scope.formRow.formObjects.length == 0 then 12 else 12/$scope.formRow.formObjects.length
   , yes
 ]
 
@@ -384,5 +374,5 @@ angular.module 'builder.controller', ['builder.provider']
             id: $scope.formObject.id
             label: $scope.formObject.label
             value: value ? ''
-        $scope.$parent.input.splice $scope.$index, 1, input
+        $scope.$parent.$parent.$parent.input.splice $scope.$index, 1, input
 ]
