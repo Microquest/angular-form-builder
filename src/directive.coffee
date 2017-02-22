@@ -307,19 +307,21 @@ angular.module 'builder.directive', [
             return if not template
             complete =
                   """
-                    <div class="col-sm-10" style='pointer-events: none;'>
+                    <div class='row'>
+                      <div class="col-sm-10" style='pointer-events: none;'>
                   """ +
                   template +
                   """
-                    </div>
-                    <div class="col-sm-2">
-                      <div class='row'>
-                        <button type="button" class="btn btn-xs btn-info">
-                          <i class="glyphicon glyphicon-edit"></i>
-                        </button>
-                        <button type="button" ng-click="" class="btn btn-xs btn-danger">
-                          <i class="glyphicon glyphicon-remove"></i>
-                        </button>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class='row'>
+                          <button type="button" class="btn btn-xs btn-info">
+                            <i class="glyphicon glyphicon-edit"></i>
+                          </button>
+                          <button type="button" ng-click="" class="btn btn-xs btn-danger">
+                            <i class="glyphicon glyphicon-remove"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   """

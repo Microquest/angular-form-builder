@@ -439,8 +439,10 @@
         var component;
         copyObjectToScope(formObject, $scope);
         $scope.optionsText = formObject.options.join('\n');
-        $scope.$watch('[label, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', function() {
+        $scope.$watch('[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', function() {
           formObject.label = $scope.label;
+          formObject.label_visible = $scope.label_visible;
+          formObject.label_inline = $scope.label_inline;
           formObject.description = $scope.description;
           formObject.placeholder = $scope.placeholder;
           formObject.backgroundImage = $scope.backgroundImage;
@@ -494,6 +496,8 @@
            */
           return this.model = {
             label: $scope.label,
+            label_inline: $scope.label_inline,
+            label_visible: $scope.label_visible,
             description: $scope.description,
             placeholder: $scope.placeholder,
             backgroundImage: $scope.backgroundImage,
@@ -529,6 +533,8 @@
             return;
           }
           $scope.label = this.model.label;
+          $scope.label_inline = this.model.label_inline;
+          $scope.label_visible = this.model.label_visible;
           $scope.description = this.model.description;
           $scope.placeholder = this.model.placeholder;
           $scope.backgroundImage = this.model.backgroundImage;
@@ -943,7 +949,7 @@
             if (!template) {
               return;
             }
-            complete = "<div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "</div>\n<div class=\"col-sm-2\">\n  <div class='row'>\n    <button type=\"button\" class=\"btn btn-xs btn-info\">\n      <i class=\"glyphicon glyphicon-edit\"></i>\n    </button>\n    <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n      <i class=\"glyphicon glyphicon-remove\"></i>\n    </button>\n  </div>\n</div>";
+            complete = "<div class='row'>\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\">\n    <div class='row'>\n      <button type=\"button\" class=\"btn btn-xs btn-info\">\n        <i class=\"glyphicon glyphicon-edit\"></i>\n      </button>\n      <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n        <i class=\"glyphicon glyphicon-remove\"></i>\n      </button>\n    </div>\n  </div>\n</div>";
             view = $compile(complete)(scope);
             $(element).html(view);
             $(element).find('.btn-info').click(function() {
@@ -1754,19 +1760,21 @@
     this.skipLogicComponents = [];
     this.forms = {};
     this.convertComponent = function(name, component) {
-      var result, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var result, _ref, _ref1, _ref10, _ref11, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       result = {
         name: name,
         group: (_ref = component.group) != null ? _ref : 'Default',
         label: (_ref1 = component.label) != null ? _ref1 : '',
-        description: (_ref2 = component.description) != null ? _ref2 : '',
-        placeholder: (_ref3 = component.placeholder) != null ? _ref3 : '',
-        editable: (_ref4 = component.editable) != null ? _ref4 : true,
-        required: (_ref5 = component.required) != null ? _ref5 : false,
-        validation: (_ref6 = component.validation) != null ? _ref6 : '/.*/',
-        validationOptions: (_ref7 = component.validationOptions) != null ? _ref7 : [],
-        options: (_ref8 = component.options) != null ? _ref8 : [],
-        arrayToText: (_ref9 = component.arrayToText) != null ? _ref9 : false,
+        label_inline: (_ref2 = component.label_inline) != null ? _ref2 : true,
+        label_visible: (_ref3 = component.label_visible) != null ? _ref3 : true,
+        description: (_ref4 = component.description) != null ? _ref4 : '',
+        placeholder: (_ref5 = component.placeholder) != null ? _ref5 : '',
+        editable: (_ref6 = component.editable) != null ? _ref6 : true,
+        required: (_ref7 = component.required) != null ? _ref7 : false,
+        validation: (_ref8 = component.validation) != null ? _ref8 : '/.*/',
+        validationOptions: (_ref9 = component.validationOptions) != null ? _ref9 : [],
+        options: (_ref10 = component.options) != null ? _ref10 : [],
+        arrayToText: (_ref11 = component.arrayToText) != null ? _ref11 : false,
         template: component.template,
         templateUrl: component.templateUrl,
         popoverTemplate: component.popoverTemplate,
@@ -1781,7 +1789,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1796,30 +1804,32 @@
         index: (_ref1 = formObject.index) != null ? _ref1 : 0,
         row: (_ref2 = formObject.row) != null ? _ref2 : 0,
         label: (_ref3 = formObject.label) != null ? _ref3 : component.label,
-        description: (_ref4 = formObject.description) != null ? _ref4 : component.description,
-        placeholder: (_ref5 = formObject.placeholder) != null ? _ref5 : component.placeholder,
-        options: (_ref6 = formObject.options) != null ? _ref6 : component.options,
-        required: (_ref7 = formObject.required) != null ? _ref7 : component.required,
-        validation: (_ref8 = formObject.validation) != null ? _ref8 : component.validation,
-        multiple: (_ref9 = formObject.multiple) != null ? _ref9 : component.multiple,
-        minLength: (_ref10 = formObject.minLength) != null ? _ref10 : component.minLength,
-        maxLength: (_ref11 = formObject.maxLength) != null ? _ref11 : component.maxLength,
-        dateRangeStart: (_ref12 = formObject.dateRangeStart) != null ? _ref12 : component.dateRangeStart,
-        dateRangeEnd: (_ref13 = formObject.dateRangeEnd) != null ? _ref13 : component.dateRangeEnd,
-        disableWeekends: (_ref14 = formObject.disableWeekends) != null ? _ref14 : component.disableWeekends,
-        readOnly: (_ref15 = formObject.readOnly) != null ? _ref15 : component.readOnly,
-        nextXDays: (_ref16 = formObject.nextXDays) != null ? _ref16 : component.nextXDays,
-        maxDate: (_ref17 = formObject.maxDate) != null ? _ref17 : component.maxDate,
-        requireConfirmation: (_ref18 = formObject.requireConfirmation) != null ? _ref18 : component.requireConfirmation,
-        minRange: (_ref19 = formObject.minRange) != null ? _ref19 : component.minRange,
-        maxRange: (_ref20 = formObject.maxRange) != null ? _ref20 : component.maxRange,
-        performCreditCheck: (_ref21 = formObject.performCreditCheck) != null ? _ref21 : component.performCreditCheck,
-        cprCountry: (_ref22 = formObject.cprCountry) != null ? _ref22 : component.cprCountry,
-        logic: (_ref23 = formObject.logic) != null ? _ref23 : component.logic,
-        category: (_ref24 = formObject.category) != null ? _ref24 : component.category,
-        pointRules: (_ref25 = formObject.pointRules) != null ? _ref25 : component.pointRules,
-        conversionType: (_ref26 = formObject.conversionType) != null ? _ref26 : component.conversionType,
-        backgroundImage: (_ref27 = formObject.backgroundImage) != null ? _ref27 : component.backgroundImage
+        label_inline: (_ref4 = formObject.label_inline) != null ? _ref4 : component.label_inline,
+        label_visible: (_ref5 = formObject.label_visible) != null ? _ref5 : component.label_visible,
+        description: (_ref6 = formObject.description) != null ? _ref6 : component.description,
+        placeholder: (_ref7 = formObject.placeholder) != null ? _ref7 : component.placeholder,
+        options: (_ref8 = formObject.options) != null ? _ref8 : component.options,
+        required: (_ref9 = formObject.required) != null ? _ref9 : component.required,
+        validation: (_ref10 = formObject.validation) != null ? _ref10 : component.validation,
+        multiple: (_ref11 = formObject.multiple) != null ? _ref11 : component.multiple,
+        minLength: (_ref12 = formObject.minLength) != null ? _ref12 : component.minLength,
+        maxLength: (_ref13 = formObject.maxLength) != null ? _ref13 : component.maxLength,
+        dateRangeStart: (_ref14 = formObject.dateRangeStart) != null ? _ref14 : component.dateRangeStart,
+        dateRangeEnd: (_ref15 = formObject.dateRangeEnd) != null ? _ref15 : component.dateRangeEnd,
+        disableWeekends: (_ref16 = formObject.disableWeekends) != null ? _ref16 : component.disableWeekends,
+        readOnly: (_ref17 = formObject.readOnly) != null ? _ref17 : component.readOnly,
+        nextXDays: (_ref18 = formObject.nextXDays) != null ? _ref18 : component.nextXDays,
+        maxDate: (_ref19 = formObject.maxDate) != null ? _ref19 : component.maxDate,
+        requireConfirmation: (_ref20 = formObject.requireConfirmation) != null ? _ref20 : component.requireConfirmation,
+        minRange: (_ref21 = formObject.minRange) != null ? _ref21 : component.minRange,
+        maxRange: (_ref22 = formObject.maxRange) != null ? _ref22 : component.maxRange,
+        performCreditCheck: (_ref23 = formObject.performCreditCheck) != null ? _ref23 : component.performCreditCheck,
+        cprCountry: (_ref24 = formObject.cprCountry) != null ? _ref24 : component.cprCountry,
+        logic: (_ref25 = formObject.logic) != null ? _ref25 : component.logic,
+        category: (_ref26 = formObject.category) != null ? _ref26 : component.category,
+        pointRules: (_ref27 = formObject.pointRules) != null ? _ref27 : component.pointRules,
+        conversionType: (_ref28 = formObject.conversionType) != null ? _ref28 : component.conversionType,
+        backgroundImage: (_ref29 = formObject.backgroundImage) != null ? _ref29 : component.backgroundImage
       };
       return result;
     };

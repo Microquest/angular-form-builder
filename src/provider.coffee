@@ -45,6 +45,8 @@ angular.module 'builder.provider', []
             name: name
             group: component.group ? 'Default'
             label: component.label ? ''
+            label_inline: component.label_inline ? yes
+            label_visible: component.label_visible ? yes
             description: component.description ? ''
             placeholder: component.placeholder ? ''
             editable: component.editable ? yes
@@ -73,6 +75,8 @@ angular.module 'builder.provider', []
             index: formObject.index ? 0
             row: formObject.row ? 0
             label: formObject.label ? component.label
+            label_inline: formObject.label_inline ? component.label_inline
+            label_visible: formObject.label_visible ? component.label_visible
             description: formObject.description ? component.description
             placeholder: formObject.placeholder ? component.placeholder
             options: formObject.options ? component.options

@@ -79,6 +79,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'date',
         group: 'Basic'
         label: 'Date Picker'
+        label_inline: true
+        label_visible: true
         description: ''
         required: no
         disableWeekends: no
@@ -88,8 +90,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                  <div class="col-sm-10">
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText'\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
@@ -118,6 +120,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -230,13 +240,15 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'phone',
         group: 'Basic'
         label: 'Phone Number'
+        label_inline: true
+        label_visible: true
         description: ''
         required: no
         readOnly: no
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                   <input type="hidden" class="form-control" required="{'fb-required':required}" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}"\>
                   <div class="col-sm-3">
                     <select ng-show="!multiple" ng-readonly="readOnly" class="form-control m-b"
@@ -247,10 +259,10 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         <option value="Other">Other</option>
                     </select>
                   </div>
-                  <div class="col-sm-4">
+                  <div ng-class="{'col-sm-6':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
                     <input type="text" class="form-control" required="{'fb-required':required}" ng-model='number' mask='(999) 999-9999' clean='true' placeholder='#'\>
                   </div>
-                  <div class='col-sm-2'>
+                  <div class="col-sm-3">
                     <input type="text" class="form-control" required="{'fb-required':required}" ng-model='extension' mask='999' clean='true' placeholder='ext.'\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
@@ -279,6 +291,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -364,6 +384,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'text',
         group: 'Basic'
         label: 'Text Input'
+        label_inline: true
+        label_visible: true
         description: ''
         placeholder: 'placeholder'
         readOnly: no
@@ -381,14 +403,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div class="col-sm-10">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <input type="text" ng-show="validation != '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                     <input type="tel" ng-show="validation === '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                 </div>
-              <div class="col-sm-10 col-sm-offset-2">
-                <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
-              </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
             """
@@ -412,6 +434,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -521,6 +551,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'area',
         group: 'Basic'
         label: 'Text Area'
+        label_inline: true
+        label_visible: true
         description: ''
         placeholder: 'placeholder'
         required: no
@@ -528,8 +560,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div class="col-sm-10">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <textarea type="text" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" rows='6' placeholder="{{placeholder}}"/>
                 </div>
                 <div class="col-sm-10 col-sm-offset-2">
@@ -558,6 +590,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -639,6 +679,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'checkbox',
         group: 'Choice'
         label: 'Checkbox'
+        label_inline: true
+        label_visible: true
         description: ''
         placeholder: 'placeholder'
         required: no
@@ -648,8 +690,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" class="col-sm-2 control-label" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div class="col-sm-10">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
                     <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
                       <input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="readOnly" type="checkbox" checked="">
@@ -682,6 +724,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -764,6 +814,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'radio',
         group: 'Choice'
         label: 'Radio'
+        label_inline: true
+        label_visible: true
         description: ''
         placeholder: 'placeholder'
         required: no
@@ -772,8 +824,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" class="col-sm-2 control-label" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div class="col-sm-10">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
 
                         <input id="{{formName+index+$index | nospace}}" type="radio" ng-disabled="readOnly" name='{{formName+index}}' ng-model="$parent.inputText" validator-group="{{formName}}" ng-value='item'>
@@ -807,6 +859,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -892,6 +952,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'select',
         group: 'Choice'
         label: 'Select'
+        label_inline: true
+        label_visible: true
         description: ''
         placeholder: 'Choose..'
         required: no
@@ -900,8 +962,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div class="col-sm-10 dropdown">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <select ng-show="!multiple" ng-readonly="readOnly" ng-options="value for value in options" class="form-control m-b"
                         ng-model="inputText" ng-init="inputText = ''">
                         <option value="">{{placeholder}}</option>
@@ -933,6 +995,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -1023,13 +1093,15 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'draw',
         group: 'Drawing'
         label: 'Draw'
+        label_inline: true
+        label_visible: true
         description: ''
         readOnly: no
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}" ng-class="{'fb-required':required}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div class="col-sm-10" ng-style="{'background-image':'url('+formObject.backgroundImage+')', 'background-size':'cover', 'width': '400px', 'height': '300px'}" >
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" ng-style="{'background-image':'url('+formObject.backgroundImage+')', 'background-size':'cover', 'width': '400px', 'height': '300px'}" >
                     <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: 400, height: 300, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3}" version="formObject.drawVersion" imageSrc="formObject.backgroundImage"></div>
                     <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
                 </div>
@@ -1058,6 +1130,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             <div class="form-group m-t-sm">
                                 <label class='control-label'>Label</label>
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                            </div>
+                            <div class='checkbox icheck-label'>
+                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              <label for="{{'label_visible' + date + index}}">Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>

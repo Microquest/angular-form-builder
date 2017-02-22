@@ -174,8 +174,10 @@ angular.module 'builder.controller', ['builder.provider']
 
         $scope.optionsText = formObject.options.join '\n'
 
-        $scope.$watch '[label, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', ->
+        $scope.$watch '[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', ->
             formObject.label = $scope.label
+            formObject.label_visible = $scope.label_visible
+            formObject.label_inline = $scope.label_inline
             formObject.description = $scope.description
             formObject.placeholder = $scope.placeholder
             formObject.backgroundImage = $scope.backgroundImage
@@ -218,6 +220,8 @@ angular.module 'builder.controller', ['builder.provider']
             ###
             @model =
                 label: $scope.label
+                label_inline: $scope.label_inline
+                label_visible: $scope.label_visible
                 description: $scope.description
                 placeholder: $scope.placeholder
                 backgroundImage: $scope.backgroundImage
@@ -248,6 +252,8 @@ angular.module 'builder.controller', ['builder.provider']
             ###
             return if not @model
             $scope.label = @model.label
+            $scope.label_inline = @model.label_inline
+            $scope.label_visible = @model.label_visible
             $scope.description = @model.description
             $scope.placeholder = @model.placeholder
             $scope.backgroundImage = @model.backgroundImage
