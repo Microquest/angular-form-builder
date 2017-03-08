@@ -3,7 +3,8 @@
   "version": "1.17.0",
   "main": [
     "./dist/angular-form-builder.js",
-    "./dist/angular-form-builder-components.js"
+    "./dist/angular-form-builder-components.js",
+    "./dist/angular-form-builder.css"
   ],
   "homepage": "https://github.com/luminos-software/angular-form-builder",
   "description": "Drag and drop to build bootstrap forms in AngularJS.",
