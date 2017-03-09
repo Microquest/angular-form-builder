@@ -30,8 +30,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation" class="disabled"><a>Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation" class="disabled"><a>Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -46,20 +44,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.action" ng-options="action for action in actions"></select><p> this element if</p>
-                                <component-selector></component-selector>
-
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'points' + date + index}}">
                         </div>
                     </div>
                 </div>
@@ -110,8 +94,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation"><a href="{{'#points' + date + index}}" aria-controls="{{'points' + date + index}}" role="tab" data-toggle="tab">Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -177,52 +159,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.action" ng-options="action for action in actions"></select><p> this element if</p>
-                                <component-selector></component-selector>
-
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane p-t-n" id="{{'points' + date + index}}">
-
-                          <div class="form-group" ng-if="formObject.pointRules.length > 0">
-                            <label class="control-label m-t-c--5">Active Rules</label>
-                            <div class="m-t-xs" ng-repeat="rule in formObject.pointRules">
-                              Add <span class="label label-primary">{{rule.points}}</span> points if this field <span class="label label-primary">{{rule.predicate | predicate}}</span>&nbsp;<span class="label label-primary" ng-if="rule.predicate !== 'null' && rule.predicate !== 'not_null'">{{rule.value}}</span> <a ng-click="removeRule(rule)" class="pull-right btn btn-sm btn-link hover-dark-grey-link btn-xs"><i class="fa fa-times-circle"></i></a>
-                            </div>
-                          </div>
-                          <div class="form-group custom-m-b">
-                              <div class="input-group">
-                                <span class="input-group-addon add-points">Add</span>
-                                <input type="text" class="form-control" ng-model="newRule.points">
-                                <span class="input-group-addon add-points">points</span>
-                              </div>
-                          </div>
-
-                          <div class="form-group custom-m-b">
-                            <div class="input-group">
-                              <span class="input-group-addon add-points">if this field</span>
-                              <select ng-model="newRule.predicate" ng-options="predicate.value as predicate.label for predicate in predicates" class="form-control"></select>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <input ng-readonly="newRule.predicate === 'null' || newRule.predicate === 'not_null'" ng-model="newRule.value" type="text" class="form-control" placeholder="value">
-                            <span class="input-group-btn">
-                              <button ng-click="addRule()" class="btn btn-primary" type="button">+</button>
-                            </span>
-                          </div>
-                          <p class="text-danger">{{rulesErrorMessage}}</p>
-
-                        </div>
-
-                    </div>
                 </div>
 
                 <hr/>
@@ -281,8 +217,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation"><a href="{{'#points' + date + index}}" aria-controls="{{'points' + date + index}}" role="tab" data-toggle="tab">Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -320,51 +254,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <select ng-model="$parent.validation" class='form-control' ng-options="option.rule as option.label for option in validationOptions"></select>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.action" ng-options="action for action in actions"></select><p> this element if</p>
-                                <component-selector></component-selector>
-
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane p-t-n" id="{{'points' + date + index}}">
-
-                          <div class="form-group" ng-if="formObject.pointRules.length > 0">
-                            <label class="control-label m-t-c--5">Active Rules</label>
-                            <div class="m-t-xs" ng-repeat="rule in formObject.pointRules">
-                              Add <span class="label label-primary">{{rule.points}}</span> points if this field <span class="label label-primary">{{rule.predicate | predicate}}</span>&nbsp;<span class="label label-primary" ng-if="rule.predicate !== 'null' && rule.predicate !== 'not_null'">{{rule.value}}</span> <a ng-click="removeRule(rule)" class="pull-right btn btn-sm btn-link hover-dark-grey-link btn-xs"><i class="fa fa-times-circle"></i></a>
-                            </div>
-                          </div>
-                          <div class="form-group custom-m-b">
-                              <div class="input-group">
-                                <span class="input-group-addon add-points">Add</span>
-                                <input type="text" class="form-control" ng-model="newRule.points">
-                                <span class="input-group-addon add-points">points</span>
-                              </div>
-                          </div>
-
-                          <div class="form-group custom-m-b">
-                            <div class="input-group">
-                              <span class="input-group-addon add-points">if this field</span>
-                              <select ng-model="newRule.predicate" ng-options="predicate.value as predicate.label for predicate in predicates" class="form-control"></select>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <input ng-readonly="newRule.predicate === 'null' || newRule.predicate === 'not_null'" ng-model="newRule.value" type="text" class="form-control" placeholder="value">
-                            <span class="input-group-btn">
-                              <button ng-click="addRule()" class="btn btn-primary" type="button">+</button>
-                            </span>
-                          </div>
-                          <p class="text-danger">{{rulesErrorMessage}}</p>
-
-                        </div>
-
                     </div>
                 </div>
 
@@ -424,8 +313,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation"><a href="{{'#points' + date + index}}" aria-controls="{{'points' + date + index}}" role="tab" data-toggle="tab">Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -493,50 +380,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.action" ng-options="action for action in actions"></select><p> this element if</p>
-                                <component-selector></component-selector>
-
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane p-t-n" id="{{'points' + date + index}}">
-
-                          <div class="form-group" ng-if="formObject.pointRules.length > 0">
-                            <label class="control-label m-t-c--5">Active Rules</label>
-                            <div class="m-t-xs" ng-repeat="rule in formObject.pointRules">
-                              Add <span class="label label-primary">{{rule.points}}</span> points if this field <span class="label label-primary">{{rule.predicate | predicate}}</span>&nbsp;<span class="label label-primary" ng-if="rule.predicate !== 'null' && rule.predicate !== 'not_null'">{{rule.value}}</span> <a ng-click="removeRule(rule)" class="pull-right btn btn-sm btn-link hover-dark-grey-link btn-xs"><i class="fa fa-times-circle"></i></a>
-                            </div>
-                          </div>
-                          <div class="form-group custom-m-b">
-                              <div class="input-group">
-                                <span class="input-group-addon add-points">Add</span>
-                                <input type="text" class="form-control" ng-model="newRule.points">
-                                <span class="input-group-addon add-points">points</span>
-                              </div>
-                          </div>
-
-                          <div class="form-group custom-m-b">
-                            <div class="input-group">
-                              <span class="input-group-addon add-points">if this field</span>
-                              <select ng-model="newRule.predicate" ng-options="predicate.value as predicate.label for predicate in predicates" class="form-control"></select>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <input ng-readonly="newRule.predicate === 'null' || newRule.predicate === 'not_null'" ng-model="newRule.value" type="text" class="form-control" placeholder="value">
-                            <span class="input-group-btn">
-                              <button ng-click="addRule()" class="btn btn-primary" type="button">+</button>
-                            </span>
-                          </div>
-                          <p class="text-danger">{{rulesErrorMessage}}</p>
-
-                        </div>
                     </div>
                 </div>
 
@@ -584,8 +427,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation"><a href="{{'#points' + date + index}}" aria-controls="{{'points' + date + index}}" role="tab" data-toggle="tab">Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -621,49 +462,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                               <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
                               <label for="{{'required' + date + index}}">Required</label>
                             </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.action" ng-options="action for action in actions"></select><p> this element if</p>
-                                <component-selector></component-selector>
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane p-t-n" id="{{'points' + date + index}}">
-
-                          <div class="form-group" ng-if="formObject.pointRules.length > 0">
-                            <label class="control-label m-t-c--5">Active Rules</label>
-                            <div class="m-t-xs" ng-repeat="rule in formObject.pointRules">
-                              Add <span class="label label-primary">{{rule.points}}</span> points if this field <span class="label label-primary">{{rule.predicate | predicate}}</span>&nbsp;<span class="label label-primary" ng-if="rule.predicate !== 'null' && rule.predicate !== 'not_null'">{{rule.value}}</span> <a ng-click="removeRule(rule)" class="pull-right btn btn-sm btn-link hover-dark-grey-link btn-xs"><i class="fa fa-times-circle"></i></a>
-                            </div>
-                          </div>
-                          <div class="form-group custom-m-b">
-                              <div class="input-group">
-                                <span class="input-group-addon add-points">Add</span>
-                                <input type="text" class="form-control" ng-model="newRule.points">
-                                <span class="input-group-addon add-points">points</span>
-                              </div>
-                          </div>
-
-                          <div class="form-group custom-m-b">
-                            <div class="input-group">
-                              <span class="input-group-addon add-points">if this field</span>
-                              <select ng-model="newRule.predicate" ng-options="predicate.value as predicate.label for predicate in predicates" class="form-control"></select>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <input ng-readonly="newRule.predicate === 'null' || newRule.predicate === 'not_null'" ng-model="newRule.value" type="text" class="form-control" placeholder="value">
-                            <span class="input-group-btn">
-                              <button ng-click="addRule()" class="btn btn-primary" type="button">+</button>
-                            </span>
-                          </div>
-                          <p class="text-danger">{{rulesErrorMessage}}</p>
-
                         </div>
                     </div>
                 </div>
@@ -718,8 +516,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation"><a href="{{'#points' + date + index}}" aria-controls="{{'points' + date + index}}" role="tab" data-toggle="tab">Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -755,50 +551,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                               <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
                               <label for="{{'required' + date + index}}">Required</label>
                             </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.action" ng-options="action for action in actions"></select><p> this element if</p>
-                                <component-selector></component-selector>
-
-                                <select class="form-control custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane p-t-n" id="{{'points' + date + index}}">
-
-                          <div class="form-group" ng-if="formObject.pointRules.length > 0">
-                            <label class="control-label m-t-c--5">Active Rules</label>
-                            <div class="m-t-xs" ng-repeat="rule in formObject.pointRules">
-                              Add <span class="label label-primary">{{rule.points}}</span> points if this field <span class="label label-primary">{{rule.predicate | predicate}}</span>&nbsp;<span class="label label-primary" ng-if="rule.predicate !== 'null' && rule.predicate !== 'not_null'">{{rule.value}}</span> <a ng-click="removeRule(rule)" class="pull-right btn btn-sm btn-link hover-dark-grey-link btn-xs"><i class="fa fa-times-circle"></i></a>
-                            </div>
-                          </div>
-                          <div class="form-group custom-m-b">
-                              <div class="input-group">
-                                <span class="input-group-addon add-points">Add</span>
-                                <input type="text" class="form-control" ng-model="newRule.points">
-                                <span class="input-group-addon add-points">points</span>
-                              </div>
-                          </div>
-
-                          <div class="form-group custom-m-b">
-                            <div class="input-group">
-                              <span class="input-group-addon add-points">if this field</span>
-                              <select ng-model="newRule.predicate" ng-options="predicate.value as predicate.label for predicate in predicates" class="form-control"></select>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <input ng-readonly="newRule.predicate === 'null' || newRule.predicate === 'not_null'" ng-model="newRule.value" type="text" class="form-control" placeholder="value">
-                            <span class="input-group-btn">
-                              <button ng-click="addRule()" class="btn btn-primary" type="button">+</button>
-                            </span>
-                          </div>
-                          <p class="text-danger">{{rulesErrorMessage}}</p>
-
                         </div>
                     </div>
                 </div>
@@ -853,8 +605,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
                         <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
                         <li role="presentation" class="disabled"><a>Validations</a></li>
-                        <li role="presentation"><a href="{{'#logic' + date + index}}" aria-controls="{{'logic' + date + index}}" role="tab" data-toggle="tab">Logic</a></li>
-                        <li role="presentation"><a href="{{'#points' + date + index}}" aria-controls="{{'points' + date + index}}" role="tab" data-toggle="tab">Points</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -892,51 +642,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                     Required
                                 </label>
                             </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'logic' + date + index}}">
-                            <div class="form-group m-t">
-                                <select class="form-control" ng-model="formObject.logic.action" ng-options="action for action in ['Hide', 'Show']"></select><p> this element if</p>
-                                <component-selector></component-selector>
-
-                                <select class="form-control  custom-m-b" ng-model="formObject.logic.comparator" ng-options="comparator for comparator in comparatorChoices">
-                                </select>
-                                <input type="text" ng-model="formObject.logic.value" class="form-control" placeholder="Value">
-                                <button type="button" ng-click="resetLogic()" class="btn btn-default pull-right">Reset</button>
-                                <br>
-                            </div>
-                        </div>
-
-                        <div role="tabpanel" class="tab-pane p-t-n" id="{{'points' + date + index}}">
-
-                          <div class="form-group" ng-if="formObject.pointRules.length > 0">
-                            <label class="control-label m-t-c--5">Active Rules</label>
-                            <div class="m-t-xs" ng-repeat="rule in formObject.pointRules">
-                              Add <span class="label label-primary">{{rule.points}}</span> points if this field <span class="label label-primary">{{rule.predicate | predicate}}</span>&nbsp;<span class="label label-primary" ng-if="rule.predicate !== 'null' && rule.predicate !== 'not_null'">{{rule.value}}</span> <a ng-click="removeRule(rule)" class="pull-right btn btn-sm btn-link hover-dark-grey-link btn-xs"><i class="fa fa-times-circle"></i></a>
-                            </div>
-                          </div>
-                          <div class="form-group custom-m-b">
-                              <div class="input-group">
-                                <span class="input-group-addon add-points">Add</span>
-                                <input type="text" class="form-control" ng-model="newRule.points">
-                                <span class="input-group-addon add-points">points</span>
-                              </div>
-                          </div>
-
-                          <div class="form-group custom-m-b">
-                            <div class="input-group">
-                              <span class="input-group-addon add-points">if this field</span>
-                              <select ng-model="newRule.predicate" ng-options="predicate.value as predicate.label for predicate in predicates" class="form-control"></select>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <input ng-readonly="newRule.predicate === 'null' || newRule.predicate === 'not_null'" ng-model="newRule.value" type="text" class="form-control" placeholder="value">
-                            <span class="input-group-btn">
-                              <button ng-click="addRule()" class="btn btn-primary" type="button">+</button>
-                            </span>
-                          </div>
-                          <p class="text-danger">{{rulesErrorMessage}}</p>
-
                         </div>
                     </div>
                 </div>
