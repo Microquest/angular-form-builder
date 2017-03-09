@@ -127,7 +127,7 @@ angular.module 'builder.directive', [
     template:
         """
         <div class='form-horizontal'>
-            <div class='fb-form-row-editable' ng-repeat="row in formRows"
+            <div class='row fb-form-row-editable' ng-repeat="row in formRows"
                 fb-form-row-editable="row" fb-form-row-index='{{$index}}'></div>
             <div ng-if='formRows.length === 0'>
                 <h4> Form is empty </h4>
@@ -181,17 +181,16 @@ angular.module 'builder.directive', [
     fbFormRowIndex: '@'
   template:
         """
-        <div class='row'>
-            <button type="button" ng-click="" class="btn btn-xs btn-danger pull-right delete-row">
-              <i class="glyphicon glyphicon-remove"></i>
-            </button>
-            <div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat="object in formObjects"
-                fb-form-object-editable="object"></div>
-            <div class="col col-sm-12 notify fb-form-row-empty" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>
-                <h4>Empty Row</h4>
-                <p> Drag and drop components here </p>
-            </div>
+        <button type="button" ng-click="" class="btn btn-xs btn-default delete-row" style='float:right'>
+          <i class="glyphicon glyphicon-remove"></i>
+        </button>
+        <div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat="object in formObjects"
+            fb-form-object-editable="object"></div>
+        <div class="col col-sm-12 notify fb-form-row-empty" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>
+            <h4>Empty Row</h4>
+            <p> Drag and drop components here </p>
         </div>
+
         """
   link: (scope, element, attrs) ->
     # ----------------------------------------
@@ -216,7 +215,7 @@ angular.module 'builder.directive', [
                 # there are no components in the row.
                 if $(element).find('.fb-form-object-editable.empty').length is 0
                     $(element).find('.notify').hide()
-                    $(element).find('>div:first').prepend $("<div class='col col-sm-" + scope.width + " fb-form-object-editable empty'></div>")
+                    $(element).prepend $("<div class='col col-sm-" + scope.width + " fb-form-object-editable empty'></div>")
                 return
 
             #calculate the new width

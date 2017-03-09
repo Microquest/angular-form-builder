@@ -79,7 +79,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'date',
         group: 'Basic'
         label: 'Date Picker'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         required: no
@@ -240,7 +240,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'phone',
         group: 'Basic'
         label: 'Phone Number'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         required: no
@@ -384,7 +384,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'text',
         group: 'Basic'
         label: 'Text Input'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         placeholder: 'placeholder'
@@ -402,7 +402,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         ]
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <input type="text" ng-show="validation != '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
@@ -551,7 +551,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'area',
         group: 'Basic'
         label: 'Text Area'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         placeholder: 'placeholder'
@@ -679,7 +679,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'checkbox',
         group: 'Choice'
         label: 'Checkbox'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         placeholder: 'placeholder'
@@ -814,7 +814,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'radio',
         group: 'Choice'
         label: 'Radio'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         placeholder: 'placeholder'
@@ -952,7 +952,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'select',
         group: 'Choice'
         label: 'Select'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         placeholder: 'Choose..'
@@ -1093,7 +1093,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     $builderProvider.registerComponent 'draw',
         group: 'Drawing'
         label: 'Draw'
-        label_inline: true
+        label_inline: false
         label_visible: true
         description: ''
         readOnly: no

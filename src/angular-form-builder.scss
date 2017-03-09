@@ -44,9 +44,14 @@
     min-height: 250px;
 }
 
+.fb-form-row-editable {
+  padding: 5px;
+  margin: 5px;
+}
+
 .fb-form-row-empty {
   cursor: default;
-  margin: 6px;
+  margin: 0px;
   height: 80px;
   border:dashed 1px #aaa;
   background-color: #eee;

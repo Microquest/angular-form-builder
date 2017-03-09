@@ -791,7 +791,7 @@
         scope: {
           fbBuilder: '@'
         },
-        template: "<div class='form-horizontal'>\n    <div class='fb-form-row-editable' ng-repeat=\"row in formRows\"\n        fb-form-row-editable=\"row\" fb-form-row-index='{{$index}}'></div>\n    <div ng-if='formRows.length === 0'>\n        <h4> Form is empty </h4>\n        <p> Add a new row to start building your form </p>\n    </div>\n</div>",
+        template: "<div class='form-horizontal'>\n    <div class='row fb-form-row-editable' ng-repeat=\"row in formRows\"\n        fb-form-row-editable=\"row\" fb-form-row-index='{{$index}}'></div>\n    <div ng-if='formRows.length === 0'>\n        <h4> Form is empty </h4>\n        <p> Add a new row to start building your form </p>\n    </div>\n</div>",
         link: function(scope, element, attrs) {
           var beginMove, _base, _name;
           scope.formName = attrs.fbBuilder;
@@ -834,7 +834,7 @@
           fbFormRowEditable: '@',
           fbFormRowIndex: '@'
         },
-        template: "<div class='row'>\n    <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger pull-right delete-row\">\n      <i class=\"glyphicon glyphicon-remove\"></i>\n    </button>\n    <div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat=\"object in formObjects\"\n        fb-form-object-editable=\"object\"></div>\n    <div class=\"col col-sm-12 notify fb-form-row-empty\" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>\n        <h4>Empty Row</h4>\n        <p> Drag and drop components here </p>\n    </div>\n</div>",
+        template: "<button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-default delete-row\" style='float:right'>\n  <i class=\"glyphicon glyphicon-remove\"></i>\n</button>\n<div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat=\"object in formObjects\"\n    fb-form-object-editable=\"object\"></div>\n<div class=\"col col-sm-12 notify fb-form-row-empty\" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>\n    <h4>Empty Row</h4>\n    <p> Drag and drop components here </p>\n</div>\n",
         link: function(scope, element, attrs) {
           var beginMove;
           scope.width = 12;
@@ -853,7 +853,7 @@
               if ($formObjects.length === 0) {
                 if ($(element).find('.fb-form-object-editable.empty').length === 0) {
                   $(element).find('.notify').hide();
-                  $(element).find('>div:first').prepend($("<div class='col col-sm-" + scope.width + " fb-form-object-editable empty'></div>"));
+                  $(element).prepend($("<div class='col col-sm-" + scope.width + " fb-form-object-editable empty'></div>"));
                 }
                 return;
               }
