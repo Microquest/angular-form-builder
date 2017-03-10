@@ -949,7 +949,7 @@
             if (!template) {
               return;
             }
-            complete = "<div class='row'>\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\">\n    <div class='row'>\n      <button type=\"button\" class=\"btn btn-xs btn-info\">\n        <i class=\"glyphicon glyphicon-edit\"></i>\n      </button>\n      <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n        <i class=\"glyphicon glyphicon-remove\"></i>\n      </button>\n    </div>\n  </div>\n</div>";
+            complete = "<div class='row'>\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\">\n    <div class='row'>\n      <button type=\"button\" class=\"btn btn-xs btn-info\">\n        <i class=\"glyphicons glyphicons-edit\"></i><i class=\"glyphicon glyphicon-edit\"></i>\n      </button>\n      <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n        <i class=\"glyphicons glyphicons-remove\"></i><i class=\"glyphicon glyphicon-remove\"></i>\n      </button>\n    </div>\n  </div>\n</div>";
             view = $compile(complete)(scope);
             $(element).html(view);
             $(element).find('.btn-info').click(function() {

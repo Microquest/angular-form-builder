@@ -315,10 +315,10 @@ angular.module 'builder.directive', [
                       <div class="col-sm-2">
                         <div class='row'>
                           <button type="button" class="btn btn-xs btn-info">
-                            <i class="glyphicon glyphicon-edit"></i>
+                            <i class="glyphicons glyphicons-edit"></i><i class="glyphicon glyphicon-edit"></i>
                           </button>
                           <button type="button" ng-click="" class="btn btn-xs btn-danger">
-                            <i class="glyphicon glyphicon-remove"></i>
+                            <i class="glyphicons glyphicons-remove"></i><i class="glyphicon glyphicon-remove"></i>
                           </button>
                         </div>
                       </div>
