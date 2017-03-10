@@ -129,9 +129,14 @@ angular.module 'builder.directive', [
         <div class='form-horizontal'>
             <div class='row fb-form-row-editable' ng-repeat="row in formRows"
                 fb-form-row-editable="row" fb-form-row-index='{{$index}}'></div>
-            <div ng-if='formRows.length === 0'>
-                <h4> Form is empty </h4>
-                <p> Add a new row to start building your form </p>
+            <div ng-show='formRows.length === 0' class='row'>
+                <div class='col-sm-12' style='text-align: center'>
+                    <h4> Form is empty </h4>
+                    <p> Add a new row to start building your form </p>
+                    <button type="button" class="btn btn-md btn-default add-row" style=''>
+                      <i class="glyphicon glyphicon-plus"></i> Add Row
+                    </button>
+                </div>
             </div>
         </div>
         """
@@ -146,7 +151,7 @@ angular.module 'builder.directive', [
         $builder.addFormRow scope.formName
         beginMove = yes
 
-        $(element).find('.btn-primary').click ->
+        $(element).find('.add-row').click ->
           $builder.addFormRow scope.formName
           scope.$apply()
 
@@ -181,12 +186,12 @@ angular.module 'builder.directive', [
     fbFormRowIndex: '@'
   template:
         """
-        <button type="button" ng-click="" class="btn btn-xs btn-default delete-row" style='float:right'>
-          <i class="glyphicon glyphicon-remove"></i>
-        </button>
         <div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat="object in formObjects"
             fb-form-object-editable="object"></div>
-        <div class="col col-sm-12 notify fb-form-row-empty" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>
+        <div class="col col-sm-12 notify fb-form-row-empty" ng-show='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>
+            <button type="button" class="btn btn-xs btn-default delete-row pull-right" style='margin-top:10px'>
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
             <h4>Empty Row</h4>
             <p> Drag and drop components here </p>
         </div>
@@ -312,24 +317,26 @@ angular.module 'builder.directive', [
                   template +
                   """
                       </div>
-                      <div class="col-sm-2">
-                        <div class='row'>
-                          <button type="button" class="btn btn-xs btn-info">
-                            <i class="glyphicons glyphicons-edit"></i><i class="glyphicon glyphicon-edit"></i>
-                          </button>
-                          <button type="button" ng-click="" class="btn btn-xs btn-danger">
-                            <i class="glyphicons glyphicons-remove"></i><i class="glyphicon glyphicon-remove"></i>
-                          </button>
-                        </div>
+                      <div class="col-sm-2" style='vertical-align: middle'>
+                          <div class='row' style='margin:5px; margin-top: 10px'>
+                              <button type="button" ng-click="" class="btn btn-xs btn-danger delete-item">
+                                </i><i class="glyphicon glyphicon-remove"></i>
+                              </button>
+                          </div>
+                          <div class='row' style='margin:5px'>
+                              <button type="button" class="btn btn-xs btn-info modify-item">
+                                <i class="glyphicons glyphicons-edit"></i><i class="glyphicon glyphicon-edit"></i>
+                              </button>
+                          </div>
                       </div>
                     </div>
                   """
             view = $compile(complete) scope
             $(element).html view
-            $(element).find('.btn-info').click ->
+            $(element).find('.modify-item').click ->
               $(element).popover 'toggle'
 
-            $(element).find('.btn-danger').click ->
+            $(element).find('.delete-item').click ->
               $builder.removeFormObject scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index
               scope.$emit("formBuilder:formObjectRemoved")
               $(element).popover 'hide'

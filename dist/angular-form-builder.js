@@ -791,7 +791,7 @@
         scope: {
           fbBuilder: '@'
         },
-        template: "<div class='form-horizontal'>\n    <div class='row fb-form-row-editable' ng-repeat=\"row in formRows\"\n        fb-form-row-editable=\"row\" fb-form-row-index='{{$index}}'></div>\n    <div ng-if='formRows.length === 0'>\n        <h4> Form is empty </h4>\n        <p> Add a new row to start building your form </p>\n    </div>\n</div>",
+        template: "<div class='form-horizontal'>\n    <div class='row fb-form-row-editable' ng-repeat=\"row in formRows\"\n        fb-form-row-editable=\"row\" fb-form-row-index='{{$index}}'></div>\n    <div ng-show='formRows.length === 0' class='row'>\n        <div class='col-sm-12' style='text-align: center'>\n            <h4> Form is empty </h4>\n            <p> Add a new row to start building your form </p>\n            <button type=\"button\" class=\"btn btn-md btn-default add-row\" style=''>\n              <i class=\"glyphicon glyphicon-plus\"></i> Add Row\n            </button>\n        </div>\n    </div>\n</div>",
         link: function(scope, element, attrs) {
           var beginMove, _base, _name;
           scope.formName = attrs.fbBuilder;
@@ -801,7 +801,7 @@
           scope.formRows = $builder.forms[scope.formName];
           $builder.addFormRow(scope.formName);
           beginMove = true;
-          $(element).find('.btn-primary').click(function() {
+          $(element).find('.add-row').click(function() {
             $builder.addFormRow(scope.formName);
             return scope.$apply();
           });
@@ -834,7 +834,7 @@
           fbFormRowEditable: '@',
           fbFormRowIndex: '@'
         },
-        template: "<button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-default delete-row\" style='float:right'>\n  <i class=\"glyphicon glyphicon-remove\"></i>\n</button>\n<div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat=\"object in formObjects\"\n    fb-form-object-editable=\"object\"></div>\n<div class=\"col col-sm-12 notify fb-form-row-empty\" ng-if='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>\n    <h4>Empty Row</h4>\n    <p> Drag and drop components here </p>\n</div>\n",
+        template: "<div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat=\"object in formObjects\"\n    fb-form-object-editable=\"object\"></div>\n<div class=\"col col-sm-12 notify fb-form-row-empty\" ng-show='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>\n    <button type=\"button\" class=\"btn btn-xs btn-default delete-row pull-right\" style='margin-top:10px'>\n      <i class=\"glyphicon glyphicon-remove\"></i>\n    </button>\n    <h4>Empty Row</h4>\n    <p> Drag and drop components here </p>\n</div>\n",
         link: function(scope, element, attrs) {
           var beginMove;
           scope.width = 12;
@@ -949,13 +949,13 @@
             if (!template) {
               return;
             }
-            complete = "<div class='row'>\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\">\n    <div class='row'>\n      <button type=\"button\" class=\"btn btn-xs btn-info\">\n        <i class=\"glyphicons glyphicons-edit\"></i><i class=\"glyphicon glyphicon-edit\"></i>\n      </button>\n      <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger\">\n        <i class=\"glyphicons glyphicons-remove\"></i><i class=\"glyphicon glyphicon-remove\"></i>\n      </button>\n    </div>\n  </div>\n</div>";
+            complete = "<div class='row'>\n  <div class=\"col-sm-10\" style='pointer-events: none;'>" + template + "  </div>\n  <div class=\"col-sm-2\" style='vertical-align: middle'>\n      <div class='row' style='margin:5px; margin-top: 10px'>\n          <button type=\"button\" ng-click=\"\" class=\"btn btn-xs btn-danger delete-item\">\n            </i><i class=\"glyphicon glyphicon-remove\"></i>\n          </button>\n      </div>\n      <div class='row' style='margin:5px'>\n          <button type=\"button\" class=\"btn btn-xs btn-info modify-item\">\n            <i class=\"glyphicons glyphicons-edit\"></i><i class=\"glyphicon glyphicon-edit\"></i>\n          </button>\n      </div>\n  </div>\n</div>";
             view = $compile(complete)(scope);
             $(element).html(view);
-            $(element).find('.btn-info').click(function() {
+            $(element).find('.modify-item').click(function() {
               return $(element).popover('toggle');
             });
-            return $(element).find('.btn-danger').click(function() {
+            return $(element).find('.delete-item').click(function() {
               $builder.removeFormObject(scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index);
               scope.$emit("formBuilder:formObjectRemoved");
               return $(element).popover('hide');
