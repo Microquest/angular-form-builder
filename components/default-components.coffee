@@ -104,13 +104,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
+                            <label for="{{'label_visible' + date + index}}">
                             <div class='checkbox icheck-label'>
                               <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
-                            </div>
+                              Show Label
+                            </div></label>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
                                 <input type='text' ng-model="description" class='form-control'/>
