@@ -107,18 +107,17 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                               <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
                               Label Inline</label>
                             </div>
-                            <label for="{{'label_visible' + date + index}}">
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              Show Label
-                            </div></label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
+                            </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
                                 <input type='text' ng-model="description" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -166,7 +165,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -228,20 +227,20 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
                                 <input type='text' ng-model="description" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -262,7 +261,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -325,14 +324,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             </div>
                             <div class="form-group m-t-sm">
                                 <div class='checkbox icheck-label'>
-                                  <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                                  <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                                  <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                                  Label Inline</label>
                                 </div>
                             </div>
                             <div class="form-group m-t-sm">
                                 <div class='checkbox icheck-label'>
-                                  <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                                  <label for="{{'label_visible' + date + index}}">Show Label</label>
+                                  <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                                  Show Label</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -344,8 +343,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="placeholder" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -388,7 +387,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -438,12 +437,12 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -454,8 +453,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="placeholder" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -471,7 +470,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -527,12 +526,12 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -543,8 +542,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <textarea class="form-control" rows="3" ng-model="optionsText"/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -560,7 +559,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -616,12 +615,12 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -632,8 +631,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <textarea class="form-control" rows="3" ng-model="optionsText"/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -651,7 +650,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -707,12 +706,12 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -727,8 +726,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <textarea class="form-control" rows="3" ng-model="optionsText"/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -792,7 +791,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
@@ -842,12 +841,12 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="label" validator="[required]" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              <label for="{{'label_inline' + date + index}}">Label Inline</label>
+                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                              Label Inline</label>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              <label for="{{'label_visible' + date + index}}">Show Label</label>
+                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                              Show Label</label>
                             </div>
                             <div class="form-group">
                                 <label class='control-label'>Description</label>
@@ -858,8 +857,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="placeholder" class='form-control'/>
                             </div>
                             <div class='checkbox icheck-label'>
-                              <input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              <label for="{{'readonly' + date + index}}">Read Only</label>
+                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                              Read Only</label>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -909,7 +908,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class='form-group'>
                     <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
                     <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
             """
