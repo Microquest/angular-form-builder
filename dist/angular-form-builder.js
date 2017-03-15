@@ -2077,6 +2077,8 @@
          */
         var component, forms, row, _results;
         forms = _this.forms;
+        console.log(formRows);
+        _this.forms[name] = {};
         _results = [];
         for (row in formRows) {
           _this.addFormRow(name);
@@ -2084,6 +2086,7 @@
             var _results1;
             _results1 = [];
             for (component in formRows[row].formObjects) {
+              console.log("adding " + name(+' ' + row));
               _results1.push(this.addFormObject(name, row, formRows[row].formObjects[component]));
             }
             return _results1;
