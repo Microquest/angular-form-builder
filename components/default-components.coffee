@@ -122,8 +122,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
 
                             <div class='checkbox icheck-label m-t'>
@@ -245,8 +245,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
 
                             <div class="form-group" ng-if="validationOptions.length > 0">
@@ -349,8 +349,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
 
                             <div class="form-group" ng-if="validationOptions.length > 0">
@@ -459,8 +459,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
                         </div>
                     </div>
@@ -496,8 +496,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
                     <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
-                      <input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="readOnly" type="checkbox" checked="">
-                      <label for="{{formName+index+$index | nospace}}">{{item}}</label>
+                      <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="readOnly" type="checkbox" checked="">
+                      {{item}}</label>
                     </div>
                 </div>
                 <div class="col-sm-10 col-sm-offset-2">
@@ -548,8 +548,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
                         </div>
                     </div>
@@ -584,8 +584,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
 
-                        <input id="{{formName+index+$index | nospace}}" type="radio" ng-disabled="readOnly" name='{{formName+index}}' ng-model="$parent.inputText" validator-group="{{formName}}" ng-value='item'>
-                        <label for="{{formName+index+$index | nospace}}">{{item}}</label>
+                        <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" type="radio" ng-disabled="readOnly" name='{{formName+index}}' ng-model="$parent.inputText" validator-group="{{formName}}" ng-value='item'>
+                        {{item}}</label>
 
                     </div>
                 </div>
@@ -732,8 +732,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
                             <div class="form-group" ng-if="validationOptions.length > 0">
                                 <label class='control-label'>Validation</label>
@@ -863,8 +863,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              <label for="{{'required' + date + index}}">Required</label>
+                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                              Required</label>
                             </div>
 
                             <div class="form-group" ng-if="validationOptions.length > 0">
