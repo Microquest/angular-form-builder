@@ -2085,6 +2085,7 @@
             var _results1;
             _results1 = [];
             for (component in formRows[row].formObjects) {
+              console.log('loading ' + row + ' ' + component, formRows[row].formObjects[component]);
               _results1.push(this.addFormObject(name, row, formRows[row].formObjects[component]));
             }
             return _results1;

@@ -263,6 +263,7 @@ angular.module 'builder.provider', []
         for row of formRows
           @addFormRow name
           for component of formRows[row].formObjects
+            console.log('loading ' + row + ' ' + component, formRows[row].formObjects[component])
             @addFormObject(name, row, formRows[row].formObjects[component])
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
