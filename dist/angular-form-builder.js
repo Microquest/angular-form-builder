@@ -2078,7 +2078,7 @@
         var component, forms, row, _results;
         forms = _this.forms;
         console.log(formRows);
-        _this.forms[name] = {};
+        _this.forms[name] = [];
         _results = [];
         for (row in formRows) {
           _this.addFormRow(name);

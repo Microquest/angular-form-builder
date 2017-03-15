@@ -260,7 +260,7 @@ angular.module 'builder.provider', []
         ###
         forms = @forms
         console.log(formRows)
-        @forms[name] = {}
+        @forms[name] = []
         for row of formRows
           @addFormRow name
           for component of formRows[row].formObjects
