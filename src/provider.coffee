@@ -264,7 +264,7 @@ angular.module 'builder.provider', []
         for row of formRows
           @addFormRow name
           for component of formRows[row].formObjects
-            console.log("adding " + name +' '+ row)
+            console.log("adding " + name + ", " + row)
             @addFormObject(name, row, formRows[row].formObjects[component])
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
