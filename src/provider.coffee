@@ -215,6 +215,7 @@ angular.module 'builder.provider', []
             [index]: {int} The form object index. It will be updated by $builder.
         @return: The form object.
         ###
+        console.log('inserting item at ' + row + ' ' + index, formObject)
         @forms[name] ?= [{index: 0, formObjects: []}]
         if index > @forms[name][row].formObjects.length then index = @forms[name][row].formObjects.length
         else if index < 0 then index = 0
@@ -259,12 +260,9 @@ angular.module 'builder.provider', []
         @param formObjects: The form compoennts to add.
         ###
         forms = @forms
-        console.log(formRows)
-        @forms[name] = []
         for row of formRows
           @addFormRow name
           for component of formRows[row].formObjects
-            console.log("adding " + name + ", " + row)
             @addFormObject(name, row, formRows[row].formObjects[component])
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
