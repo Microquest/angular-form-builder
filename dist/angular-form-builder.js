@@ -635,8 +635,9 @@
       $timeout = $injector.get('$timeout');
       $rootScope = $injector.get('$rootScope');
       return $scope.$watch('formRow', function() {
+        console.log('watch is reached', $scope.formRow.formObjects.length);
         return $scope.width = $scope.formRow.formObjects.length === 0 ? 12 : 12 / $scope.formRow.formObjects.length;
-      }, true);
+      });
     }
   ]).controller('fbFormObjectController', [
     '$scope', '$injector', function($scope, $injector) {
@@ -1936,14 +1937,13 @@
     })(this);
     this.removeFormRow = (function(_this) {
       return function(name, row) {
-        var formRows, forms;
-        console.log(name + " " + row);
 
         /*
         Remove the form object by the index.
         @param name: The form name.
         @param index: The form object index.
          */
+        var formRows, forms;
         forms = _this.forms;
         formRows = forms[name];
         formRows.splice(row, 1);
@@ -1995,7 +1995,6 @@
             [index]: {int} The form object index. It will be updated by $builder.
         @return: The form object.
          */
-        console.log('inserting item at ' + row + ' ' + index, formObject);
         if ((_base = _this.forms)[name] == null) {
           _base[name] = [
             {
@@ -2010,7 +2009,6 @@
           index = 0;
         }
         formObject.row = parseInt(row);
-        console.log('modified? ' + row + ' ' + index, formObject);
         _this.forms[name][row].formObjects.splice(index, 0, _this.convertFormObject(name, formObject));
         if (_this.forms[name][_this.forms[name].length - 1].formObjects.length !== 0) {
           _this.addFormRow(name);
@@ -2077,27 +2075,23 @@
         @param name: The form name.
         @param formObjects: The form compoennts to add.
          */
-        var component, row, _base, _results;
+        var component, row, _base;
         if ((_base = _this.forms)[name] == null) {
           _base[name] = [];
         }
-        _results = [];
         for (row in formRows) {
-          _this.forms[name].splice(row, 0, {
-            index: row,
-            formObjects: []
-          });
-          _results.push((function() {
-            var _results1;
-            _results1 = [];
-            for (component in formRows[row].formObjects) {
-              this.forms[name][row].formObjects.splice(component, 0, this.convertFormObject(name, this.forms[name][row].formObjects[component]));
-              _results1.push(console.log(this.forms[name]));
-            }
-            return _results1;
-          }).call(_this));
+          if (row > 0) {
+            _this.forms[name].splice(row, 0, {
+              index: row,
+              formObjects: []
+            });
+          }
+          for (component in formRows[row].formObjects) {
+            _this.forms[name][row].formObjects.splice(component, 0, _this.convertFormObject(name, formRows[row].formObjects[component]));
+          }
+          _this.reindexFormObject(name, row);
         }
-        return _results;
+        return _this.reindexFormRows(name);
       };
     })(this);
     this.updateFormObjectIndex = (function(_this) {

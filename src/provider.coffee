@@ -179,7 +179,6 @@ angular.module 'builder.provider', []
         @insertFormRow name, @forms[name].length
 
     @removeFormRow = (name, row) =>
-        console.log(name + " " + row)
         ###
         Remove the form object by the index.
         @param name: The form name.
@@ -215,12 +214,10 @@ angular.module 'builder.provider', []
             [index]: {int} The form object index. It will be updated by $builder.
         @return: The form object.
         ###
-        console.log('inserting item at ' + row + ' ' + index, formObject)
         @forms[name] ?= [{index: 0, formObjects: []}]
         if index > @forms[name][row].formObjects.length then index = @forms[name][row].formObjects.length
         else if index < 0 then index = 0
         formObject.row = parseInt(row)
-        console.log('modified? ' + row + ' ' + index, formObject)
         @forms[name][row].formObjects.splice index, 0, @convertFormObject(name, formObject)
         #check if we should add a new row
         if @forms[name][@forms[name].length-1].formObjects.length != 0 then @addFormRow name
@@ -262,10 +259,11 @@ angular.module 'builder.provider', []
         ###
         @forms[name] ?= []
         for row of formRows
-          @forms[name].splice row, 0, {index: row, formObjects: []}
+          if row > 0 then @forms[name].splice row, 0, {index: row, formObjects: []}
           for component of formRows[row].formObjects
-            @forms[name][row].formObjects.splice component, 0, @convertFormObject(name, @forms[name][row].formObjects[component])
-            console.log(@forms[name])
+            @forms[name][row].formObjects.splice component, 0, @convertFormObject(name, formRows[row].formObjects[component])
+          @reindexFormObject name, row
+        @reindexFormRows name
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
         ###

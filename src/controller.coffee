@@ -357,8 +357,8 @@ angular.module 'builder.controller', ['builder.provider']
   $rootScope = $injector.get '$rootScope'
 
   $scope.$watch 'formRow', ->
+    console.log('watch is reached', $scope.formRow.formObjects.length)
     $scope.width = if $scope.formRow.formObjects.length == 0 then 12 else 12/$scope.formRow.formObjects.length
-  , yes
 ]
 
 

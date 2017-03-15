@@ -128,4 +128,14 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
         $validator.validate $scope, 'default'
         .success -> console.log 'success'
         .error -> console.log 'error'
+
+    $scope.testLoad = ->
+        json = [{"index":0,"formObjects":
+                      [
+                        {"id":3,"component":"text","editable":true,"index":0,"row":0,"label":"Text Input","label_inline":false,"label_visible":true,"description":"","placeholder":"placeholder","options":[],"required":false,"validation":"/.*/","logic":{"action":"Hide"},"pointRules":[]},
+                        {"id":4,"component":"date","editable":true,"index":1,"row":0,"label":"Date Picker","label_inline":false,"label_visible":true,"description":"","placeholder":"","options":[],"required":false,"validation":"/.*/","logic":{"action":"Hide"},"pointRules":[]}]},
+                    {"index":1,"formObjects":
+                      []}
+                    ]
+        $builder.loadFromArray 'default', json
 ]
