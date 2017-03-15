@@ -220,6 +220,7 @@ angular.module 'builder.provider', []
         if index > @forms[name][row].formObjects.length then index = @forms[name][row].formObjects.length
         else if index < 0 then index = 0
         formObject.row = parseInt(row)
+        console.log('modified? ' + row + ' ' + index, formObject)
         @forms[name][row].formObjects.splice index, 0, @convertFormObject(name, formObject)
         #check if we should add a new row
         if @forms[name][@forms[name].length-1].formObjects.length != 0 then @addFormRow name
@@ -263,7 +264,6 @@ angular.module 'builder.provider', []
         for row of formRows
           @addFormRow name
           for component of formRows[row].formObjects
-            console.log('loading ' + row + ' ' + component, formRows[row].formObjects[component])
             @insertFormObject(name, row, component, formRows[row].formObjects[component])
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
