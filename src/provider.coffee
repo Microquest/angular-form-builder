@@ -195,7 +195,7 @@ angular.module 'builder.provider', []
         Insert the form object into the form at last.
         ###
         @forms[name] ?= [{index: 0, formObjects: []}]
-        @insertFormObject name, row, @forms[name].length, formObject
+        @insertFormObject name, row, @forms[name][row].formObjects.length, formObject
 
     @insertFormObject = (name, row, index, formObject={}) =>
         ###
@@ -264,7 +264,7 @@ angular.module 'builder.provider', []
           @addFormRow name
           for component of formRows[row].formObjects
             console.log('loading ' + row + ' ' + component, formRows[row].formObjects[component])
-            @addFormObject(name, row, formRows[row].formObjects[component])
+            @insertFormObject(name, row, component, formRows[row].formObjects[component])
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
         ###
