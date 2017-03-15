@@ -2077,16 +2077,22 @@
         @param name: The form name.
         @param formObjects: The form compoennts to add.
          */
-        var component, forms, row, _results;
-        forms = _this.forms;
+        var component, row, _base, _results;
+        if ((_base = _this.forms)[name] == null) {
+          _base[name] = [];
+        }
         _results = [];
         for (row in formRows) {
-          _this.addFormRow(name);
+          _this.forms[name].splice(row, 0, {
+            index: row,
+            formObjects: []
+          });
           _results.push((function() {
             var _results1;
             _results1 = [];
             for (component in formRows[row].formObjects) {
-              _results1.push(this.insertFormObject(name, row, component, formRows[row].formObjects[component]));
+              this.forms[name][row].formObjects.splice(component, 0, this.convertFormObject(name, this.forms[name][row].formObjects[component]));
+              _results1.push(console.log(this.forms[name]));
             }
             return _results1;
           }).call(_this));
