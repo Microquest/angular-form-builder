@@ -260,11 +260,12 @@ angular.module 'builder.provider', []
         @param name: The form name.
         @param formObjects: The form compoennts to add.
         ###
-        forms = @forms
+        @forms[name] ?= []
         for row of formRows
-          @addFormRow name
+          @forms[name].splice row, 0, {index: row, formObjects: []}
           for component of formRows[row].formObjects
-            @insertFormObject(name, row, component, formRows[row].formObjects[component])
+            @forms[name][row].formObjects.splice component, 0, @convertFormObject(name, @forms[name][row].formObjects[component])
+            console.log(@forms[name])
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>
         ###
