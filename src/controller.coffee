@@ -324,7 +324,6 @@ angular.module 'builder.controller', ['builder.provider']
     # set default for input
     $scope.input ?= []
     $scope.$watch 'form', ->
-        console.log($scope.form)
         # remove superfluous input
         if $scope.input.length > $scope.form.length
             $scope.input.splice $scope.form.length
@@ -356,8 +355,7 @@ angular.module 'builder.controller', ['builder.provider']
   $timeout = $injector.get '$timeout'
   $rootScope = $injector.get '$rootScope'
 
-  $scope.$watch 'formRow', ->
-    console.log('watch is reached', $scope.formRow.formObjects.length)
+  $scope.$watch 'formRow.formObjects.length', ->
     $scope.width = if $scope.formRow.formObjects.length == 0 then 12 else 12/$scope.formRow.formObjects.length
 ]
 

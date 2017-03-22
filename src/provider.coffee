@@ -101,6 +101,8 @@ angular.module 'builder.provider', []
             pointRules: formObject.pointRules ? component.pointRules
             conversionType: formObject.conversionType ? component.conversionType
             backgroundImage: formObject.backgroundImage ? component.backgroundImage
+            imageWidth: formObject.imageWidth ? component.imageWidth
+            imageHeight: formObject.imageHeight ? component.imageHeight
         result
 
     @reindexFormObject = (name, row) =>

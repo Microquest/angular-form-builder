@@ -607,7 +607,6 @@
         $scope.input = [];
       }
       $scope.$watch('form', function() {
-        console.log($scope.form);
         if ($scope.input.length > $scope.form.length) {
           $scope.input.splice($scope.form.length);
         }
@@ -634,8 +633,7 @@
       $builder = $injector.get('$builder');
       $timeout = $injector.get('$timeout');
       $rootScope = $injector.get('$rootScope');
-      return $scope.$watch('formRow', function() {
-        console.log('watch is reached', $scope.formRow.formObjects.length);
+      return $scope.$watch('formRow.formObjects.length', function() {
         return $scope.width = $scope.formRow.formObjects.length === 0 ? 12 : 12 / $scope.formRow.formObjects.length;
       });
     }
@@ -1790,7 +1788,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref31, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1830,7 +1828,9 @@
         category: (_ref26 = formObject.category) != null ? _ref26 : component.category,
         pointRules: (_ref27 = formObject.pointRules) != null ? _ref27 : component.pointRules,
         conversionType: (_ref28 = formObject.conversionType) != null ? _ref28 : component.conversionType,
-        backgroundImage: (_ref29 = formObject.backgroundImage) != null ? _ref29 : component.backgroundImage
+        backgroundImage: (_ref29 = formObject.backgroundImage) != null ? _ref29 : component.backgroundImage,
+        imageWidth: (_ref30 = formObject.imageWidth) != null ? _ref30 : component.imageWidth,
+        imageHeight: (_ref31 = formObject.imageHeight) != null ? _ref31 : component.imageHeight
       };
       return result;
     };

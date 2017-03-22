@@ -12,10 +12,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label class="col-sm-2 control-label" for="{{formName+index}}"><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i>
-                </label>
-                 <div class="col-sm-10 form-group text-left">
-                  <rich-text><strong>Text Message</strong></rich-text>
+                <div class="col-sm-12 form-group text-left" style='margin:2px'>
+                  <rich-text><strong>Static <i>Rich Text</i> Component</strong></rich-text>
                 </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
@@ -806,17 +804,19 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         label_visible: true
         description: ''
         readOnly: no
+        imageHeight: 8
+        imageWidth: 12
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} <span style='color:red' ng-if='required'>*</span></label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" ng-style="{'background-image':'url('+formObject.backgroundImage+')', 'background-size':'cover', 'width': '400px', 'height': '300px'}" >
-                    <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: 400, height: 300, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3}" version="formObject.drawVersion" imageSrc="formObject.backgroundImage"></div>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
+                    <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
                     <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
                 </div>
-              <div class="col-sm-10 col-sm-offset-2">
-                <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
-              </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                    <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
             """
