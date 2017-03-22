@@ -21,397 +21,16 @@
       $builder = $injector.get('$builder');
       $modal = $injector.get('$modal');
       $filter = $injector.get('$filter');
-      $scope.newRule = {};
-      if ($scope.formObject.pointRules == null) {
-        $scope.formObject.pointRules = [];
-      }
-      switch ($scope.formObject.component) {
-        case 'checkbox':
-          $scope.predicates = [
-            {
-              value: 'in',
-              label: 'In'
-            }, {
-              value: 'not_in',
-              label: 'Not in'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not Empty'
-            }
-          ];
-          break;
-        case 'radio':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'matches',
-              label: 'Matches'
-            }, {
-              value: 'does_not_match',
-              label: 'Does not match'
-            }, {
-              value: 'contains',
-              label: 'Contains'
-            }, {
-              value: 'does_not_contain',
-              label: 'Does not contain'
-            }, {
-              value: 'lt',
-              label: 'Less than'
-            }, {
-              value: 'lteq',
-              label: 'Less than or equal to'
-            }, {
-              value: 'gt',
-              label: 'Greater than'
-            }, {
-              value: 'gteq',
-              label: 'Greater than or equal to'
-            }
-          ];
-          break;
-        case 'select':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'matches',
-              label: 'Matches'
-            }, {
-              value: 'does_not_match',
-              label: 'Does not match'
-            }, {
-              value: 'contains',
-              label: 'Contains'
-            }, {
-              value: 'does_not_contain',
-              label: 'Does not contain'
-            }, {
-              value: 'lt',
-              label: 'Less than'
-            }, {
-              value: 'lteq',
-              label: 'Less than or equal to'
-            }, {
-              value: 'gt',
-              label: 'Greater than'
-            }, {
-              value: 'gteq',
-              label: 'Greater than or equal to'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'product':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'email':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'matches',
-              label: 'Matches'
-            }, {
-              value: 'does_not_match',
-              label: 'Does not match'
-            }, {
-              value: 'contains',
-              label: 'Contains'
-            }, {
-              value: 'does_not_contain',
-              label: 'Does not contain'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'area':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'matches',
-              label: 'Matches'
-            }, {
-              value: 'does_not_match',
-              label: 'Does not match'
-            }, {
-              value: 'contains',
-              label: 'Contains'
-            }, {
-              value: 'does_not_contain',
-              label: 'Does not contain'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'phone':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'matches',
-              label: 'Matches'
-            }, {
-              value: 'does_not_match',
-              label: 'Does not match'
-            }, {
-              value: 'contains',
-              label: 'Contains'
-            }, {
-              value: 'does_not_contain',
-              label: 'Does not contain'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'text':
-          $scope.predicates = [
-            {
-              value: 'eq',
-              label: 'Equals'
-            }, {
-              value: 'not_eq',
-              label: 'Does not equal'
-            }, {
-              value: 'matches',
-              label: 'Matches'
-            }, {
-              value: 'does_not_match',
-              label: 'Does not match'
-            }, {
-              value: 'contains',
-              label: 'Contains'
-            }, {
-              value: 'does_not_contain',
-              label: 'Does not contain'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }, {
-              value: 'lt',
-              label: 'Less than'
-            }, {
-              value: 'lteq',
-              label: 'Less than or equal to'
-            }, {
-              value: 'gt',
-              label: 'Greater than'
-            }, {
-              value: 'gteq',
-              label: 'Greater than or equal to'
-            }
-          ];
-          break;
-        case 'date':
-          $scope.predicates = [
-            {
-              value: 'lt',
-              label: 'Less than'
-            }, {
-              value: 'lteq',
-              label: 'Less than or equal to'
-            }, {
-              value: 'gt',
-              label: 'Greater than'
-            }, {
-              value: 'gteq',
-              label: 'Greater than or equal to'
-            }, {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'signature':
-          $scope.predicates = [
-            {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'upload':
-          $scope.predicates = [
-            {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'cpr':
-          $scope.predicates = [
-            {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-          break;
-        case 'address':
-          $scope.predicates = [
-            {
-              value: 'null',
-              label: 'Empty'
-            }, {
-              value: 'not_null',
-              label: 'Not empty'
-            }
-          ];
-      }
-      $scope.addRule = function() {
-        if (($scope.newRule.predicate == null) || !$scope.newRule.points || (($scope.newRule.value == null) && $scope.newRule.predicate !== 'null' && $scope.newRule.predicate !== 'not_null')) {
-          return $scope.rulesErrorMessage = 'Please update all fields.';
-        } else {
-          $scope.rulesErrorMessage = '';
-          if (angular.isDate($scope.newRule.value)) {
-            $scope.newRule.value = $filter('date')($scope.newRule.value, 'dd-MM-yyyy');
-          }
-          $scope.formObject.pointRules.push($scope.newRule);
-          return $scope.newRule = {};
-        }
-      };
-      $scope.removeRule = function(rule) {
-        return $scope.formObject.pointRules.splice($scope.formObject.pointRules.indexOf(rule), 1);
-      };
-      if ($scope.formObject.logic == null) {
-        $scope.formObject.logic = {
-          action: 'Hide'
-        };
-      } else {
-        if ($scope.formObject.logic.component != null) {
-          $scope.formObject.logic.component = angular.fromJson($scope.formObject.logic.component);
-        }
-      }
       if ($scope.formObject.id === void 0) {
         $scope.formObject.id = $builder.config.max_id;
         $builder.config.max_id = $builder.config.max_id + 1;
       }
-      $scope.actions = ['Hide', 'Show'];
-      $scope.$watch('formObject.logic.component', function() {
-        var objectized;
-        if ($scope.formObject.logic.component != null) {
-          objectized = angular.fromJson($scope.formObject.logic.component);
-          switch (objectized.component) {
-            case 'message':
-              return $scope.comparatorChoices = [];
-            case 'email':
-              return $scope.comparatorChoices = [];
-            case 'date':
-              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to'];
-            case 'text':
-              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain', 'Less than', 'Less than or equal to', 'Greater than', 'Greater than or equal to'];
-            case 'area':
-              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
-            case 'checkbox':
-              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
-            case 'radio':
-              return $scope.comparatorChoices = ['Equal to', 'Not equal to'];
-            case 'select':
-              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain'];
-            case 'upload':
-              return $scope.comparatorChoices = [];
-            case 'signature':
-              return $scope.comparatorChoices = [];
-            case 'address':
-              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
-            case 'cpr':
-              return $scope.comparatorChoices = ['Contains', 'Does not contain'];
-            case 'graphic':
-              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain'];
-            case 'product':
-              return $scope.comparatorChoices = ['Equal to', 'Not equal to', 'Contains', 'Does not contain'];
-          }
-        }
-      });
       $scope.cancel = function() {
         return $scope.modalInstance.dismiss('cancel');
       };
       $scope.save = function(text) {
         $scope.placeholder = text;
         return $scope.modalInstance.close();
-      };
-      $scope.openPoints = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        return $scope.openedPoints = true;
-      };
-      $scope.resetLogic = function() {
-        return $scope.formObject.logic = {
-          action: 'Hide'
-        };
       };
       $scope.openSummerNote = function() {
         $scope.summerNoteText = $scope.formObject.placeholder;
@@ -439,7 +58,7 @@
         var component;
         copyObjectToScope(formObject, $scope);
         $scope.optionsText = formObject.options.join('\n');
-        $scope.$watch('[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays, performCreditCheck, cprCountry, logic, category, pointRules, conversionType]', function() {
+        $scope.$watch('[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays]', function() {
           formObject.label = $scope.label;
           formObject.label_visible = $scope.label_visible;
           formObject.label_inline = $scope.label_inline;
@@ -460,13 +79,7 @@
           formObject.readOnly = $scope.readOnly;
           formObject.minRange = $scope.minRange;
           formObject.maxRange = $scope.maxRange;
-          formObject.nextXDays = $scope.nextXDays;
-          formObject.performCreditCheck = $scope.performCreditCheck;
-          formObject.cprCountry = $scope.cprCountry;
-          formObject.logic = $scope.logic;
-          formObject.category = $scope.category;
-          formObject.pointRules = $scope.pointRules;
-          return formObject.conversionType = $scope.conversionType;
+          return formObject.nextXDays = $scope.nextXDays;
         }, true);
         $scope.$watch('optionsText', function(text) {
           var x;
@@ -515,13 +128,7 @@
             readOnly: $scope.readOnly,
             minRange: $scope.minRange,
             maxRange: $scope.maxRange,
-            nextXDays: $scope.nextXDays,
-            performCreditCheck: $scope.performCreditCheck,
-            cprCountry: $scope.cprCountry,
-            logic: $scope.logic,
-            category: $scope.category,
-            pointRules: $scope.pointRules,
-            conversionType: $scope.conversionType
+            nextXDays: $scope.nextXDays
           };
         },
         rollback: function() {
@@ -552,13 +159,7 @@
           $scope.readOnly = this.model.readOnly;
           $scope.minRange = this.model.minRange;
           $scope.maxRange = this.model.maxRange;
-          $scope.nextXDays = this.model.nextXDays;
-          $scope.performCreditCheck = this.model.performCreditCheck;
-          $scope.cprCountry = this.model.cprCountry;
-          $scope.logic = this.model.logic;
-          $scope.category = this.model.category;
-          $scope.pointRules = this.model.pointRules;
-          return $scope.conversionType = this.model.conversionType;
+          return $scope.nextXDays = this.model.nextXDays;
         }
       };
     }
@@ -1756,7 +1357,6 @@
     this.broadcastChannel = {
       updateInput: '$updateInput'
     };
-    this.skipLogicComponents = [];
     this.forms = {};
     this.convertComponent = function(name, component) {
       var result, _ref, _ref1, _ref10, _ref11, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
@@ -1788,7 +1388,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref31, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1822,15 +1422,10 @@
         requireConfirmation: (_ref20 = formObject.requireConfirmation) != null ? _ref20 : component.requireConfirmation,
         minRange: (_ref21 = formObject.minRange) != null ? _ref21 : component.minRange,
         maxRange: (_ref22 = formObject.maxRange) != null ? _ref22 : component.maxRange,
-        performCreditCheck: (_ref23 = formObject.performCreditCheck) != null ? _ref23 : component.performCreditCheck,
-        cprCountry: (_ref24 = formObject.cprCountry) != null ? _ref24 : component.cprCountry,
-        logic: (_ref25 = formObject.logic) != null ? _ref25 : component.logic,
-        category: (_ref26 = formObject.category) != null ? _ref26 : component.category,
-        pointRules: (_ref27 = formObject.pointRules) != null ? _ref27 : component.pointRules,
-        conversionType: (_ref28 = formObject.conversionType) != null ? _ref28 : component.conversionType,
-        backgroundImage: (_ref29 = formObject.backgroundImage) != null ? _ref29 : component.backgroundImage,
-        imageWidth: (_ref30 = formObject.imageWidth) != null ? _ref30 : component.imageWidth,
-        imageHeight: (_ref31 = formObject.imageHeight) != null ? _ref31 : component.imageHeight
+        category: (_ref23 = formObject.category) != null ? _ref23 : component.category,
+        backgroundImage: (_ref24 = formObject.backgroundImage) != null ? _ref24 : component.backgroundImage,
+        imageWidth: (_ref25 = formObject.imageWidth) != null ? _ref25 : component.imageWidth,
+        imageHeight: (_ref26 = formObject.imageHeight) != null ? _ref26 : component.imageHeight
       };
       return result;
     };
@@ -2143,7 +1738,6 @@
         _this.broadcastChannel = {
           updateInput: '$updateInput'
         };
-        _this.skipLogicComponents = [];
         return _this.forms = {};
       };
     })(this);

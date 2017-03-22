@@ -28,13 +28,11 @@ angular.module 'builder.provider', []
     @broadcastChannel =
         updateInput: '$updateInput'
 
-    @skipLogicComponents = []
 
     # forms
     #   builder mode: `fb-builder` you could drag and drop to build the form.
     #   form mode: `fb-form` this is the form for end-user to input value.
     @forms = {}
-        # skipLogic: []
 
 
     # ----------------------------------------
@@ -94,12 +92,7 @@ angular.module 'builder.provider', []
             requireConfirmation: formObject.requireConfirmation ? component.requireConfirmation
             minRange: formObject.minRange ? component.minRange
             maxRange: formObject.maxRange ? component.maxRange
-            performCreditCheck: formObject.performCreditCheck ? component.performCreditCheck
-            cprCountry: formObject.cprCountry ? component.cprCountry
-            logic: formObject.logic ? component.logic
             category: formObject.category ? component.category
-            pointRules: formObject.pointRules ? component.pointRules
-            conversionType: formObject.conversionType ? component.conversionType
             backgroundImage: formObject.backgroundImage ? component.backgroundImage
             imageWidth: formObject.imageWidth ? component.imageWidth
             imageHeight: formObject.imageHeight ? component.imageHeight
@@ -307,7 +300,6 @@ angular.module 'builder.provider', []
         @groups = []
         @broadcastChannel =
             updateInput: '$updateInput'
-        @skipLogicComponents = []
         @forms = {}
 
     # ----------------------------------------
