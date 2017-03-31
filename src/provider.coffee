@@ -258,6 +258,12 @@ angular.module 'builder.provider', []
           for component of formRows[row].formObjects
             @forms[name][row].formObjects.splice component, 0, @convertFormObject(name, formRows[row].formObjects[component])
           @reindexFormObject name, row
+
+        #hackily remove empty rows at the end?
+        for row of formRows
+          if formRows[row].formObjects.length == 0
+            @forms[name].splice row, 1
+            row--
         @reindexFormRows name
 
     @updateFormObjectIndex = (name, oldRow, newRow, oldIndex, newIndex) =>

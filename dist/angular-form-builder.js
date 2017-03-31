@@ -1686,6 +1686,12 @@
           }
           _this.reindexFormObject(name, row);
         }
+        for (row in formRows) {
+          if (formRows[row].formObjects.length === 0) {
+            _this.forms[name].splice(row, 1);
+            row--;
+          }
+        }
         return _this.reindexFormRows(name);
       };
     })(this);
