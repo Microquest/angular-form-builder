@@ -607,7 +607,9 @@ angular.module 'builder.directive', [
     # ----------------------------------------
     # variables
     # ----------------------------------------
+    scope.input = []
     scope.width = if scope.formRow.formObjects.length == 0 then 12 else 12/scope.formRow.formObjects.length
+    scope.$parent.input.splice scope.formRow.index, 1, scope.input
 ]
 
 
@@ -635,6 +637,7 @@ angular.module 'builder.directive', [
         # listen (formObject updated
         scope.$on $builder.broadcastChannel.updateInput, -> scope.updateInput scope.inputText
         scope.$on '$builder.$directive.valuesChanged', (event, values) ->
+            console.log("$builder.$directive.valuesChanged", values)
             scope.inputText = values[scope.index].value;
             scope.updateInput(scope.inputText);
 

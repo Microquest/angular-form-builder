@@ -257,7 +257,7 @@
           label: $scope.formObject.label,
           value: value != null ? value : ''
         };
-        return $scope.$parent.$parent.$parent.input.splice($scope.$index, 1, input);
+        return $scope.$parent.input.splice($scope.$index, 1, input);
       };
     }
   ]);
@@ -803,7 +803,9 @@
         template: "<div class='row fb-form-row'>\n  <div class='col col-sm-{{width}} fb-form-object' ng-repeat=\"object in formRow.formObjects\" fb-form-object=\"object\"></div>\n  <div ng-if='form.length === 0'>\n      <h4> This row is empty </h4>\n  </div>\n</div>",
         controller: 'fbFormRowController',
         link: function(scope, element, attrs) {
-          return scope.width = scope.formRow.formObjects.length === 0 ? 12 : 12 / scope.formRow.formObjects.length;
+          scope.input = [];
+          scope.width = scope.formRow.formObjects.length === 0 ? 12 : 12 / scope.formRow.formObjects.length;
+          return scope.$parent.input.splice(scope.formRow.index, 1, scope.input);
         }
       };
     }
@@ -823,6 +825,7 @@
             return scope.updateInput(scope.inputText);
           });
           scope.$on('$builder.$directive.valuesChanged', function(event, values) {
+            console.log("$builder.$directive.valuesChanged", values);
             scope.inputText = values[scope.index].value;
             return scope.updateInput(scope.inputText);
           });
