@@ -74,7 +74,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
-                    <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText'\>
+                    <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
@@ -183,7 +183,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                  <input type="hidden" class="form-control" required="{'fb-required':required}" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}"\>
+                  <input type="hidden" class="form-control" required="{'fb-required':required}" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}" validator-required="{{required}}" validator-group="{{formName}}"\>
                   <div class="col-sm-3">
                     <select ng-show="!multiple" ng-readonly="readOnly" class="form-control m-b"
                         ng-model="type" ng-init="type='Home'">
