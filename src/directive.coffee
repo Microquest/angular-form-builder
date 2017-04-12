@@ -305,7 +305,6 @@ angular.module 'builder.directive', [
         scope.$component = $builder.components[scope.formObject.component]
         # setup scope
         scope.setupScope scope.formObject
-
         # compile formObject
         scope.$watch '$component.template', (template) ->
             return if not template
@@ -630,14 +629,13 @@ angular.module 'builder.directive', [
         # ----------------------------------------
         scope.formObject = $parse(attrs.fbFormObject) scope
         scope.$component = $builder.components[scope.formObject.component]
-
+        scope.formName = scope.$parent.$parent.formName
         # ----------------------------------------
         # scope
         # ----------------------------------------
         # listen (formObject updated
         scope.$on $builder.broadcastChannel.updateInput, -> scope.updateInput scope.inputText
         scope.$on '$builder.$directive.valuesChanged', (event, values) ->
-            console.log("$builder.$directive.valuesChanged", values)
             scope.inputText = values[scope.index].value;
             scope.updateInput(scope.inputText);
 

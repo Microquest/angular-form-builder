@@ -37,7 +37,7 @@ angular.module 'builder.controller', ['builder.provider']
       $scope.modalInstance.close()
 
     $scope.openSummerNote = ->
-      $scope.summerNoteText = $scope.formObject.placeholder;
+      $scope.summerNoteText = $scope.formObject.inputText;
       $scope.modalInstance = $modal.open({
         template:   '<div class="modal-header">'+
                         '<button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>'+

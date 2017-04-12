@@ -33,7 +33,7 @@
         return $scope.modalInstance.close();
       };
       $scope.openSummerNote = function() {
-        $scope.summerNoteText = $scope.formObject.placeholder;
+        $scope.summerNoteText = $scope.formObject.inputText;
         return $scope.modalInstance = $modal.open({
           template: '<div class="modal-header">' + '<button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + '<h4 class="modal-title">Edit Rich Content</div>' + '</div>' + '<div class="modal-body no-padding">' + '<div summernote ng-model="summerNoteText"></div>' + '</div>' + '<div class="modal-footer">' + '<button class="btn btn-white pull-left" ng-click="cancel()">Cancel</button>' + '<button class="btn btn-primary pull-right" ng-click="save(summerNoteText)">Apply</button>' + '</div>',
           scope: $scope
@@ -821,11 +821,11 @@
         link: function(scope, element, attrs) {
           scope.formObject = $parse(attrs.fbFormObject)(scope);
           scope.$component = $builder.components[scope.formObject.component];
+          scope.formName = scope.$parent.$parent.formName;
           scope.$on($builder.broadcastChannel.updateInput, function() {
             return scope.updateInput(scope.inputText);
           });
           scope.$on('$builder.$directive.valuesChanged', function(event, values) {
-            console.log("$builder.$directive.valuesChanged", values);
             scope.inputText = values[scope.index].value;
             return scope.updateInput(scope.inputText);
           });
