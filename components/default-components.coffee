@@ -125,8 +125,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             </div>
 
                             <div class='checkbox icheck-label m-t'>
-                              <input type="checkbox" id="{{'disableweekends' + date + index}}" ng-model="disableWeekends">
-                              <label for="{{'disableweekends' + date + index}}">Disable Weekends</label>
+                              <label for="{{'disableweekends' + date + index}}"><input type="checkbox" id="{{'disableweekends' + date + index}}" ng-model="disableWeekends">
+                              Disable Weekends</label>
                             </div>
 
                             <div class="form-group" ng-if="validationOptions.length > 0">
@@ -183,10 +183,10 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                  <input type="hidden" class="form-control" required="{'fb-required':required}" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}" validator-required="{{required}}" validator-group="{{formName}}"\>
+                  <input type="hidden" class="form-control" required="{'fb-required':required}" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}"\>
                   <div class="col-sm-3">
                     <select ng-show="!multiple" ng-readonly="readOnly" class="form-control m-b"
-                        ng-model="type" ng-init="type='Home'">
+                        ng-model="type" ng-init="type='Home'" validator-required="{{required}}" validator-group="{{formName}}">
                         <option value="Home">Home</option>
                         <option value="Mobile">Mobile</option>
                         <option value="Work">Work</option>
@@ -194,7 +194,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     </select>
                   </div>
                   <div ng-class="{'col-sm-6':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
-                    <input type="text" class="form-control" required="{'fb-required':required}" ng-model='number' mask='(999) 999-9999' clean='true' placeholder='#'\>
+                    <input type="text" class="form-control" required="{'fb-required':required}" ng-model='number' mask='(999) 999-9999' clean='true' placeholder='#' validator-required="{{required}}" validator-group="{{formName}}"\>
                   </div>
                   <div class="col-sm-3">
                     <input type="text" class="form-control" required="{'fb-required':required}" ng-model='extension' mask='999' clean='true' placeholder='ext.'\>
