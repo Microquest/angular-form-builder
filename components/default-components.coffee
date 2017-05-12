@@ -38,7 +38,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="placeholder" class='form-control'/>
                             </div>
                             <div class="form-group m-t">
-                              <a class="btn btn-success btn-block" ng-click="openSummerNote()">Open Rich Text Editor</a>
+                              <a class="btn btn-success btn-block" ng-click="openRichTextEditor()">Open Rich Text Editor</a>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
@@ -72,9 +72,9 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
-                    <input type="date" class="form-control" required="{'fb-required':required}" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
+                    <input type="date" class="form-control" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
@@ -182,11 +182,11 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                  <input type="hidden" class="form-control" required="{'fb-required':required}" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}"\>
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
+                  <input type="hidden" class="form-control" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}" \>
                   <div class="col-sm-3">
                     <select ng-show="!multiple" ng-readonly="readOnly" class="form-control m-b"
-                        ng-model="type" ng-init="type='Home'" validator-required="{{required}}" validator-group="{{formName}}">
+                        ng-model="type" ng-init="type='Home'" >
                         <option value="Home">Home</option>
                         <option value="Mobile">Mobile</option>
                         <option value="Work">Work</option>
@@ -194,10 +194,10 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     </select>
                   </div>
                   <div ng-class="{'col-sm-6':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
-                    <input type="text" class="form-control" required="{'fb-required':required}" ng-model='number' mask='(999) 999-9999' clean='true' placeholder='#' validator-required="{{required}}" validator-group="{{formName}}"\>
+                    <input type="text" class="form-control" ng-model='number' validator="{required ? '[phoneNumber]' : ''" mask='(999) 999-9999' clean='true' placeholder='#'\>
                   </div>
                   <div class="col-sm-3">
-                    <input type="text" class="form-control" required="{'fb-required':required}" ng-model='extension' mask='999' clean='true' placeholder='ext.'\>
+                    <input type="text" class="form-control" ng-model='extension' mask='999' clean='true' placeholder='ext.'"\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>

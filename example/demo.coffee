@@ -1,4 +1,4 @@
-angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.bootstrap', 'summernote', 'ngFileUpload']
+angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.bootstrap', 'summernote', 'ngFileUpload', 'ckeditor']
 
 .run ['$builder', ($builder) ->
     # $builder.registerComponent 'sampleInput',
@@ -138,4 +138,5 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
                       []}
                     ]
         $builder.loadFromArray 'default', json
+
 ]

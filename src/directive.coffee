@@ -7,6 +7,7 @@ angular.module 'builder.directive', [
     'builder.drag'
     'validator'
     'ngFileUpload'
+    'ckeditor'
 ]
 
 # ----------------------------------------
@@ -629,7 +630,9 @@ angular.module 'builder.directive', [
         # ----------------------------------------
         scope.formObject = $parse(attrs.fbFormObject) scope
         scope.$component = $builder.components[scope.formObject.component]
-        scope.formName = scope.$parent.$parent.formName
+        #scope.formName = scope.$parent.$parent.formName
+        #console.log("FormName for ", scope.formObject, scope.formName);
+
         # ----------------------------------------
         # scope
         # ----------------------------------------

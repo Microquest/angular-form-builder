@@ -30,12 +30,23 @@
       };
       $scope.save = function(text) {
         $scope.placeholder = text;
+        CKEDITOR.instances.modal_ckeditor.focusManager.blur(true);
+        if (CKEDITOR.instances.modal_ckeditor) {
+          CKEDITOR.instances.modal_ckeditor.destroy(false);
+        }
         return $scope.modalInstance.close();
       };
-      $scope.openSummerNote = function() {
-        $scope.summerNoteText = $scope.formObject.inputText;
+      $scope.openRichTextEditor = function() {
+        $scope.editorText = $scope.placeholder;
         return $scope.modalInstance = $modal.open({
-          template: '<div class="modal-header">' + '<button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' + '<h4 class="modal-title">Edit Rich Content</div>' + '</div>' + '<div class="modal-body no-padding">' + '<div summernote ng-model="summerNoteText"></div>' + '</div>' + '<div class="modal-footer">' + '<button class="btn btn-white pull-left" ng-click="cancel()">Cancel</button>' + '<button class="btn btn-primary pull-right" ng-click="save(summerNoteText)">Apply</button>' + '</div>',
+          controller: function($scope, $modalInstance) {
+            return $scope.options = {
+              language: 'en',
+              allowedContent: true,
+              entities: false
+            };
+          },
+          template: '<div class="modal-header">\n    <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\n    <h4 class="modal-title">Edit Rich Content</div>\n</div>\n<div class="modal-body">\n  <div ckeditor="options" ng-model="editorText" id="modal_ckeditor"></div>\n</div>\n<div class="modal-footer">\n    <button class="btn btn-white pull-left" ng-click="cancel()">Cancel</button>\n    <button class="btn btn-primary pull-right" ng-click="save(editorText)">Apply</button>\n</div> ',
           scope: $scope
         });
       };
@@ -265,7 +276,7 @@
 }).call(this);
 
 (function() {
-  angular.module('builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator', 'ngFileUpload']).directive('richText', [
+  angular.module('builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator', 'ngFileUpload', 'ckeditor']).directive('richText', [
     '$injector', function($injector) {
       return {
         restrict: 'E',
@@ -821,7 +832,6 @@
         link: function(scope, element, attrs) {
           scope.formObject = $parse(attrs.fbFormObject)(scope);
           scope.$component = $builder.components[scope.formObject.component];
-          scope.formName = scope.$parent.$parent.formName;
           scope.$on($builder.broadcastChannel.updateInput, function() {
             return scope.updateInput(scope.inputText);
           });
@@ -1319,10 +1329,26 @@
         return scope.minLength === 0 || (value.length >= scope.minLength && value.length <= scope.maxLength);
       }
     });
-    return $validator.register('numberRange', {
+    $validator.register('numberRange', {
       invoke: 'watch',
       validator: function(value, scope, element, attrs, $injector) {
         return value >= scope.minRange && value <= scope.maxRange;
+      }
+    });
+    return $validator.register('phoneNumber', {
+      invoke: 'watch',
+      validator: function(value, scope, element, attrs, $injector) {
+        var pattern, res;
+        pattern = /^\d{10}$/;
+        console.log(attrs, value);
+        if (value) {
+          res = value.match(pattern);
+          console.log(res);
+          if (res !== null) {
+            return true;
+          }
+        }
+        return false;
       }
     });
   });
