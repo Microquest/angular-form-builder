@@ -36,7 +36,8 @@
     "viscompass": "compass#^0.7.1",
     "angular-file-upload": "^2.3.4",
     "ng-file-upload": "^12.2.9",
-    "angular-ckeditor": "^1.0.3"
+    "angular-ckeditor": "^1.0.3",
+    "ckeditor": "^4.6.2"
   },
   "resolutions": {
     "angular": ">=1.2.18"
