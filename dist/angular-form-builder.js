@@ -832,6 +832,7 @@
         link: function(scope, element, attrs) {
           scope.formObject = $parse(attrs.fbFormObject)(scope);
           scope.$component = $builder.components[scope.formObject.component];
+          scope.formName = scope.$parent.$parent.formName;
           scope.$on($builder.broadcastChannel.updateInput, function() {
             return scope.updateInput(scope.inputText);
           });
@@ -1329,26 +1330,10 @@
         return scope.minLength === 0 || (value.length >= scope.minLength && value.length <= scope.maxLength);
       }
     });
-    $validator.register('numberRange', {
+    return $validator.register('numberRange', {
       invoke: 'watch',
       validator: function(value, scope, element, attrs, $injector) {
         return value >= scope.minRange && value <= scope.maxRange;
-      }
-    });
-    return $validator.register('phoneNumber', {
-      invoke: 'watch',
-      validator: function(value, scope, element, attrs, $injector) {
-        var pattern, res;
-        pattern = /^\d{10}$/;
-        console.log(attrs, value);
-        if (value) {
-          res = value.match(pattern);
-          console.log(res);
-          if (res !== null) {
-            return true;
-          }
-        }
-        return false;
       }
     });
   });

@@ -194,7 +194,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     </select>
                   </div>
                   <div ng-class="{'col-sm-6':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
-                    <input type="text" class="form-control" ng-model='number' validator="{required ? '[phoneNumber]' : ''" mask='(999) 999-9999' clean='true' placeholder='#'\>
+                    <input type="text" class="form-control" ng-model='number' validator-required="{{required}}" validator-group="{{formName}}" mask='(999) 999-9999' clean='true' placeholder='#'\>
                   </div>
                   <div class="col-sm-3">
                     <input type="text" class="form-control" ng-model='extension' mask='999' clean='true' placeholder='ext.'"\>
@@ -672,7 +672,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <select ng-show="!multiple" ng-readonly="readOnly" ng-options="value for value in options" class="form-control m-b"
-                        ng-model="inputText" ng-init="inputText = ''">
+                        ng-model="inputText" ng-init="inputText = ''" validator-required="{{required}}" validator-group="{{formName}}">
                         <option value="">{{placeholder}}</option>
                     </select>
                 </div>

@@ -573,7 +573,6 @@ angular.module 'builder.directive', [
     link: (scope, element, attrs) ->
         # providers
         $builder = $injector.get '$builder'
-
         # get the form for controller
         $builder.forms[scope.formName] ?= []
         scope.form = $builder.forms[scope.formName]
@@ -630,8 +629,7 @@ angular.module 'builder.directive', [
         # ----------------------------------------
         scope.formObject = $parse(attrs.fbFormObject) scope
         scope.$component = $builder.components[scope.formObject.component]
-        #scope.formName = scope.$parent.$parent.formName
-        #console.log("FormName for ", scope.formObject, scope.formName);
+        scope.formName = scope.$parent.$parent.formName
 
         # ----------------------------------------
         # scope
