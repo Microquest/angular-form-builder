@@ -641,7 +641,6 @@ angular.module 'builder.directive', [
             itemIndex = _.findIndex values[row], (o) ->
                 return o.id == scope.formObject.id
             scope.inputText = values[row][itemIndex].value
-            console.log("$builder.fbFormObject.loadInput.value", values, $scope.inputText)
 
         if scope.$component.arrayToText
             scope.inputArray = []

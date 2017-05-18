@@ -223,7 +223,6 @@ angular.module 'builder.controller', ['builder.provider']
 
     # set default for input
     $scope.input ?= []
-    console.log("$builder.fbForm.input", $scope.input)
     $scope.$watch 'form', ->
         # remove superfluous input
         if $scope.input.length > $scope.form.length
@@ -235,7 +234,6 @@ angular.module 'builder.controller', ['builder.provider']
     , yes
 
     $scope.$watch 'input', ->
-      console.log("$builder.fbForm.$watch.input", $scope.input)
       $timeout ->
         $scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
 
@@ -280,7 +278,6 @@ angular.module 'builder.controller', ['builder.provider']
         Copy current scope.input[X] to $parent.input.
         @param value: The input value.
         ###
-        console.log("$builder.fbFormObject.updateInput", value)
         input =
             id: $scope.formObject.id
             label: $scope.formObject.label

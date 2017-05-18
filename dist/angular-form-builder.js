@@ -218,7 +218,6 @@
       if ($scope.input == null) {
         $scope.input = [];
       }
-      console.log("$builder.fbForm.input", $scope.input);
       $scope.$watch('form', function() {
         if ($scope.input.length > $scope.form.length) {
           $scope.input.splice($scope.form.length);
@@ -228,7 +227,6 @@
         });
       }, true);
       $scope.$watch('input', function() {
-        console.log("$builder.fbForm.$watch.input", $scope.input);
         return $timeout(function() {
           return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
         });
@@ -270,7 +268,6 @@
         @param value: The input value.
          */
         var input;
-        console.log("$builder.fbFormObject.updateInput", value);
         input = {
           id: $scope.formObject.id,
           label: $scope.formObject.label,
@@ -850,8 +847,7 @@
             itemIndex = _.findIndex(values[row], function(o) {
               return o.id === scope.formObject.id;
             });
-            scope.inputText = values[row][itemIndex].value;
-            return console.log("$builder.fbFormObject.loadInput.value", values, $scope.inputText);
+            return scope.inputText = values[row][itemIndex].value;
           });
           if (scope.$component.arrayToText) {
             scope.inputArray = [];

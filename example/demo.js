@@ -20,8 +20,8 @@
           return console.log('error');
         });
       };
-      return $scope.testLoad = function() {
-        var data, json;
+      $scope.testLoad = function() {
+        var json;
         json = [
           {
             "index": 0,
@@ -69,7 +69,10 @@
             "formObjects": []
           }
         ];
-        $builder.loadFromArray('default', json);
+        return $builder.loadFromArray('default', json);
+      };
+      return $scope.testData = function() {
+        var data;
         data = [
           [
             {

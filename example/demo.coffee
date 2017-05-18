@@ -138,6 +138,9 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
                       []}
                     ]
         $builder.loadFromArray 'default', json
+
+
+    $scope.testData = ->
         data = [[{"id":4,"label":"Date Picker","value":"2017-05-17"},{"id":3,"label":"Text Input","value":"Tooootes"}],[]]
         $scope.input = data
 
