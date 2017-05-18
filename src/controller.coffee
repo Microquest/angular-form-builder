@@ -233,6 +233,10 @@ angular.module 'builder.controller', ['builder.provider']
             $scope.$broadcast $builder.broadcastChannel.updateInput
     , yes
 
+    $scope.$watch 'input', ->
+      $timeout ->
+        $scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
+
     $scope.broadcastMessage = (message) ->
       $rootScope.$broadcast(message)
 

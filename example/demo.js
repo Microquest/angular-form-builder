@@ -21,7 +21,7 @@
         });
       };
       return $scope.testLoad = function() {
-        var json;
+        var data, json;
         json = [
           {
             "index": 0,
@@ -69,7 +69,21 @@
             "formObjects": []
           }
         ];
-        return $builder.loadFromArray('default', json);
+        $builder.loadFromArray('default', json);
+        data = [
+          [
+            {
+              "id": 4,
+              "label": "Date Picker",
+              "value": "2017-05-17"
+            }, {
+              "id": 3,
+              "label": "Text Input",
+              "value": "Tooootes"
+            }
+          ], []
+        ];
+        return $scope.input = data;
       };
     }
   ]);

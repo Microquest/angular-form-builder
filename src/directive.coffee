@@ -636,9 +636,11 @@ angular.module 'builder.directive', [
         # ----------------------------------------
         # listen (formObject updated
         scope.$on $builder.broadcastChannel.updateInput, -> scope.updateInput scope.inputText
-        scope.$on '$builder.$directive.valuesChanged', (event, values) ->
-            scope.inputText = values[scope.index].value;
-            scope.updateInput(scope.inputText);
+        scope.$on $builder.broadcastChannel.loadInput, (event, values) ->
+            row = scope.$parent.$parent.$index
+            itemIndex = _.findIndex values[row], (o) ->
+                return o.id == scope.formObject.id
+            scope.inputText = values[row][itemIndex].value
 
         if scope.$component.arrayToText
             scope.inputArray = []

@@ -27,6 +27,7 @@ angular.module 'builder.provider', []
     @groups = []
     @broadcastChannel =
         updateInput: '$updateInput'
+        loadInput: '$loadInput'
 
 
     # forms
@@ -308,6 +309,7 @@ angular.module 'builder.provider', []
             updateInput: '$updateInput'
         @forms = {}
 
+
     # ----------------------------------------
     # $get
     # ----------------------------------------
@@ -329,7 +331,6 @@ angular.module 'builder.provider', []
       loadFromArray: @loadFromArray
       resetProviderData: @resetProviderData
       clearForm: @clearForm
-      setFormData: @setFormData
       insertFormRow: @insertFormRow
       addFormRow: @addFormRow
       removeFormRow: @removeFormRow

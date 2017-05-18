@@ -226,6 +226,11 @@
           return $scope.$broadcast($builder.broadcastChannel.updateInput);
         });
       }, true);
+      $scope.$watch('input', function() {
+        return $timeout(function() {
+          return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
+        });
+      });
       $scope.broadcastMessage = function(message) {
         return $rootScope.$broadcast(message);
       };
@@ -836,9 +841,13 @@
           scope.$on($builder.broadcastChannel.updateInput, function() {
             return scope.updateInput(scope.inputText);
           });
-          scope.$on('$builder.$directive.valuesChanged', function(event, values) {
-            scope.inputText = values[scope.index].value;
-            return scope.updateInput(scope.inputText);
+          scope.$on($builder.broadcastChannel.loadInput, function(event, values) {
+            var itemIndex, row;
+            row = scope.$parent.$parent.$index;
+            itemIndex = _.findIndex(values[row], function(o) {
+              return o.id === scope.formObject.id;
+            });
+            return scope.inputText = values[row][itemIndex].value;
           });
           if (scope.$component.arrayToText) {
             scope.inputArray = [];
@@ -1369,7 +1378,8 @@
     this.components = {};
     this.groups = [];
     this.broadcastChannel = {
-      updateInput: '$updateInput'
+      updateInput: '$updateInput',
+      loadInput: '$loadInput'
     };
     this.forms = {};
     this.convertComponent = function(name, component) {
@@ -1785,7 +1795,6 @@
             loadFromArray: _this.loadFromArray,
             resetProviderData: _this.resetProviderData,
             clearForm: _this.clearForm,
-            setFormData: _this.setFormData,
             insertFormRow: _this.insertFormRow,
             addFormRow: _this.addFormRow,
             removeFormRow: _this.removeFormRow
