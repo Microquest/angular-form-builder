@@ -28,6 +28,7 @@ angular.module 'builder.provider', []
     @broadcastChannel =
         updateInput: '$updateInput'
         loadInput: '$loadInput'
+        loadComplete: '$builder.loadCompleted'
 
 
     # forms
