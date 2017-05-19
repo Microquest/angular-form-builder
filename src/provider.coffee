@@ -246,6 +246,7 @@ angular.module 'builder.provider', []
         Clears all components from the form object.
         @param name: The form name.
         ###
+        @forms[name] ?= []
         while @forms[name].length > 0
             #pop the collars... errr the rows
             @forms[name].pop()

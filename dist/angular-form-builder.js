@@ -1679,6 +1679,10 @@
         Clears all components from the form object.
         @param name: The form name.
          */
+        var _base;
+        if ((_base = _this.forms)[name] == null) {
+          _base[name] = [];
+        }
         while (_this.forms[name].length > 0) {
           _this.forms[name].pop();
         }
