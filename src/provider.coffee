@@ -246,7 +246,11 @@ angular.module 'builder.provider', []
         Clears all components from the form object.
         @param name: The form name.
         ###
-        @forms[name] = [{index: 0, formObjects: []}]
+        while @forms[name].length > 0
+            #pop the collars... errr the rows
+            @forms[name].pop()
+        #Keep a single row for sanity
+        @forms[name].push {index: 0, formObjects: []}
 
     @loadFromArray = (name, formRows) =>
         ###
@@ -255,6 +259,7 @@ angular.module 'builder.provider', []
         @param formObjects: The form compoennts to add.
         ###
         @forms[name] ?= []
+        @clearForm name
         for row of formRows
           if row > 0 then @forms[name].splice row, 0, {index: row, formObjects: []}
           for component of formRows[row].formObjects

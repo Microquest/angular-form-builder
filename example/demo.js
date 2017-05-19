@@ -71,7 +71,7 @@
         ];
         return $builder.loadFromArray('default', json);
       };
-      return $scope.testData = function() {
+      $scope.testData = function() {
         var data;
         data = [
           [
@@ -87,6 +87,9 @@
           ], []
         ];
         return $scope.input = data;
+      };
+      return $scope.clearData = function() {
+        return $builder.clearForm('default');
       };
     }
   ]);

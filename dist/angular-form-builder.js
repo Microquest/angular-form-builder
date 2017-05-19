@@ -1679,12 +1679,13 @@
         Clears all components from the form object.
         @param name: The form name.
          */
-        return _this.forms[name] = [
-          {
-            index: 0,
-            formObjects: []
-          }
-        ];
+        while (_this.forms[name].length > 0) {
+          _this.forms[name].pop();
+        }
+        return _this.forms[name].push({
+          index: 0,
+          formObjects: []
+        });
       };
     })(this);
     this.loadFromArray = (function(_this) {
@@ -1699,6 +1700,7 @@
         if ((_base = _this.forms)[name] == null) {
           _base[name] = [];
         }
+        _this.clearForm(name);
         for (row in formRows) {
           if (row > 0) {
             _this.forms[name].splice(row, 0, {
