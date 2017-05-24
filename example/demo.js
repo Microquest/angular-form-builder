@@ -86,7 +86,8 @@
             }
           ], []
         ];
-        return $scope.input = data;
+        _.merge($scope.input, data);
+        return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
       };
       return $scope.clearData = function() {
         return $builder.clearForm('default');
