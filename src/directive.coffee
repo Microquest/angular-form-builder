@@ -73,7 +73,7 @@ angular.module 'builder.directive', [
         <p class="input-group">
           <input type="text" class="form-control" max-date="maxDate" datepicker-popup="{{format}}" ng-model="inputText" is-open="opened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close"  validator-required="{{required}}" validator-group="{{required}}" id="{{formName+index}}" disabled/>
           <span class="input-group-btn">
-            <button ng-disabled="readOnly" type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicons glyphicons-calendar"></i></button>
+            <button ng-disabled="readOnly" type="button" class="btn btn-default" ng-click="open($event)"><i class="fa fa-calendar"></i></button>
           </span>
         </p>
         """
@@ -135,7 +135,7 @@ angular.module 'builder.directive', [
                     <h4> Form is empty </h4>
                     <p> Add a new row to start building your form </p>
                     <button type="button" class="btn btn-md btn-default add-row" style=''>
-                      <i class="glyphicon glyphicon-plus"></i> Add Row
+                      <i class="fa fa-plus"></i> Add Row
                     </button>
                 </div>
             </div>
@@ -191,7 +191,7 @@ angular.module 'builder.directive', [
             fb-form-object-editable="object"></div>
         <div class="col col-sm-12 notify fb-form-row-empty" ng-show='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>
             <button type="button" class="btn btn-xs btn-default delete-row pull-right" style='margin-top:10px'>
-              <i class="glyphicon glyphicon-remove"></i>
+              <i class="fa fa-remove"></i>
             </button>
             <h4>Empty Row</h4>
             <p> Drag and drop components here </p>
@@ -320,12 +320,12 @@ angular.module 'builder.directive', [
                       <div class="col-sm-2" style='vertical-align: middle'>
                           <div class='row' style='margin:5px; margin-top: 10px'>
                               <button type="button" ng-click="" class="btn btn-xs btn-danger delete-item">
-                                </i><i class="glyphicon glyphicon-remove"></i>
+                                </i><i class="fa fa-remove"></i>
                               </button>
                           </div>
                           <div class='row' style='margin:5px'>
                               <button type="button" class="btn btn-xs btn-info modify-item">
-                                <i class="glyphicons glyphicons-edit"></i><i class="glyphicon glyphicon-edit"></i>
+                                <i class="fa fa-edit"></i>
                               </button>
                           </div>
                       </div>
