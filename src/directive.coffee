@@ -642,6 +642,23 @@ angular.module 'builder.directive', [
                 return o.id == scope.formObject.id
             scope.inputText = values[row][itemIndex].value
 
+        if scope.$component.dictionaryToString
+            scope.inputDictionary = {}
+
+            scope.$watchCollection 'inputDictionary', (newValue, oldValue) ->
+                #dict input, like phone number
+                return if newValue is oldValue
+                #set the inputText to be json value of the dict
+                scope.inputText = JSON.stringify(scope.inputDictionary)
+            , yes
+
+            scope.$watch 'inputText', (newValue, oldValue) ->
+                return if newValue is oldValue
+                #catch initial empty inputText, or undefined, causes parse error
+                return if not newValue or newValue.length == 0
+                scope.inputDictionary = JSON.parse(newValue)
+
+
         if scope.$component.arrayToText
             scope.inputArray = []
             # watch (end-user updated input of the form
@@ -654,6 +671,16 @@ angular.module 'builder.directive', [
                       checked.push scope.options[index] ? scope.inputArray[index]
                 scope.inputText = checked.join ', '
             , yes
+
+            scope.$watch 'inputText', (newValue, oldValue) ->
+                # array input, like checkbox
+                return if newValue is oldValue
+                checked = newValue.split(', ')
+                for val, i in scope.options
+                    index = _.indexOf checked, val
+                    if index > -1 then scope.inputArray[i] = true else scope.inputArray[i] = false
+            , yes
+
         scope.$watch 'inputText', -> scope.updateInput scope.inputText
         # watch (management updated form objects
         scope.$watch attrs.fbFormObject, ->
@@ -682,6 +709,124 @@ angular.module 'builder.directive', [
                 scope.inputArray = value
             else
                 scope.inputText = value
+]
+
+# ----------------------------------------
+# fb-form
+# ----------------------------------------
+.directive 'fbFormViewer', ['$injector', ($injector) ->
+  restrict: 'A'
+  require: 'ngModel'  # form data (end-user input values)
+  scope:
+      # input model for scops in ng-repeat
+      formName: '@fbFormViewer'
+      input: '=ngModel'
+  template:
+        """
+        <div class='form-horizontal'>
+          <div class='fb-form-row-viewer' ng-repeat="row in form" fb-form-row-viewer form-row="row"></div>
+          <div ng-if='form.length === 0'>
+              <h4> The form is empty </h4>
+          </div>
+        </div>
+        """
+  controller: 'fbFormViewerController'
+  link: (scope, element, attrs) ->
+# providers
+    $builder = $injector.get '$builder'
+    # get the form for controller
+    $builder.forms[scope.formName] ?= []
+    scope.form = $builder.forms[scope.formName]
+]
+
+# ----------------------------------------
+# fb-form-row
+# ----------------------------------------
+.directive 'fbFormRowViewer', ['$injector', ($injector) ->
+# providers
+  $builder = $injector.get '$builder'
+  $compile = $injector.get '$compile'
+  $parse = $injector.get '$parse'
+
+  restrict: 'A'
+  scope:
+      # input model for scopes in ng-repeat
+      formRow: '='
+  template:
+        """
+        <div class='row fb-form-row-viewer'>
+          <div class='col col-sm-{{width}} fb-form-object-viewer' ng-repeat="object in formRow.formObjects" fb-form-object-viewer="object"></div>
+        </div>
+        """
+  controller: 'fbFormRowViewerController'
+  link: (scope, element, attrs) ->
+# ----------------------------------------
+# variables
+# ----------------------------------------
+    scope.width = if scope.formRow.formObjects.length == 0 then 12 else 12/scope.formRow.formObjects.length
+]
+
+# ----------------------------------------
+# fb-form-object
+# ----------------------------------------
+.directive 'fbFormObjectViewer', ['$injector', ($injector) ->
+# providers
+  $builder = $injector.get '$builder'
+  $compile = $injector.get '$compile'
+  $parse = $injector.get '$parse'
+
+  restrict: 'A'
+  controller: 'fbFormObjectViewerController'
+  link: (scope, element, attrs) ->
+# ----------------------------------------
+# variables
+# ----------------------------------------
+    scope.formObject = $parse(attrs.fbFormObjectViewer) scope
+    scope.$component = $builder.components[scope.formObject.component]
+    scope.formName = scope.$parent.$parent.formName
+    scope.phoneFormatter = new StringMask('(000) 000-0000')
+
+    # ----------------------------------------
+    # scope
+    # ----------------------------------------
+    # listen (formObject updated
+    scope.$on $builder.broadcastChannel.loadInput, (event, values) ->
+      row = scope.$parent.$parent.$index
+      itemIndex = _.findIndex values[row], (o) ->
+        return o.id == scope.formObject.id
+      scope.inputText = values[row][itemIndex].value
+
+      if scope.$component.dictionaryToString
+          scope.inputDictionary = {}
+          scope.$watch 'inputText', (newValue, oldValue) ->
+              #catch initial empty inputText, or undefined, causes parse error
+              return if not newValue or newValue.length == 0
+              scope.inputDictionary = JSON.parse(newValue)
+          , yes
+
+    if scope.$component.arrayToText
+        scope.inputArray = []
+        scope.$watch 'inputText', (newValue, oldValue) ->
+            # array input, like checkbox
+            checked = newValue.split(', ')
+            for val, i in scope.options
+                index = _.indexOf checked, val
+                if index > -1 then scope.inputArray[i] = true else scope.inputArray[i] = false
+        , yes
+
+    scope.$watch '$component.viewerTemplate', (template) ->
+      return if not template
+      $template = $(template)
+      # add validator
+      $input = $template.find "[ng-model='inputText']"
+      # compile
+      view = $compile($template) scope
+      $(element).html view
+
+
+    scope.$watch attrs.fbFormObjectViewer, ->
+      scope.copyObjectToScope scope.formObject
+    , yes
 ]
 
 .directive 'uploadPhoto', ->

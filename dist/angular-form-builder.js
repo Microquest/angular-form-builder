@@ -226,7 +226,7 @@
           return $scope.$broadcast($builder.broadcastChannel.updateInput);
         });
       }, true);
-      $scope.$watch('input', function() {
+      $scope.$watchCollection('input', function() {
         return $timeout(function() {
           return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
         });
@@ -255,6 +255,48 @@
       });
     }
   ]).controller('fbFormObjectController', [
+    '$scope', '$injector', function($scope, $injector) {
+      var $builder;
+      $builder = $injector.get('$builder');
+      $scope.copyObjectToScope = function(object) {
+        return copyObjectToScope(object, $scope);
+      };
+      return $scope.updateInput = function(value) {
+
+        /*
+        Copy current scope.input[X] to $parent.input.
+        @param value: The input value.
+         */
+        var input;
+        input = {
+          id: $scope.formObject.id,
+          label: $scope.formObject.label,
+          value: value != null ? value : ''
+        };
+        return $scope.$parent.input.splice($scope.$index, 1, input);
+      };
+    }
+  ]).controller('fbFormViewerController', [
+    '$scope', '$injector', function($scope, $injector) {
+      var $builder, $rootScope, $timeout;
+      $builder = $injector.get('$builder');
+      $timeout = $injector.get('$timeout');
+      $rootScope = $injector.get('$rootScope');
+      $scope.$watchCollection('input', function() {
+        return $timeout(function() {
+          return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
+        });
+      });
+      return $rootScope.fields = $builder.forms;
+    }
+  ]).controller('fbFormRowViewerController', [
+    '$scope', '$injector', function($scope, $injector) {
+      var $builder, $rootScope, $timeout;
+      $builder = $injector.get('$builder');
+      $timeout = $injector.get('$timeout');
+      return $rootScope = $injector.get('$rootScope');
+    }
+  ]).controller('fbFormObjectViewerController', [
     '$scope', '$injector', function($scope, $injector) {
       var $builder;
       $builder = $injector.get('$builder');
@@ -849,6 +891,24 @@
             });
             return scope.inputText = values[row][itemIndex].value;
           });
+          if (scope.$component.dictionaryToString) {
+            scope.inputDictionary = {};
+            scope.$watchCollection('inputDictionary', function(newValue, oldValue) {
+              if (newValue === oldValue) {
+                return;
+              }
+              return scope.inputText = JSON.stringify(scope.inputDictionary);
+            }, true);
+            scope.$watch('inputText', function(newValue, oldValue) {
+              if (newValue === oldValue) {
+                return;
+              }
+              if (!newValue || newValue.length === 0) {
+                return;
+              }
+              return scope.inputDictionary = JSON.parse(newValue);
+            });
+          }
           if (scope.$component.arrayToText) {
             scope.inputArray = [];
             scope.$watch('inputArray', function(newValue, oldValue) {
@@ -865,6 +925,25 @@
                 }
               }
               return scope.inputText = checked.join(', ');
+            }, true);
+            scope.$watch('inputText', function(newValue, oldValue) {
+              var checked, i, index, val, _i, _len, _ref, _results;
+              if (newValue === oldValue) {
+                return;
+              }
+              checked = newValue.split(', ');
+              _ref = scope.options;
+              _results = [];
+              for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+                val = _ref[i];
+                index = _.indexOf(checked, val);
+                if (index > -1) {
+                  _results.push(scope.inputArray[i] = true);
+                } else {
+                  _results.push(scope.inputArray[i] = false);
+                }
+              }
+              return _results;
             }, true);
           }
           scope.$watch('inputText', function() {
@@ -899,6 +978,111 @@
               return scope.inputText = value;
             }
           });
+        }
+      };
+    }
+  ]).directive('fbFormViewer', [
+    '$injector', function($injector) {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        scope: {
+          formName: '@fbFormViewer',
+          input: '=ngModel'
+        },
+        template: "<div class='form-horizontal'>\n  <div class='fb-form-row-viewer' ng-repeat=\"row in form\" fb-form-row-viewer form-row=\"row\"></div>\n  <div ng-if='form.length === 0'>\n      <h4> The form is empty </h4>\n  </div>\n</div>",
+        controller: 'fbFormViewerController',
+        link: function(scope, element, attrs) {
+          var $builder, _base, _name;
+          $builder = $injector.get('$builder');
+          if ((_base = $builder.forms)[_name = scope.formName] == null) {
+            _base[_name] = [];
+          }
+          return scope.form = $builder.forms[scope.formName];
+        }
+      };
+    }
+  ]).directive('fbFormRowViewer', [
+    '$injector', function($injector) {
+      var $builder, $compile, $parse;
+      $builder = $injector.get('$builder');
+      $compile = $injector.get('$compile');
+      $parse = $injector.get('$parse');
+      return {
+        restrict: 'A',
+        scope: {
+          formRow: '='
+        },
+        template: "<div class='row fb-form-row-viewer'>\n  <div class='col col-sm-{{width}} fb-form-object-viewer' ng-repeat=\"object in formRow.formObjects\" fb-form-object-viewer=\"object\"></div>\n</div>",
+        controller: 'fbFormRowViewerController',
+        link: function(scope, element, attrs) {
+          return scope.width = scope.formRow.formObjects.length === 0 ? 12 : 12 / scope.formRow.formObjects.length;
+        }
+      };
+    }
+  ]).directive('fbFormObjectViewer', [
+    '$injector', function($injector) {
+      var $builder, $compile, $parse;
+      $builder = $injector.get('$builder');
+      $compile = $injector.get('$compile');
+      $parse = $injector.get('$parse');
+      return {
+        restrict: 'A',
+        controller: 'fbFormObjectViewerController',
+        link: function(scope, element, attrs) {
+          scope.formObject = $parse(attrs.fbFormObjectViewer)(scope);
+          scope.$component = $builder.components[scope.formObject.component];
+          scope.formName = scope.$parent.$parent.formName;
+          scope.phoneFormatter = new StringMask('(000) 000-0000');
+          scope.$on($builder.broadcastChannel.loadInput, function(event, values) {
+            var itemIndex, row;
+            row = scope.$parent.$parent.$index;
+            itemIndex = _.findIndex(values[row], function(o) {
+              return o.id === scope.formObject.id;
+            });
+            scope.inputText = values[row][itemIndex].value;
+            if (scope.$component.dictionaryToString) {
+              scope.inputDictionary = {};
+              return scope.$watch('inputText', function(newValue, oldValue) {
+                if (!newValue || newValue.length === 0) {
+                  return;
+                }
+                return scope.inputDictionary = JSON.parse(newValue);
+              }, true);
+            }
+          });
+          if (scope.$component.arrayToText) {
+            scope.inputArray = [];
+            scope.$watch('inputText', function(newValue, oldValue) {
+              var checked, i, index, val, _i, _len, _ref, _results;
+              checked = newValue.split(', ');
+              _ref = scope.options;
+              _results = [];
+              for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+                val = _ref[i];
+                index = _.indexOf(checked, val);
+                if (index > -1) {
+                  _results.push(scope.inputArray[i] = true);
+                } else {
+                  _results.push(scope.inputArray[i] = false);
+                }
+              }
+              return _results;
+            }, true);
+          }
+          scope.$watch('$component.viewerTemplate', function(template) {
+            var $input, $template, view;
+            if (!template) {
+              return;
+            }
+            $template = $(template);
+            $input = $template.find("[ng-model='inputText']");
+            view = $compile($template)(scope);
+            return $(element).html(view);
+          });
+          return scope.$watch(attrs.fbFormObjectViewer, function() {
+            return scope.copyObjectToScope(scope.formObject);
+          }, true);
         }
       };
     }
@@ -1384,7 +1568,7 @@
     };
     this.forms = {};
     this.convertComponent = function(name, component) {
-      var result, _ref, _ref1, _ref10, _ref11, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var result, _ref, _ref1, _ref10, _ref11, _ref12, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       result = {
         name: name,
         group: (_ref = component.group) != null ? _ref : 'Default',
@@ -1399,8 +1583,11 @@
         validationOptions: (_ref9 = component.validationOptions) != null ? _ref9 : [],
         options: (_ref10 = component.options) != null ? _ref10 : [],
         arrayToText: (_ref11 = component.arrayToText) != null ? _ref11 : false,
+        dictionaryToString: (_ref12 = component.dictionaryToString) != null ? _ref12 : false,
         template: component.template,
         templateUrl: component.templateUrl,
+        viewerTemplate: component.viewerTemplate,
+        viewerTemplateUrl: component.viewerTemplateUrl,
         popoverTemplate: component.popoverTemplate,
         popoverTemplateUrl: component.popoverTemplateUrl
       };

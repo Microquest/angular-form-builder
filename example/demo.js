@@ -12,6 +12,7 @@
         return $scope.selected = page;
       };
       $scope.input = [];
+      $scope.testInput = [];
       $scope.defaultValue = {};
       $scope.submit = function() {
         return $validator.validate($scope, 'default').success(function() {
@@ -39,58 +40,63 @@
                 "placeholder": "placeholder",
                 "options": [],
                 "required": false,
-                "validation": "/.*/",
-                "logic": {
-                  "action": "Hide"
-                },
-                "pointRules": []
-              }, {
-                "id": 4,
-                "component": "date",
+                "validation": "/.*/"
+              }
+            ]
+          }, {
+            "index": 1,
+            "formObjects": [
+              {
+                "id": 0,
+                "component": "phone",
                 "editable": true,
-                "index": 1,
-                "row": 0,
-                "label": "Date Picker",
+                "index": 0,
+                "row": 1,
+                "label": "Phone Number",
                 "label_inline": false,
                 "label_visible": true,
                 "description": "",
                 "placeholder": "",
                 "options": [],
                 "required": false,
-                "validation": "/.*/",
-                "logic": {
-                  "action": "Hide"
-                },
-                "pointRules": []
+                "validation": "/.*/"
               }
             ]
           }, {
-            "index": 1,
+            "index": 2,
             "formObjects": []
           }
         ];
-        return $builder.loadFromArray('default', json);
+        $builder.loadFromArray('default', json);
+        return $scope.form = $builder.forms['default'];
       };
       $scope.testData = function() {
         var data;
         data = [
           [
             {
-              "id": 4,
-              "label": "Date Picker",
-              "value": "2017-05-17"
-            }, {
               "id": 3,
               "label": "Text Input",
-              "value": "Tooootes"
+              "value": "asdf"
+            }
+          ], [
+            {
+              "id": 0,
+              "label": "Phone Number",
+              "value": "{\"type\":\"Mobile\",\"number\":\"1234567890\",\"extension\":\"999\"}"
             }
           ], []
         ];
-        _.merge($scope.input, data);
-        return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
+        return _.merge($scope.input, data);
       };
-      return $scope.clearData = function() {
-        return $builder.clearForm('default');
+      $scope.clearData = function() {
+        $builder.clearForm('default');
+        return $builder.clearForm('testForm');
+      };
+      return $scope.loadViewer = function() {
+        $scope.testForm = _.cloneDeep($builder.forms['default']);
+        $builder.loadFromArray('testForm', $scope.testForm);
+        return _.merge($scope.testInput, $scope.input);
       };
     }
   ]);

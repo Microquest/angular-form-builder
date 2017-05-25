@@ -119,6 +119,7 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
     $scope.select = (page) ->
         $scope.selected = page
     $scope.input = []
+    $scope.testInput = []
     $scope.defaultValue = {}
     # formObjectId: default value
     # $scope.defaultValue[textbox.id] = 'default value'
@@ -130,22 +131,23 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
         .error -> console.log 'error'
 
     $scope.testLoad = ->
-        json = [{"index":0,"formObjects":
-                      [
-                        {"id":3,"component":"text","editable":true,"index":0,"row":0,"label":"Text Input","label_inline":false,"label_visible":true,"description":"","placeholder":"placeholder","options":[],"required":false,"validation":"/.*/","logic":{"action":"Hide"},"pointRules":[]},
-                        {"id":4,"component":"date","editable":true,"index":1,"row":0,"label":"Date Picker","label_inline":false,"label_visible":true,"description":"","placeholder":"","options":[],"required":false,"validation":"/.*/","logic":{"action":"Hide"},"pointRules":[]}]},
-                    {"index":1,"formObjects":
-                      []}
-                    ]
+        json = [{"index":0,"formObjects":[{"id":3,"component":"text","editable":true,"index":0,"row":0,"label":"Text Input","label_inline":false,"label_visible":true,"description":"","placeholder":"placeholder","options":[],"required":false,"validation":"/.*/"}]},{"index":1,"formObjects":[{"id":0,"component":"phone","editable":true,"index":0,"row":1,"label":"Phone Number","label_inline":false,"label_visible":true,"description":"","placeholder":"","options":[],"required":false,"validation":"/.*/"}]},{"index":2,"formObjects":[]}]
         $builder.loadFromArray 'default', json
-
+        $scope.form = $builder.forms['default']
 
     $scope.testData = ->
-        data = [[{"id":4,"label":"Date Picker","value":"2017-05-17"},{"id":3,"label":"Text Input","value":"Tooootes"}],[]]
+        data = [[{"id":3,"label":"Text Input","value":"asdf"}],[{"id":0,"label":"Phone Number","value":"{\"type\":\"Mobile\",\"number\":\"1234567890\",\"extension\":\"999\"}"}],[]]
         _.merge($scope.input, data)
-        $scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
+        #$scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
 
     $scope.clearData = ->
         $builder.clearForm 'default'
+        $builder.clearForm 'testForm'
+
+    $scope.loadViewer = ->
+        $scope.testForm = _.cloneDeep $builder.forms['default']
+        $builder.loadFromArray 'testForm', $scope.testForm
+        _.merge($scope.testInput, $scope.input)
+        #$scope.$broadcast $builder.broadcastChannel.loadInput, $scope.testInput, data
 
 ]

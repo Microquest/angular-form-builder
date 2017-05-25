@@ -18,6 +18,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
             """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <div class="col-sm-12 form-group text-left" style='margin:2px'>
+                  <rich-text><strong>Static <i>Rich Text</i> Component</strong></rich-text>
+                </div>
+            </div>
+            """
         popoverTemplate:
             """
             <form>
@@ -81,6 +89,18 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
+            """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" style='border-style: solid;border-width: 1px'>
+                    <span>{{inputText}}</span>
+                  </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
             """
         popoverTemplate:
             """
@@ -179,14 +199,15 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         description: ''
         required: no
         readOnly: no
+        dictionaryToString: yes
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
-                  <input type="hidden" class="form-control" ng-model='inputText' value="{{inputText=type + ': ' + number + ' ext.' + extension}}" \>
+                  <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
                   <div class="col-sm-3">
                     <select ng-show="!multiple" ng-readonly="readOnly" class="form-control m-b"
-                        ng-model="type" ng-init="type='Home'" >
+                        ng-model="inputDictionary['type']" ng-init="type='Home'" >
                         <option value="Home">Home</option>
                         <option value="Mobile">Mobile</option>
                         <option value="Work">Work</option>
@@ -194,16 +215,28 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     </select>
                   </div>
                   <div ng-class="{'col-sm-6':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
-                    <input type="text" class="form-control" ng-model='number' validator-required="{{required}}" validator-group="{{formName}}" mask='(999) 999-9999' clean='true' placeholder='#'\>
+                    <input type="text" class="form-control" ng-model="inputDictionary['number']" validator-required="{{required}}" validator-group="{{formName}}" mask='(999) 999-9999' clean='true' placeholder='#'\>
                   </div>
                   <div class="col-sm-3">
-                    <input type="text" class="form-control" ng-model='extension' mask='999' clean='true' placeholder='ext.'"\>
+                    <input type="text" class="form-control" ng-model="inputDictionary['extension']" mask='999' clean='true' placeholder='ext.'"\>
                   </div>
                 <div class="col-sm-10 col-sm-offset-2">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
+            """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                     <span> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
+                  </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
             """
         popoverTemplate:
             """
@@ -300,6 +333,18 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
+            """
+        viewerTemplate:
+            """
+            <div class="row form-group" id="{{formName+index | nospace}}">
+                <label ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                    <span>{{inputText}}</span>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
             """
         popoverTemplate:
             """
@@ -415,6 +460,18 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
             """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                    <p>{{inputText}}</p>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
+            """
         popoverTemplate:
             """
             <form>
@@ -503,6 +560,21 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 </div>
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
+            """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                    <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
+                      <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="true" type="checkbox" checked="">
+                      {{item}}</label>
+                    </div>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
             """
         popoverTemplate:
             """
@@ -593,6 +665,23 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
             """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                    <div class='radio icheck-label' ng-repeat="item in options track by $index">
+
+                        <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" type="radio" ng-disabled="true" name='{{formName+index}}' ng-model="$parent.inputText" validator-group="{{formName}}" ng-value='item'>
+                        {{item}}</label>
+
+                    </div>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
+            """
         popoverTemplate:
             """
             <form>
@@ -682,6 +771,18 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             </div>
             <div id="dashedline" class="hr-line-dashed"></div>
             """
+        viewerTemplate:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                    <span>{{inputText}}</span>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                  <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
+            """
         popoverTemplate:
             """
             <form>
@@ -761,6 +862,20 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         imageHeight: 8
         imageWidth: 12
         template:
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
+                    <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
+                    <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                    <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
+            <div id="dashedline" class="hr-line-dashed"></div>
+            """
+        viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>

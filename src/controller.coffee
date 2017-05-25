@@ -233,7 +233,7 @@ angular.module 'builder.controller', ['builder.provider']
             $scope.$broadcast $builder.broadcastChannel.updateInput
     , yes
 
-    $scope.$watch 'input', ->
+    $scope.$watchCollection 'input', ->
       $timeout ->
         $scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
 
@@ -283,4 +283,54 @@ angular.module 'builder.controller', ['builder.provider']
             label: $scope.formObject.label
             value: value ? ''
         $scope.$parent.input.splice $scope.$index, 1, input
+]
+
+
+# ----------------------------------------
+# fbFormController
+# ----------------------------------------
+.controller 'fbFormViewerController', ['$scope', '$injector', ($scope, $injector) ->
+# providers
+  $builder = $injector.get '$builder'
+  $timeout = $injector.get '$timeout'
+  $rootScope = $injector.get '$rootScope'
+
+  $scope.$watchCollection 'input', ->
+      $timeout ->
+          $scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
+
+  $rootScope.fields = $builder.forms
+]
+
+
+# ----------------------------------------
+# fbFormRowController
+# ----------------------------------------
+.controller 'fbFormRowViewerController', ['$scope', '$injector', ($scope, $injector) ->
+# providers
+  $builder = $injector.get '$builder'
+  $timeout = $injector.get '$timeout'
+  $rootScope = $injector.get '$rootScope'
+]
+
+
+# ----------------------------------------
+# fbFormObjectController
+# ----------------------------------------
+.controller 'fbFormObjectViewerController', ['$scope', '$injector', ($scope, $injector) ->
+# providers
+  $builder = $injector.get '$builder'
+
+  $scope.copyObjectToScope = (object) -> copyObjectToScope object, $scope
+
+  $scope.updateInput = (value) ->
+    ###
+    Copy current scope.input[X] to $parent.input.
+    @param value: The input value.
+    ###
+    input =
+      id: $scope.formObject.id
+      label: $scope.formObject.label
+      value: value ? ''
+    $scope.$parent.input.splice $scope.$index, 1, input
 ]

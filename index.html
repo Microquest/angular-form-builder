@@ -22,6 +22,7 @@
     <script type="text/javascript" src="bower_components/iCheck/icheck.js"></script>
     <script type="text/javascript" src="bower_components/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="bower_components/angular-ckeditor/angular-ckeditor.js"></script>
+    <script type="text/javascript" src="bower_components/string-mask/src/string-mask.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload-all.min.js"></script>
@@ -77,9 +78,16 @@
     <div class="col-md-12 footer"></div>
 </div>
 
+<div>
+    <div fb-form-viewer="testForm" ng-model="testInput"></div>
+    <pre ng-if="isShowScope">{{testForm}}</pre>
+    <pre ng-if="isShowScope">{{testInput}}</pre>
+</div>
+
 <input type='button' ng-click="testLoad()" class='btn btn-white h-c-34 pull-left m-b' value='Load'/>
 <input type='button' ng-click="testData()" class='btn btn-white h-c-34 pull-left m-b' value='Data'/>
 <input type='button' ng-click="clearData()" class='btn btn-white h-c-34 pull-left m-b' value='Clear'/>
+<input type='button' ng-click="loadViewer()" class='btn btn-white h-c-34 pull-left m-b' value='Load Viewer'/>
 
 </body>
 </html>

@@ -55,8 +55,11 @@ angular.module 'builder.provider', []
             validationOptions: component.validationOptions ? []
             options: component.options ? []
             arrayToText: component.arrayToText ? no
+            dictionaryToString : component.dictionaryToString ? no
             template: component.template
             templateUrl: component.templateUrl
+            viewerTemplate: component.viewerTemplate
+            viewerTemplateUrl: component.viewerTemplateUrl
             popoverTemplate: component.popoverTemplate
             popoverTemplateUrl: component.popoverTemplateUrl
         if not result.template and not result.templateUrl
