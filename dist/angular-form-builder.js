@@ -1040,21 +1040,24 @@
             itemIndex = _.findIndex(values[row], function(o) {
               return o.id === scope.formObject.id;
             });
-            scope.inputText = values[row][itemIndex].value;
-            if (scope.$component.dictionaryToString) {
-              scope.inputDictionary = {};
-              return scope.$watch('inputText', function(newValue, oldValue) {
-                if (!newValue || newValue.length === 0) {
-                  return;
-                }
-                return scope.inputDictionary = JSON.parse(newValue);
-              }, true);
-            }
+            return scope.inputText = values[row][itemIndex].value;
           });
+          if (scope.$component.dictionaryToString) {
+            scope.inputDictionary = {};
+            scope.$watch('inputText', function(newValue, oldValue) {
+              if (!newValue || newValue.length === 0) {
+                return;
+              }
+              return scope.inputDictionary = JSON.parse(newValue);
+            }, true);
+          }
           if (scope.$component.arrayToText) {
             scope.inputArray = [];
             scope.$watch('inputText', function(newValue, oldValue) {
               var checked, i, index, val, _i, _len, _ref, _results;
+              if (!newValue || newValue.length === 0) {
+                return;
+              }
               checked = newValue.split(', ');
               _ref = scope.options;
               _results = [];

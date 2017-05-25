@@ -796,17 +796,18 @@ angular.module 'builder.directive', [
         return o.id == scope.formObject.id
       scope.inputText = values[row][itemIndex].value
 
-      if scope.$component.dictionaryToString
-          scope.inputDictionary = {}
-          scope.$watch 'inputText', (newValue, oldValue) ->
-              #catch initial empty inputText, or undefined, causes parse error
-              return if not newValue or newValue.length == 0
-              scope.inputDictionary = JSON.parse(newValue)
-          , yes
+    if scope.$component.dictionaryToString
+        scope.inputDictionary = {}
+        scope.$watch 'inputText', (newValue, oldValue) ->
+            #catch initial empty inputText, or undefined, causes parse error
+            return if not newValue or newValue.length == 0
+            scope.inputDictionary = JSON.parse(newValue)
+        , yes
 
     if scope.$component.arrayToText
         scope.inputArray = []
         scope.$watch 'inputText', (newValue, oldValue) ->
+            return if not newValue or newValue.length == 0
             # array input, like checkbox
             checked = newValue.split(', ')
             for val, i in scope.options
