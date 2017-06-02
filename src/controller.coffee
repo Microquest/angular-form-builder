@@ -21,7 +21,7 @@ angular.module 'builder.controller', ['builder.provider']
 # ----------------------------------------
 .controller 'fbFormObjectEditableController', ['$scope', '$injector', '$document', 'Upload', ($scope, $injector, $document, Upload) ->
     $builder = $injector.get '$builder'
-    $modal = $injector.get '$uibModal'
+    $modal = $injector.get '$modal'
     $filter = $injector.get '$filter'
 
     # initialize formObject id
