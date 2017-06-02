@@ -19,7 +19,7 @@
     '$scope', '$injector', '$document', 'Upload', function($scope, $injector, $document, Upload) {
       var $builder, $filter, $modal;
       $builder = $injector.get('$builder');
-      $modal = $injector.get('$uibModal');
+      $modal = $injector.get('$modal');
       $filter = $injector.get('$filter');
       if ($scope.formObject.id === void 0) {
         $scope.formObject.id = $builder.config.max_id;
@@ -1537,6 +1537,7 @@
   ]);
 
 }).call(this);
+
 
 /*
     component:
