@@ -1,5 +1,5 @@
 angular.module 'builder', ['builder.directive']
-    .run ($validator) ->
+    .run (['$validator', ($validator) ->
         $validator.register('text', {
                 invoke: 'watch'
                 validator: (value, scope, element, attrs, $injector) ->
@@ -10,3 +10,4 @@ angular.module 'builder', ['builder.directive']
                 validator: (value, scope, element, attrs, $injector) ->
                     value >= scope.minRange && value <= scope.maxRange
             })
+      ])

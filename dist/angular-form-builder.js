@@ -19,7 +19,7 @@
     '$scope', '$injector', '$document', 'Upload', function($scope, $injector, $document, Upload) {
       var $builder, $filter, $modal;
       $builder = $injector.get('$builder');
-      $modal = $injector.get('$modal');
+      $modal = $injector.get('$uibModal');
       $filter = $injector.get('$filter');
       if ($scope.formObject.id === void 0) {
         $scope.formObject.id = $builder.config.max_id;
@@ -1519,23 +1519,24 @@
 }).call(this);
 
 (function() {
-  angular.module('builder', ['builder.directive']).run(function($validator) {
-    $validator.register('text', {
-      invoke: 'watch',
-      validator: function(value, scope, element, attrs, $injector) {
-        return scope.minLength === 0 || (value.length >= scope.minLength && value.length <= scope.maxLength);
-      }
-    });
-    return $validator.register('numberRange', {
-      invoke: 'watch',
-      validator: function(value, scope, element, attrs, $injector) {
-        return value >= scope.minRange && value <= scope.maxRange;
-      }
-    });
-  });
+  angular.module('builder', ['builder.directive']).run([
+    '$validator', function($validator) {
+      $validator.register('text', {
+        invoke: 'watch',
+        validator: function(value, scope, element, attrs, $injector) {
+          return scope.minLength === 0 || (value.length >= scope.minLength && value.length <= scope.maxLength);
+        }
+      });
+      return $validator.register('numberRange', {
+        invoke: 'watch',
+        validator: function(value, scope, element, attrs, $injector) {
+          return value >= scope.minRange && value <= scope.maxRange;
+        }
+      });
+    }
+  ]);
 
 }).call(this);
-
 
 /*
     component:
