@@ -1527,28 +1527,29 @@
           return scope.minLength === 0 || (value.length >= scope.minLength && value.length <= scope.maxLength);
         }
       });
-      $validator.register('numberRange', {
+      return $validator.register('numberRange', {
         invoke: 'watch',
         validator: function(value, scope, element, attrs, $injector) {
           return value >= scope.minRange && value <= scope.maxRange;
         }
       });
-      $validator.register('patientRequired', {
-        invoke: 'watch',
-        validator: function(value, scope, element, attrs, $injector) {
-          console.log('reached patientRequired');
-          return true;
-        }
-      });
-      return $validator.register('attachmentRequired', {
-        invoke: 'watch',
-        validator: function(value, scope, element, attrs, $injector) {
-          console.log('reached attachmentRequired');
-          return true;
-        }
-      });
     }
   ]);
+
+
+  /*        $validator.register('patientRequired', {
+              invoke: 'watch'
+              validator: (value, scope, element, attrs, $injector) ->
+                  console.log('reached patientRequired')
+                  yes
+          })
+          $validator.register('attachmentRequired', {
+              invoke: 'watch'
+              validator: (value, scope, element, attrs, $injector) ->
+                  console.log('reached attachmentRequired')
+                  yes
+          })
+   */
 
 }).call(this);
 

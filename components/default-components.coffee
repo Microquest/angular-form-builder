@@ -981,6 +981,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 </div>
             </form>
             """
+  ]
 
 ###    $builderProvider.registerComponent 'dataRequired',
         group: 'Custom'
@@ -1070,4 +1071,3 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 </div>
             </form>
             """###
-]

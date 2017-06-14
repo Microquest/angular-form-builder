@@ -10,6 +10,7 @@ angular.module 'builder', ['builder.directive']
             validator: (value, scope, element, attrs, $injector) ->
                 value >= scope.minRange && value <= scope.maxRange
         })
+  ])
 
 ###        $validator.register('patientRequired', {
             invoke: 'watch'
@@ -23,6 +24,6 @@ angular.module 'builder', ['builder.directive']
                 console.log('reached attachmentRequired')
                 yes
         })###
-    ])
+
 
 
