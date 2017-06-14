@@ -84,7 +84,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <input type="date" class="form-control" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
                   </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -97,7 +97,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" style='border-style: solid;border-width: 1px'>
                     <span>{{inputText}}</span>
                   </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -220,7 +220,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                   <div class="col-sm-3">
                     <input type="text" class="form-control" ng-model="inputDictionary['extension']" mask='999' clean='true' placeholder='ext.'"\>
                   </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -233,7 +233,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                      <span> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
                   </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -328,7 +328,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <input type="text" ng-show="validation != '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                     <input type="tel" ng-show="validation === '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -341,7 +341,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -454,7 +454,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <textarea type="text" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" rows='6' placeholder="{{placeholder}}"/>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -467,7 +467,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <p>{{inputText}}</p>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -555,7 +555,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                       {{item}}</label>
                     </div>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -571,7 +571,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                       {{item}}</label>
                     </div>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -659,7 +659,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
 
                     </div>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -677,7 +677,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
 
                     </div>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -765,7 +765,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         <option value="">{{placeholder}}</option>
                     </select>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -778,7 +778,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -869,7 +869,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
                     <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                     <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -883,7 +883,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
                     <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-10">
                     <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
                 </div>
             </div>
@@ -969,6 +969,95 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                     accept="image/*" ngf-max-size="2MB">
                                 Select File</button>
                             <img ng-src="{{formObject.backgroundImage}}" style='width:150px;height:150px'/>
+                        </div>
+                    </div>
+                </div>
+
+                <hr/>
+                <div class='form-group'>
+                    <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
+                    <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
+                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
+                </div>
+            </form>
+            """
+
+    $builderProvider.registerComponent 'dataRequired',
+        group: 'Custom'
+        label: 'Data Required'
+        label_inline: false
+        label_visible: true
+        description: 'Additional data required'
+        placeholder: 'placeholder'
+        readOnly: yes
+        required: no
+        validationOptions: [
+          {label: 'Patient', rule: '[patientRequired]'}
+          {label: 'Attachment', rule: '[attachmentRequired]'}
+        ]
+        template :
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> <i class="fa fa-user-circle" aria-hidden="true"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
+                    <input type="text" ng-model="inputText" validator="{{validation}}" validator-group="{{formName}}" disabled/>
+                </div>
+                <div class="col-sm-10">
+                    <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
+            """
+        viewerTemplate :
+            """
+            <div class="row" id="{{formName+index | nospace}}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> <i class="fa fa-user-circle" aria-hidden="true"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
+                    {{inputText}}
+                </div>
+                <div class="col-sm-10">
+                    <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                </div>
+            </div>
+            """
+        popoverTemplate:
+            """
+            <form>
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
+                        <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
+                        <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="{{'properties' + date + index}}">
+                            <div class="form-group m-t-sm">
+                                <label class='control-label'>Label</label>
+                                <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                            </div>
+                            <div class="form-group m-t-sm">
+                                <div class='checkbox icheck-label'>
+                                  <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                                  Label Inline</label>
+                                </div>
+                            </div>
+                            <div class="form-group m-t-sm">
+                                <div class='checkbox icheck-label'>
+                                  <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                                  Show Label</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class='control-label'>Description</label>
+                                <input type='text' ng-model="description" class='form-control'/>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
+
+                            <div class="form-group" ng-if="validationOptions.length > 0">
+                                <label class='control-label'>Validation</label>
+                                <select ng-model="$parent.validation" class='form-control' ng-options="option.rule as option.label for option in validationOptions"></select>
+                            </div>
                         </div>
                     </div>
                 </div>
