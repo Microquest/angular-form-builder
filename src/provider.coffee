@@ -119,7 +119,7 @@ angular.module 'builder.provider', []
         $injector = injector
         $http = $injector.get '$http'
         $templateCache = $injector.get '$templateCache'
-        $modal = $injector.get '$modal'
+        $uibModal = $injector.get '$uibModal'
 
     @loadTemplate = (component) ->
         ###

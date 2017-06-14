@@ -23,11 +23,12 @@
     "test"
   ],
   "dependencies": {
-    "angular": ">=1.2.18",
+    "angular": "~1.5.11",
     "angular-mocks": ">=1.2.18",
     "angular-validator": ">=0.2.3",
+    "bootstrap": "^3.3.6",
     "jquery": "~2.1.0",
-    "angular-bootstrap": "~0.12.0",
+    "angular-bootstrap": "^2.5.0",
     "font-awesome": "~4.3.0",
     "iCheck": "~1.0.2",
     "moment": "~2.10",

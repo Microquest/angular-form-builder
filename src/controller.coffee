@@ -21,7 +21,7 @@ angular.module 'builder.controller', ['builder.provider']
 # ----------------------------------------
 .controller 'fbFormObjectEditableController', ['$scope', '$injector', '$document', 'Upload', ($scope, $injector, $document, Upload) ->
     $builder = $injector.get '$builder'
-    $modal = $injector.get '$modal'
+    $uibModal = $injector.get '$uibModal'
     $filter = $injector.get '$filter'
 
     # initialize formObject id
@@ -43,8 +43,8 @@ angular.module 'builder.controller', ['builder.provider']
 
     $scope.openRichTextEditor = ->
       $scope.editorText = $scope.placeholder;
-      $scope.modalInstance = $modal.open({
-        controller: ($scope, $modalInstance) ->
+      $scope.modalInstance = $uibModal.open({
+        controller: ($scope, $uibModalInstance) ->
 
           $scope.options = {
             language: 'en',

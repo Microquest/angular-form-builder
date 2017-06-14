@@ -17,9 +17,9 @@
 
   angular.module('builder.controller', ['builder.provider']).controller('fbFormObjectEditableController', [
     '$scope', '$injector', '$document', 'Upload', function($scope, $injector, $document, Upload) {
-      var $builder, $filter, $modal;
+      var $builder, $filter, $uibModal;
       $builder = $injector.get('$builder');
-      $modal = $injector.get('$modal');
+      $uibModal = $injector.get('$uibModal');
       $filter = $injector.get('$filter');
       if ($scope.formObject.id === void 0) {
         $scope.formObject.id = $builder.config.max_id;
@@ -38,8 +38,8 @@
       };
       $scope.openRichTextEditor = function() {
         $scope.editorText = $scope.placeholder;
-        return $scope.modalInstance = $modal.open({
-          controller: function($scope, $modalInstance) {
+        return $scope.modalInstance = $uibModal.open({
+          controller: function($scope, $uibModalInstance) {
             return $scope.options = {
               language: 'en',
               allowedContent: true,
@@ -1666,11 +1666,11 @@
     })(this);
     this.setupProviders = (function(_this) {
       return function(injector) {
-        var $modal;
+        var $uibModal;
         $injector = injector;
         $http = $injector.get('$http');
         $templateCache = $injector.get('$templateCache');
-        return $modal = $injector.get('$modal');
+        return $uibModal = $injector.get('$uibModal');
       };
     })(this);
     this.loadTemplate = function(component) {
