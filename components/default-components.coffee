@@ -982,7 +982,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             </form>
             """
 
-    $builderProvider.registerComponent 'dataRequired',
+###    $builderProvider.registerComponent 'dataRequired',
         group: 'Custom'
         label: 'Data Required'
         label_inline: false
@@ -1069,5 +1069,5 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                     <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
                 </div>
             </form>
-            """
+            """###
 ]
