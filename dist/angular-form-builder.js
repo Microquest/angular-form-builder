@@ -451,33 +451,19 @@
         },
         template: "<div class='form-horizontal'>\n    <div class='row fb-form-row-editable' ng-repeat=\"row in formRows\"\n        fb-form-row-editable=\"row\" fb-form-row-index='{{$index}}'></div>\n    <div ng-show='formRows.length === 0' class='row'>\n        <div class='col-sm-12' style='text-align: center'>\n            <h4> Form is empty </h4>\n            <p> Add a new row to start building your form </p>\n            <button type=\"button\" class=\"btn btn-md btn-default add-row\" style=''>\n              <i class=\"fa fa-plus\"></i> Add Row\n            </button>\n        </div>\n    </div>\n</div>",
         link: function(scope, element, attrs) {
-          var beginMove, _base, _name;
+          var _base, _name;
           scope.formName = attrs.fbBuilder;
+          scope.rowInserting = false;
           if ((_base = $builder.forms)[_name = scope.formName] == null) {
             _base[_name] = [];
           }
           scope.formRows = $builder.forms[scope.formName];
           $builder.addFormRow(scope.formName);
-          beginMove = true;
           $(element).find('.add-row').click(function() {
             $builder.addFormRow(scope.formName);
             return scope.$apply();
           });
-          $(element).addClass('fb-builder');
-          return $drag.droppable($(element), {
-            move: function(e) {
-              if (beginMove) {
-                $("div.fb-form-object-editable").popover('hide');
-                return beginMove = false;
-              }
-            },
-            up: function(e, isHover, draggable) {
-              beginMove = true;
-              if (!$drag.isMouseMoved()) {
-                $(element).find('.empty').remove();
-              }
-            }
-          });
+          return $(element).addClass('fb-builder');
         }
       };
     }
@@ -492,12 +478,13 @@
           fbFormRowEditable: '@',
           fbFormRowIndex: '@'
         },
-        template: "<div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat=\"object in formObjects\"\n    fb-form-object-editable=\"object\"></div>\n<div class=\"col col-sm-12 notify fb-form-row-empty\" ng-show='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>\n    <button type=\"button\" class=\"btn btn-xs btn-default delete-row pull-right\" style='margin-top:10px'>\n      <i class=\"fa fa-remove\"></i>\n    </button>\n    <h4>Empty Row</h4>\n    <p> Drag and drop components here </p>\n</div>\n",
+        template: "<div class='col col-sm-{{width}} fb-form-object-editable' ng-repeat=\"object in formObjects\"\n    fb-form-object-editable=\"object\"></div>\n<div class=\"col col-sm-12 notify fb-form-row-empty\" ng-show='formObjects.length === 0' style='text-align: center; vertical-align: middle;'>\n    <button type=\"button\" class=\"btn btn-xs btn-default delete-row pull-right\" style='margin-top:10px'>\n      <i class=\"fa fa-remove\"></i>\n    </button>\n    <h4>Empty Row</h4>\n    <p> Drag and drop components here </p>\n</div>",
         link: function(scope, element, attrs) {
           var beginMove;
           scope.width = 12;
           scope.formName = scope.$parent.formName;
           scope.formObjects = $builder.forms[scope.formName][scope.fbFormRowIndex].formObjects;
+          scope.emptyIndex = -1;
           beginMove = true;
           $(element).find('.delete-row').click(function() {
             $builder.removeFormRow(scope.formName, scope.fbFormRowIndex);
@@ -505,8 +492,8 @@
           });
           $(element).addClass('fb-form-row-editable');
           $drag.droppable($(element), {
-            move: function(e) {
-              var $empty, $formObject, $formObjects, index, offset, positions, width, _i, _j, _ref, _ref1;
+            move: function(e, draggable) {
+              var $empty, $formObject, $formObjects, fromThisRow, index, offset, positions, width, _i, _j, _ref, _ref1;
               $formObjects = $(element).find('.fb-form-object-editable:not(.empty,.dragging)');
               if ($formObjects.length === 0) {
                 if ($(element).find('.fb-form-object-editable.empty').length === 0) {
@@ -515,7 +502,12 @@
                 }
                 return;
               }
-              scope.width = 12 / ($formObjects.length + 1);
+              fromThisRow = draggable.object.formObject !== void 0 && _.findIndex(scope.formObjects, function(d) {
+                return d.id === draggable.object.formObject.id;
+              }) >= 0;
+              if (!fromThisRow) {
+                scope.width = 12 / ($formObjects.length + 1);
+              }
               positions = [];
               positions.push(-1000);
               for (index = _i = 0, _ref = $formObjects.length; _i < _ref; index = _i += 1) {
@@ -534,11 +526,12 @@
                   } else {
                     $empty.insertAfter($($formObjects[index - 2]));
                   }
+                  scope.emptyIndex = index - 1;
                   break;
                 }
               }
             },
-            out: function() {
+            out: function(e, draggable) {
               var $formObjects;
               $formObjects = $(element).find('.fb-form-object-editable:not(.empty,.dragging)');
               scope.width = 12 / $formObjects.length;
@@ -558,16 +551,13 @@
               }
               if (isHover) {
                 if (draggable.mode === 'mirror') {
-                  $builder.insertFormObject(scope.formName, scope.fbFormRowIndex, $(element).find('.empty').index('.fb-form-object-editable'), {
+                  $builder.insertFormObject(scope.formName, scope.fbFormRowIndex, scope.emptyIndex, {
                     component: draggable.object.componentName
                   });
                 }
                 if (draggable.mode === 'drag') {
                   oldIndex = draggable.object.formObject.index;
-                  newIndex = $(element).find('.empty').index('.fb-form-object-editable');
-                  if (oldIndex < newIndex) {
-                    newIndex--;
-                  }
+                  newIndex = scope.emptyIndex;
                   newRow = scope.fbFormRowIndex;
                   oldRow = draggable.object.formObject.row;
                   $builder.updateFormObjectIndex(scope.formName, oldRow, newRow, oldIndex, newIndex);
@@ -1667,6 +1657,7 @@
         formObjects = _this.forms[name][row].formObjects;
         for (index = _i = 0, _ref = formObjects.length; _i < _ref; index = _i += 1) {
           formObjects[index].index = index;
+          formObjects[index].row = row;
         }
       };
     })(this);
@@ -1779,7 +1770,6 @@
     })(this);
     this.addFormObject = (function(_this) {
       return function(name, row, formObject) {
-        var _base;
         if (formObject == null) {
           formObject = {};
         }
@@ -1787,14 +1777,6 @@
         /*
         Insert the form object into the form at last.
          */
-        if ((_base = _this.forms)[name] == null) {
-          _base[name] = [
-            {
-              index: 0,
-              formObjects: []
-            }
-          ];
-        }
         return _this.insertFormObject(name, row, _this.forms[name][row].formObjects.length, formObject);
       };
     })(this);
@@ -1832,7 +1814,8 @@
         }
         if (index > _this.forms[name][row].formObjects.length) {
           index = _this.forms[name][row].formObjects.length;
-        } else if (index < 0) {
+        }
+        if (index < 0) {
           index = 0;
         }
         formObject.row = parseInt(row);
@@ -1852,7 +1835,8 @@
         }
         if (index > _this.forms[name].length) {
           index = _this.forms[name].length;
-        } else if (index < 0) {
+        }
+        if (index < 0) {
           index = 0;
         }
         _this.forms[name].splice(index, 0, {
@@ -1871,12 +1855,11 @@
         @param name: The form name.
         @param index: The form object index.
          */
-        var formObjects, forms, reindexFormObject;
+        var formObjects, forms;
         forms = _this.forms;
-        reindexFormObject = _this.reindexFormObject;
         formObjects = forms[name][row].formObjects;
         formObjects.splice(index, 1);
-        return reindexFormObject(name, row);
+        return _this.reindexFormObject(name, row);
       };
     })(this);
     this.clearForm = (function(_this) {
@@ -1942,17 +1925,22 @@
         @param oldIndex: The old index.
         @param newIndex: The new index.
          */
-        var formObject, formObjects, formRow, formRows, newFormObjects, newFormRow;
+        var formObject, formRows, newFormObjects, newFormRow, oldFormObjects, oldFormRow;
         if (oldIndex === newIndex && oldRow === newRow) {
           return;
         }
         formRows = _this.forms[name];
-        formRow = formRows[oldRow];
-        formObjects = formRow.formObjects;
-        formObject = formObjects.splice(oldIndex, 1)[0];
+        oldFormRow = formRows[oldRow];
+        oldFormObjects = oldFormRow.formObjects;
         if (oldRow === newRow) {
-          formObjects.splice(newIndex, 0, formObject);
+          formObject = oldFormObjects.splice(oldIndex, 1)[0];
+          if (oldIndex > newIndex) {
+            oldFormObjects.splice(newIndex, 0, formObject);
+          } else {
+            oldFormObjects.splice(newIndex - 1, 0, formObject);
+          }
         } else {
+          formObject = oldFormObjects.splice(oldIndex, 1)[0];
           newFormRow = formRows[newRow];
           newFormObjects = newFormRow.formObjects;
           newFormObjects.splice(newIndex, 0, formObject);

@@ -146,30 +146,17 @@ angular.module 'builder.directive', [
         # valuables
         # ----------------------------------------
         scope.formName = attrs.fbBuilder
+        scope.rowInserting = false;
         $builder.forms[scope.formName] ?= []
         scope.formRows = $builder.forms[scope.formName]
         #Always have a row
         $builder.addFormRow scope.formName
-        beginMove = yes
 
         $(element).find('.add-row').click ->
           $builder.addFormRow scope.formName
           scope.$apply()
 
         $(element).addClass 'fb-builder'
-        #Moving drag calculations to rows.
-        $drag.droppable $(element),
-            move: (e) ->
-                if beginMove
-                    # hide all popovers
-                    $("div.fb-form-object-editable").popover 'hide'
-                    beginMove = no
-            up: (e, isHover, draggable) ->
-                beginMove = yes
-                if not $drag.isMouseMoved()
-                    # click event
-                    $(element).find('.empty').remove()
-                    return
 ]
 
 
@@ -196,7 +183,6 @@ angular.module 'builder.directive', [
             <h4>Empty Row</h4>
             <p> Drag and drop components here </p>
         </div>
-
         """
   link: (scope, element, attrs) ->
     # ----------------------------------------
@@ -205,8 +191,8 @@ angular.module 'builder.directive', [
     scope.width = 12
     scope.formName = scope.$parent.formName
     scope.formObjects = $builder.forms[scope.formName][scope.fbFormRowIndex].formObjects
+    scope.emptyIndex = -1
     beginMove = yes
-
 
     $(element).find('.delete-row').click ->
         $builder.removeFormRow scope.formName, scope.fbFormRowIndex
@@ -214,8 +200,7 @@ angular.module 'builder.directive', [
 
     $(element).addClass 'fb-form-row-editable'
     $drag.droppable $(element),
-        move: (e) ->
-
+        move: (e, draggable) ->
             $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
             if $formObjects.length is 0
                 # there are no components in the row.
@@ -225,7 +210,8 @@ angular.module 'builder.directive', [
                 return
 
             #calculate the new width
-            scope.width = 12/($formObjects.length + 1)
+            fromThisRow = draggable.object.formObject != undefined && _.findIndex(scope.formObjects, (d) -> d.id == draggable.object.formObject.id) >= 0
+            if not fromThisRow then scope.width = 12/($formObjects.length + 1)
             # the positions could added .empty div.
             positions = []
             # first
@@ -247,9 +233,10 @@ angular.module 'builder.directive', [
                         $empty.insertBefore $($formObjects[index - 1])
                     else
                         $empty.insertAfter $($formObjects[index - 2])
+                    scope.emptyIndex = index-1
                     break
             return
-        out: ->
+        out: (e, draggable) ->
             #reset width
             $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
             scope.width = 12/($formObjects.length)
@@ -268,13 +255,12 @@ angular.module 'builder.directive', [
             if isHover
                 if draggable.mode is 'mirror'
                     # insert a form object
-                    $builder.insertFormObject scope.formName, scope.fbFormRowIndex, $(element).find('.empty').index('.fb-form-object-editable'),
+                    $builder.insertFormObject scope.formName, scope.fbFormRowIndex, scope.emptyIndex,
                       component: draggable.object.componentName
                 if draggable.mode is 'drag'
                     # update the index of form objects
                     oldIndex = draggable.object.formObject.index
-                    newIndex = $(element).find('.empty').index('.fb-form-object-editable')
-                    newIndex-- if oldIndex < newIndex
+                    newIndex = scope.emptyIndex
                     newRow = scope.fbFormRowIndex
                     oldRow = draggable.object.formObject.row
                     $builder.updateFormObjectIndex scope.formName, oldRow, newRow, oldIndex, newIndex

@@ -107,6 +107,7 @@ angular.module 'builder.provider', []
         formObjects = @forms[name][row].formObjects
         for index in [0...formObjects.length] by 1
             formObjects[index].index = index
+            formObjects[index].row = row
         return
 
     @reindexFormRows = (name) =>
@@ -193,7 +194,6 @@ angular.module 'builder.provider', []
         ###
         Insert the form object into the form at last.
         ###
-        @forms[name] ?= [{index: 0, formObjects: []}]
         @insertFormObject name, row, @forms[name][row].formObjects.length, formObject
 
     @insertFormObject = (name, row, index, formObject={}) =>
@@ -216,7 +216,7 @@ angular.module 'builder.provider', []
         ###
         @forms[name] ?= [{index: 0, formObjects: []}]
         if index > @forms[name][row].formObjects.length then index = @forms[name][row].formObjects.length
-        else if index < 0 then index = 0
+        if index < 0 then index = 0
         formObject.row = parseInt(row)
         @forms[name][row].formObjects.splice index, 0, @convertFormObject(name, formObject)
         #check if we should add a new row
@@ -227,7 +227,7 @@ angular.module 'builder.provider', []
     @insertFormRow = (name, index) =>
         @forms[name] ?= []
         if index > @forms[name].length then index = @forms[name].length
-        else if index < 0 then index = 0
+        if index < 0 then index = 0
         @forms[name].splice index, 0, {index: index, formObjects: []}
         @reindexFormRows name
         @forms[name][index]
@@ -239,10 +239,9 @@ angular.module 'builder.provider', []
         @param index: The form object index.
         ###
         forms = @forms
-        reindexFormObject = @reindexFormObject
         formObjects = forms[name][row].formObjects
         formObjects.splice index, 1
-        reindexFormObject name, row
+        @reindexFormObject name, row
 
     @clearForm = (name) =>
         ###
@@ -286,14 +285,19 @@ angular.module 'builder.provider', []
         ###
         return if oldIndex is newIndex and oldRow is newRow
         formRows = @forms[name]
-        formRow = formRows[oldRow]
-        formObjects = formRow.formObjects
-        #remove from old position
-        formObject = formObjects.splice(oldIndex, 1)[0]
+        oldFormRow = formRows[oldRow]
+        oldFormObjects = oldFormRow.formObjects
+
         if oldRow is newRow
           #if its in the same row just move it
-          formObjects.splice newIndex, 0, formObject
+          formObject = oldFormObjects.splice(oldIndex, 1)[0]
+          if oldIndex > newIndex
+            oldFormObjects.splice newIndex, 0, formObject
+          else
+            oldFormObjects.splice newIndex-1, 0, formObject
         else
+          #remove from old position
+          formObject = oldFormObjects.splice(oldIndex, 1)[0]
           #if its in a different row get that row
           newFormRow = formRows[newRow]
           newFormObjects = newFormRow.formObjects
