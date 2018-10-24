@@ -201,6 +201,11 @@ angular.module 'builder.directive', [
     $(element).addClass 'fb-form-row-editable'
     $drag.droppable $(element),
         move: (e, draggable) ->
+            #Prevent multiple empty divs from occurring between rows
+            totalEmpty = $(element).parent().find('.fb-form-object-editable.empty').length
+            rowEmpty = $(element).find('.fb-form-object-editable.empty').length
+            return if totalEmpty > 0 && rowEmpty == 0
+
             $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
             if $formObjects.length is 0
                 # there are no components in the row.
@@ -227,7 +232,7 @@ angular.module 'builder.directive', [
             for index in [1...positions.length] by 1
                 if e.pageX > positions[index - 1] and e.pageX <= positions[index]
                     # you known, this one
-                    $(element).find('.empty').remove()
+                    $(element).parent().find('.empty').remove()
                     $empty = $ "<div class='col col-sm-" + (scope.width-1) + " fb-form-object-editable empty'></div>"
                     if index - 1 < $formObjects.length
                         $empty.insertBefore $($formObjects[index - 1])

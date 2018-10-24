@@ -493,7 +493,12 @@
           $(element).addClass('fb-form-row-editable');
           $drag.droppable($(element), {
             move: function(e, draggable) {
-              var $empty, $formObject, $formObjects, fromThisRow, index, offset, positions, width, _i, _j, _ref, _ref1;
+              var $empty, $formObject, $formObjects, fromThisRow, index, offset, positions, rowEmpty, totalEmpty, width, _i, _j, _ref, _ref1;
+              totalEmpty = $(element).parent().find('.fb-form-object-editable.empty').length;
+              rowEmpty = $(element).find('.fb-form-object-editable.empty').length;
+              if (totalEmpty > 0 && rowEmpty === 0) {
+                return;
+              }
               $formObjects = $(element).find('.fb-form-object-editable:not(.empty,.dragging)');
               if ($formObjects.length === 0) {
                 if ($(element).find('.fb-form-object-editable.empty').length === 0) {
@@ -519,7 +524,7 @@
               positions.push(positions[positions.length - 1] + 1000);
               for (index = _j = 1, _ref1 = positions.length; _j < _ref1; index = _j += 1) {
                 if (e.pageX > positions[index - 1] && e.pageX <= positions[index]) {
-                  $(element).find('.empty').remove();
+                  $(element).parent().find('.empty').remove();
                   $empty = $("<div class='col col-sm-" + (scope.width - 1) + " fb-form-object-editable empty'></div>");
                   if (index - 1 < $formObjects.length) {
                     $empty.insertBefore($($formObjects[index - 1]));
