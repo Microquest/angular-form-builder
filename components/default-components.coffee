@@ -852,138 +852,138 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     # ----------------------------------------
     # Drawing component
     # ----------------------------------------
-    $builderProvider.registerComponent 'draw',
-        group: 'Drawing'
-        label: 'Draw'
-        label_inline: false
-        label_visible: true
-        description: ''
-        readOnly: no
-        imageHeight: 8
-        imageWidth: 12
-        template:
-            """
-            <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
-                    <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
-                    <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
-                </div>
-                <div class="col-sm-10">
-                    <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
-                </div>
-            </div>
-            <div id="dashedline" class="hr-line-dashed"></div>
-            """
-        viewerTemplate:
-            """
-            <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
-                    <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
-                    <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
-                </div>
-                <div class="col-sm-10">
-                    <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
-                </div>
-            </div>
-            <div id="dashedline" class="hr-line-dashed"></div>
-            """
-        popoverTemplate:
-            """
-            <form>
+      ###    $builderProvider.registerComponent 'draw',
+              group: 'Drawing'
+              label: 'Draw'
+              label_inline: false
+              label_visible: true
+              description: ''
+              readOnly: no
+              imageHeight: 8
+              imageWidth: 12
+              template:
+                  """
+                  <div class="row" id="{{formName+index | nospace}}">
+                      <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                      <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
+                          <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
+                          <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
+                      </div>
+                      <div class="col-sm-10">
+                          <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                      </div>
+                  </div>
+                  <div id="dashedline" class="hr-line-dashed"></div>
+                  """
+              viewerTemplate:
+                  """
+                  <div class="row" id="{{formName+index | nospace}}">
+                      <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                      <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" >
+                          <div pw-canvas options="{customCanvasId: formName+index+'_canvas', undo: true, width: $parent.$parent.width, height: imageHeight, color: '#a52a2a', backgroundColor: '#000', lineWidth: 3, imageSrc : formObject.backgroundImage}" version="formObject.drawVersion"></div>
+                          <input type='hidden' ng-model='inputText' value="{{inputText=updateCanvasValue(formName+index+'_canvas')}}"/>
+                      </div>
+                      <div class="col-sm-10">
+                          <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
+                      </div>
+                  </div>
+                  <div id="dashedline" class="hr-line-dashed"></div>
+                  """
+              popoverTemplate:
+                  """
+                  <form>
 
-                <div role="tabpanel">
+                      <div role="tabpanel">
 
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
-                        <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
-                        <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
-                        <li role="presentation"><a href="{{'#image' + date + index}}" aria-controls="{{'image' + date + index}}" role="tab" data-toggle="tab">Image</a></li>
-                    </ul>
+                          <!-- Nav tabs -->
+                          <ul class="nav nav-justified nav-tabs" role="tablist" style="margin-left:-10px">
+                              <li role="presentation" class="active"><a href="{{'#properties' + date + index}}" aria-controls="{{'properties' + date + index}}" role="tab" data-toggle="tab">Properties</a></li>
+                              <li role="presentation"><a href="{{'#validations' + date + index}}" aria-controls="{{'validations' + date + index}}" role="tab" data-toggle="tab">Validations</a></li>
+                              <li role="presentation"><a href="{{'#image' + date + index}}" aria-controls="{{'image' + date + index}}" role="tab" data-toggle="tab">Image</a></li>
+                          </ul>
 
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="{{'properties' + date + index}}">
-                            <div class="form-group m-t-sm">
-                                <label class='control-label'>Label</label>
-                                <input type='text' ng-model="label" validator="[required]" class='form-control'/>
-                            </div>
-                            <div class='checkbox icheck-label'>
-                              <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
-                              Label Inline</label>
-                            </div>
-                            <div class='checkbox icheck-label'>
-                              <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
-                              Show Label</label>
-                            </div>
-                            <div class="form-group">
-                                <label class='control-label'>Description</label>
-                                <input type='text' ng-model="description" class='form-control'/>
-                            </div>
-                            <div class="form-group">
-                                <label class='control-label'>Placeholder</label>
-                                <input type='text' ng-model="placeholder" class='form-control'/>
-                            </div>
-                            <div class='checkbox icheck-label'>
-                              <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
-                              Read Only</label>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
-                            <div class='checkbox icheck-label m-t'>
-                              <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
-                              Required</label>
-                            </div>
+                          <!-- Tab panes -->
+                          <div class="tab-content">
+                              <div role="tabpanel" class="tab-pane active" id="{{'properties' + date + index}}">
+                                  <div class="form-group m-t-sm">
+                                      <label class='control-label'>Label</label>
+                                      <input type='text' ng-model="label" validator="[required]" class='form-control'/>
+                                  </div>
+                                  <div class='checkbox icheck-label'>
+                                    <label for="{{'label_inline' + date + index}}"><input type="checkbox" id="{{'label_inline' + date + index}}" ng-model="label_inline">
+                                    Label Inline</label>
+                                  </div>
+                                  <div class='checkbox icheck-label'>
+                                    <label for="{{'label_visible' + date + index}}"><input type="checkbox" id="{{'label_visible' + date + index}}" ng-model="label_visible">
+                                    Show Label</label>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class='control-label'>Description</label>
+                                      <input type='text' ng-model="description" class='form-control'/>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class='control-label'>Placeholder</label>
+                                      <input type='text' ng-model="placeholder" class='form-control'/>
+                                  </div>
+                                  <div class='checkbox icheck-label'>
+                                    <label for="{{'readonly' + date + index}}"><input type="checkbox" id="{{'readonly' + date + index}}" ng-model="readOnly">
+                                    Read Only</label>
+                                  </div>
+                              </div>
+                              <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
+                                  <div class='checkbox icheck-label m-t'>
+                                    <label for="{{'required' + date + index}}"><input type="checkbox" id="{{'required' + date + index}}" ng-model="required">
+                                    Required</label>
+                                  </div>
 
-                            <div class="form-group" ng-if="validationOptions.length > 0">
-                                <label class='control-label'>Validation</label>
-                                <select ng-model="$parent.validation" class='form-control' ng-options="option.rule as option.label for option in validationOptions"></select>
-                            </div>
-                            <div class="row" ng-show="validation==='[text]'">
-                                <div class="form-group col-sm-6">
-                                    <input type="text" class="form-control" ng-model="minLength" placeholder="Min Length">
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="text" class="form-control" ng-model="maxLength" placeholder="Max Length">
-                                </div>
-                            </div>
-                            <div class="row" ng-show="validation==='[numberRange]'">
-                                <div class="form-group col-sm-6">
-                                    <input type="text" class="form-control" ng-model="minRange" placeholder="Min Range">
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="text" class="form-control" ng-model="maxRange" placeholder="Max Range">
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="text" class="form-control" ng-model="minLength" placeholder="Min Length">
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="text" class="form-control" ng-model="maxLength" placeholder="Max Length">
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="{{'image' + date + index}}">
-                            <h4>Select Background Image</h4>
-                            <button type="file" ngf-select="convertFileToData($file)"
-                                    accept="image/*" ngf-max-size="2MB">
-                                Select File</button>
-                            <img ng-src="{{formObject.backgroundImage}}" style='width:150px;height:150px'/>
-                        </div>
-                    </div>
-                </div>
+                                  <div class="form-group" ng-if="validationOptions.length > 0">
+                                      <label class='control-label'>Validation</label>
+                                      <select ng-model="$parent.validation" class='form-control' ng-options="option.rule as option.label for option in validationOptions"></select>
+                                  </div>
+                                  <div class="row" ng-show="validation==='[text]'">
+                                      <div class="form-group col-sm-6">
+                                          <input type="text" class="form-control" ng-model="minLength" placeholder="Min Length">
+                                      </div>
+                                      <div class="form-group col-sm-6">
+                                          <input type="text" class="form-control" ng-model="maxLength" placeholder="Max Length">
+                                      </div>
+                                  </div>
+                                  <div class="row" ng-show="validation==='[numberRange]'">
+                                      <div class="form-group col-sm-6">
+                                          <input type="text" class="form-control" ng-model="minRange" placeholder="Min Range">
+                                      </div>
+                                      <div class="form-group col-sm-6">
+                                          <input type="text" class="form-control" ng-model="maxRange" placeholder="Max Range">
+                                      </div>
+                                      <div class="form-group col-sm-6">
+                                          <input type="text" class="form-control" ng-model="minLength" placeholder="Min Length">
+                                      </div>
+                                      <div class="form-group col-sm-6">
+                                          <input type="text" class="form-control" ng-model="maxLength" placeholder="Max Length">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div role="tabpanel" class="tab-pane" id="{{'image' + date + index}}">
+                                  <h4>Select Background Image</h4>
+                                  <button type="file" ngf-select="convertFileToData($file)"
+                                          accept="image/*" ngf-max-size="2MB">
+                                      Select File</button>
+                                  <img ng-src="{{formObject.backgroundImage}}" style='width:150px;height:150px'/>
+                              </div>
+                          </div>
+                      </div>
 
-                <hr/>
-                <div class='form-group'>
-                    <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
-                    <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
-                    <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
-                </div>
-            </form>
-            """
-  ]
+                      <hr/>
+                      <div class='form-group'>
+                          <input type='button' ng-click="popover.remove($event)" class='btn btn-danger fa h-c-34 pull-right m-b m-l-xs' value='&#xf1f8'/>
+                          <input type='submit' ng-click="popover.save($event)" class='btn btn-primary h-c-34 pull-right m-b fa' value='&#xf0c7'/>
+                          <input type='button' ng-click="popover.cancel($event)" class='btn btn-white h-c-34 pull-left m-b' value='Cancel' style='margin-bottom:15px'/>
+                      </div>
+                  </form>
+                  """
+         ###
 
-###    $builderProvider.registerComponent 'dataRequired',
+      ###    $builderProvider.registerComponent 'dataRequired',
         group: 'Custom'
         label: 'Data Required'
         label_inline: false
@@ -1071,3 +1071,4 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 </div>
             </form>
             """###
+]
