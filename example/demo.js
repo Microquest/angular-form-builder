@@ -41,6 +41,20 @@
                 "options": [],
                 "required": false,
                 "validation": "/.*/"
+              }, {
+                "id": 5,
+                "component": "phone",
+                "editable": true,
+                "index": 1,
+                "row": 0,
+                "label": "Phone Number",
+                "label_inline": false,
+                "label_visible": true,
+                "description": "",
+                "placeholder": "",
+                "options": [],
+                "required": false,
+                "validation": "/.*/"
               }
             ]
           }, {
@@ -57,6 +71,20 @@
                 "label_visible": true,
                 "description": "",
                 "placeholder": "",
+                "options": [],
+                "required": false,
+                "validation": "/.*/"
+              }, {
+                "id": 2,
+                "component": "text",
+                "editable": true,
+                "index": 0,
+                "row": 0,
+                "label": "Text Input",
+                "label_inline": false,
+                "label_visible": true,
+                "description": "",
+                "placeholder": "placeholder",
                 "options": [],
                 "required": false,
                 "validation": "/.*/"

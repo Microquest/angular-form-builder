@@ -167,6 +167,7 @@ angular.module 'builder.directive', [
 # providers
   $builder = $injector.get '$builder'
   $drag = $injector.get '$drag'
+  $timeout = $injector.get '$timeout'
 
   restrict: 'A'
   scope:
@@ -215,8 +216,9 @@ angular.module 'builder.directive', [
                 return
 
             #calculate the new width
-            fromThisRow = draggable.object.formObject != undefined && _.findIndex(scope.formObjects, (d) -> d.id == draggable.object.formObject.id) >= 0
-            if not fromThisRow then scope.width = 12/($formObjects.length + 1)
+            #fromThisRow = draggable.object.formObject != undefined && _.findIndex(scope.formObjects, (d) -> d.id == draggable.object.formObject.id) >= 0
+            #if not fromThisRow then
+            scope.width = 12/($formObjects.length + 1)
             # the positions could added .empty div.
             positions = []
             # first
@@ -275,6 +277,11 @@ angular.module 'builder.directive', [
         $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
         scope.width = 12/($formObjects.length-1)
         #scope.$apply()
+
+    scope.$watch 'formObjects.length', ->
+      $timeout () ->
+        $formObjects = $(element).find '.fb-form-object-editable:not(.empty,.dragging)'
+        scope.width = 12/($formObjects.length)
 ]
 
 # ----------------------------------------

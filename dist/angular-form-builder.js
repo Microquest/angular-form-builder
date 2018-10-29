@@ -469,9 +469,10 @@
     }
   ]).directive('fbFormRowEditable', [
     '$injector', function($injector) {
-      var $builder, $drag;
+      var $builder, $drag, $timeout;
       $builder = $injector.get('$builder');
       $drag = $injector.get('$drag');
+      $timeout = $injector.get('$timeout');
       return {
         restrict: 'A',
         scope: {
@@ -493,7 +494,7 @@
           $(element).addClass('fb-form-row-editable');
           $drag.droppable($(element), {
             move: function(e, draggable) {
-              var $empty, $formObject, $formObjects, fromThisRow, index, offset, positions, rowEmpty, totalEmpty, width, _i, _j, _ref, _ref1;
+              var $empty, $formObject, $formObjects, index, offset, positions, rowEmpty, totalEmpty, width, _i, _j, _ref, _ref1;
               totalEmpty = $(element).parent().find('.fb-form-object-editable.empty').length;
               rowEmpty = $(element).find('.fb-form-object-editable.empty').length;
               if (totalEmpty > 0 && rowEmpty === 0) {
@@ -507,12 +508,7 @@
                 }
                 return;
               }
-              fromThisRow = draggable.object.formObject !== void 0 && _.findIndex(scope.formObjects, function(d) {
-                return d.id === draggable.object.formObject.id;
-              }) >= 0;
-              if (!fromThisRow) {
-                scope.width = 12 / ($formObjects.length + 1);
-              }
+              scope.width = 12 / ($formObjects.length + 1);
               positions = [];
               positions.push(-1000);
               for (index = _i = 0, _ref = $formObjects.length; _i < _ref; index = _i += 1) {
@@ -571,10 +567,17 @@
               return $(element).find('.empty').remove();
             }
           });
-          return scope.$on("formBuilder:formObjectRemoved", function() {
+          scope.$on("formBuilder:formObjectRemoved", function() {
             var $formObjects;
             $formObjects = $(element).find('.fb-form-object-editable:not(.empty,.dragging)');
             return scope.width = 12 / ($formObjects.length - 1);
+          });
+          return scope.$watch('formObjects.length', function() {
+            return $timeout(function() {
+              var $formObjects;
+              $formObjects = $(element).find('.fb-form-object-editable:not(.empty,.dragging)');
+              return scope.width = 12 / $formObjects.length;
+            });
           });
         }
       };
