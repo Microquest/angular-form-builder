@@ -94,8 +94,9 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
-                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}" style='border-style: solid;border-width: 1px'>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
+                    <span ng-if='!inputText'><i>No Data</i></span>
                   </div>
                 <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
@@ -231,7 +232,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
-                     <span> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
+                     <span ng-show="inputDictionary['number']"> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
+                     <span ng-show="!inputDictionary['number']"><i>No Data</i></span>
                   </div>
                 <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
@@ -340,6 +342,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <label ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
+                    <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
                 <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
@@ -466,6 +469,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <p>{{inputText}}</p>
+                    <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
                 <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
