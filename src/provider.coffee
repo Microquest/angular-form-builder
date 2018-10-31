@@ -36,6 +36,16 @@ angular.module 'builder.provider', []
     #   form mode: `fb-form` this is the form for end-user to input value.
     @forms = {}
 
+    @verifyIdSanity = (name) ->
+      form = @forms[name]
+      ids = {}
+      for row in form
+        for obj in row
+          if not ids[obj.id]
+            ids[obj.id] = true
+          else
+            obj.id = @config.max_id
+            @config.max_id = @config.max_id + 1
 
     # ----------------------------------------
     # private functions
