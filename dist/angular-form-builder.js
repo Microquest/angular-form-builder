@@ -1585,30 +1585,6 @@
       loadComplete: '$builder.loadCompleted'
     };
     this.forms = {};
-    this.verifyIdSanity = function(name) {
-      var form, ids, obj, row, _i, _len, _results;
-      form = this.forms[name];
-      ids = {};
-      _results = [];
-      for (_i = 0, _len = form.length; _i < _len; _i++) {
-        row = form[_i];
-        _results.push((function() {
-          var _j, _len1, _results1;
-          _results1 = [];
-          for (_j = 0, _len1 = row.length; _j < _len1; _j++) {
-            obj = row[_j];
-            if (!ids[obj.id]) {
-              _results1.push(ids[obj.id] = true);
-            } else {
-              obj.id = this.config.max_id;
-              _results1.push(this.config.max_id = this.config.max_id + 1);
-            }
-          }
-          return _results1;
-        }).call(this));
-      }
-      return _results;
-    };
     this.convertComponent = function(name, component) {
       var result, _ref, _ref1, _ref10, _ref11, _ref12, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       result = {
@@ -2005,6 +1981,32 @@
         return _this.forms = {};
       };
     })(this);
+    this.verifyIdSanity = (function(_this) {
+      return function(name) {
+        var form, ids, obj, row, _i, _len, _results;
+        form = _this.forms[name];
+        ids = {};
+        _results = [];
+        for (_i = 0, _len = form.length; _i < _len; _i++) {
+          row = form[_i];
+          _results.push((function() {
+            var _j, _len1, _results1;
+            _results1 = [];
+            for (_j = 0, _len1 = row.length; _j < _len1; _j++) {
+              obj = row[_j];
+              if (!ids[obj.id]) {
+                _results1.push(ids[obj.id] = true);
+              } else {
+                obj.id = this.config.max_id;
+                _results1.push(this.config.max_id = this.config.max_id + 1);
+              }
+            }
+            return _results1;
+          }).call(_this));
+        }
+        return _results;
+      };
+    })(this);
     this.$get = [
       '$injector', (function(_this) {
         return function($injector) {
@@ -2031,7 +2033,8 @@
             clearForm: _this.clearForm,
             insertFormRow: _this.insertFormRow,
             addFormRow: _this.addFormRow,
-            removeFormRow: _this.removeFormRow
+            removeFormRow: _this.removeFormRow,
+            verifyIdSanity: _this.verifyIdSanity
           };
         };
       })(this)
