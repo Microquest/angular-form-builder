@@ -295,9 +295,10 @@ angular.module 'builder.controller', ['builder.provider']
   $timeout = $injector.get '$timeout'
   $rootScope = $injector.get '$rootScope'
 
-  $scope.$watchCollection 'input', ->
+  $scope.$watch 'input', ->
       $timeout ->
           $scope.$broadcast $builder.broadcastChannel.loadInput, $scope.input
+  , true
 
   $rootScope.fields = $builder.forms
 ]

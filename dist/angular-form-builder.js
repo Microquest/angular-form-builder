@@ -282,11 +282,11 @@
       $builder = $injector.get('$builder');
       $timeout = $injector.get('$timeout');
       $rootScope = $injector.get('$rootScope');
-      $scope.$watchCollection('input', function() {
+      $scope.$watch('input', function() {
         return $timeout(function() {
           return $scope.$broadcast($builder.broadcastChannel.loadInput, $scope.input);
         });
-      });
+      }, true);
       return $rootScope.fields = $builder.forms;
     }
   ]).controller('fbFormRowViewerController', [
