@@ -1038,7 +1038,11 @@
             itemIndex = _.findIndex(values[row], function(o) {
               return o.id === scope.formObject.id;
             });
-            return scope.inputText = values[row][itemIndex].value;
+            if (scope.formObject.component === 'date') {
+              return scope.inputText = (new Date(values[row][itemIndex].value)).toDateString();
+            } else {
+              return scope.inputText = values[row][itemIndex].value;
+            }
           });
           if (scope.$component.dictionaryToString) {
             scope.inputDictionary = {};

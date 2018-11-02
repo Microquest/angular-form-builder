@@ -792,7 +792,10 @@ angular.module 'builder.directive', [
       row = scope.$parent.$parent.$index
       itemIndex = _.findIndex values[row], (o) ->
         return o.id == scope.formObject.id
-      scope.inputText = values[row][itemIndex].value
+      if scope.formObject.component == 'date'
+        scope.inputText = (new Date(values[row][itemIndex].value)).toDateString()
+      else
+        scope.inputText = values[row][itemIndex].value
 
     if scope.$component.dictionaryToString
         scope.inputDictionary = {}
