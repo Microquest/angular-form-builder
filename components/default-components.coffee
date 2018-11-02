@@ -338,7 +338,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
         viewerTemplate:
             """
-            <div class="row form-group" id="{{formName+index | nospace}}">
+            <div class="row" id="{{formName+index | nospace}}">
                 <label ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
