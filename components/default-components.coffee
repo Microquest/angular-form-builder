@@ -93,7 +93,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
+                  <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
@@ -230,7 +230,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
+                  <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                      <span ng-show="inputDictionary['number']"> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
                      <span ng-show="!inputDictionary['number']"><i>No Data</i></span>
@@ -339,7 +339,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
+                <label ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
@@ -466,7 +466,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <p>{{inputText}}</p>
                     <span ng-if='!inputText'><i>No Data</i></span>
@@ -568,7 +568,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
                       <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="true" type="checkbox" checked="">
@@ -672,7 +672,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
 
@@ -778,7 +778,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
