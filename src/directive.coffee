@@ -332,7 +332,7 @@ angular.module 'builder.directive', [
             view = $compile(complete) scope
             $(element).html view
             $(element).find('.modify-item').click ->
-              $(element).popover 'toggle'
+              $(element).popover 'show'
 
             $(element).find('.delete-item').click ->
               $builder.removeFormObject scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index

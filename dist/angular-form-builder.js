@@ -609,7 +609,7 @@
             view = $compile(complete)(scope);
             $(element).html(view);
             $(element).find('.modify-item').click(function() {
-              return $(element).popover('toggle');
+              return $(element).popover('show');
             });
             return $(element).find('.delete-item').click(function() {
               $builder.removeFormObject(scope.$parent.$parent.formName, scope.$parent.$parent.$parent.$index, scope.$parent.$index);
