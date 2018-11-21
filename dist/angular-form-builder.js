@@ -30,10 +30,6 @@
       };
       $scope.save = function(text) {
         $scope.placeholder = text;
-        CKEDITOR.instances.modal_ckeditor.focusManager.blur(true);
-        if (CKEDITOR.instances.modal_ckeditor) {
-          CKEDITOR.instances.modal_ckeditor.destroy(false);
-        }
         return $scope.modalInstance.close();
       };
       $scope.openRichTextEditor = function() {

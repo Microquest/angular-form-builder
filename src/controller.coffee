@@ -34,26 +34,17 @@ angular.module 'builder.controller', ['builder.provider']
 
     $scope.save = (text) ->
       $scope.placeholder = text
-      #TODO: Remove this workaround once fixed in CKEDITOR 4.7+
-      #From: https://dev.ckeditor.com/ticket/16825
-      CKEDITOR.instances.modal_ckeditor.focusManager.blur(true)
-      if (CKEDITOR.instances.modal_ckeditor)
-        CKEDITOR.instances.modal_ckeditor.destroy(false)
       $scope.modalInstance.close()
 
     $scope.openRichTextEditor = ->
       $scope.editorText = $scope.placeholder;
       $scope.modalInstance = $uibModal.open({
         controller: ($scope, $uibModalInstance) ->
-
           $scope.options = {
             language: 'en',
             allowedContent: true,
             entities: false
           }
-
-
-
         ,
         template: '''
           <div class="modal-header">
