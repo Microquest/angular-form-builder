@@ -39,13 +39,13 @@ angular.module 'builder.controller', ['builder.provider']
     $scope.openRichTextEditor = ->
       $scope.editorText = $scope.placeholder;
       $scope.modalInstance = $uibModal.open({
-        controller: ($scope, $uibModalInstance) ->
-          $scope.options = {
+        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
+            $scope.options = {
             language: 'en',
             allowedContent: true,
             entities: false
           }
-        ,
+        ],
         template: '''
           <div class="modal-header">
               <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
