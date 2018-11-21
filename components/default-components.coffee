@@ -46,7 +46,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                                 <input type='text' ng-model="placeholder" class='form-control'/>
                             </div>
                             <div class="form-group m-t">
-                              <a class="btn btn-success btn-block" ng-click="openRichTextEditor()">Open Rich Text Editor</a>
+                              <a class="btn btn-success btn-block" ng-click="openRichTextEditor(); popover.save($event)">Open Rich Text Editor</a>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="{{'validations' + date + index}}">
