@@ -35,13 +35,15 @@
       $scope.openRichTextEditor = function() {
         $scope.editorText = $scope.placeholder;
         return $scope.modalInstance = $uibModal.open({
-          controller: function($scope, $uibModalInstance) {
-            return $scope.options = {
-              language: 'en',
-              allowedContent: true,
-              entities: false
-            };
-          },
+          controller: [
+            '$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
+              return $scope.options = {
+                language: 'en',
+                allowedContent: true,
+                entities: false
+              };
+            }
+          ],
           template: '<div class="modal-header">\n    <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\n    <h4 class="modal-title">Edit Rich Content</div>\n</div>\n<div class="modal-body">\n  <div ckeditor="options" ng-model="editorText" id="modal_ckeditor"></div>\n</div>\n<div class="modal-footer">\n    <button class="btn btn-white pull-left" ng-click="cancel()">Cancel</button>\n    <button class="btn btn-primary pull-right" ng-click="save(editorText)">Apply</button>\n</div> ',
           scope: $scope
         });

@@ -39,12 +39,13 @@ angular.module 'builder.controller', ['builder.provider']
     $scope.openRichTextEditor = ->
       $scope.editorText = $scope.placeholder;
       $scope.modalInstance = $uibModal.open({
-        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
-            $scope.options = {
-            language: 'en',
-            allowedContent: true,
-            entities: false
-          }
+        controller: ['$scope', '$uibModalInstance', ($scope, $uibModalInstance) ->
+            $scope.options =
+            {
+              language: 'en',
+              allowedContent: true,
+              entities: false
+            }
         ],
         template: '''
           <div class="modal-header">
