@@ -84,7 +84,7 @@ angular.module 'builder.controller', ['builder.provider']
 
         $scope.optionsText = formObject.options.join '\n'
 
-        $scope.$watch '[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays]', ->
+        $scope.$watch '[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, restrictRange, requireConfirmation, readOnly, minRange, maxRange, nextXDays]', ->
             formObject.label = $scope.label
             formObject.label_visible = $scope.label_visible
             formObject.label_inline = $scope.label_inline
@@ -101,11 +101,13 @@ angular.module 'builder.controller', ['builder.provider']
             formObject.dateRangeEnd = $scope.dateRangeEnd
             formObject.disableWeekends = $scope.disableWeekends
             formObject.maxDate = $scope.maxDate
+            formObject.minDate = $scope.minDate
             formObject.requireConfirmation = $scope.requireConfirmation
             formObject.readOnly = $scope.readOnly
             formObject.minRange = $scope.minRange
             formObject.maxRange = $scope.maxRange
             formObject.nextXDays = $scope.nextXDays
+            formObject.restrictRange = $scope.restrictRange
 
         , yes
 
@@ -139,11 +141,13 @@ angular.module 'builder.controller', ['builder.provider']
                 dateRangeEnd: $scope.dateRangeEnd
                 disableWeekends: $scope.disableWeekends
                 maxDate: $scope.maxDate
+                minDate: $scope.minDate
                 requireConfirmation: $scope.requireConfirmation
                 readOnly: $scope.readOnly
                 minRange: $scope.minRange
                 maxRange: $scope.maxRange
                 nextXDays: $scope.nextXDays
+                restrictRange: $scope.restrictRange
         rollback: ->
             ###
             Rollback input value.
@@ -165,11 +169,13 @@ angular.module 'builder.controller', ['builder.provider']
             $scope.dateRangeEnd = @model.dateRangeEnd
             $scope.disableWeekends = @model.disableWeekends
             $scope.maxDate = @model.maxDate
+            $scope.minDate = @model.minDate
             $scope.requireConfirmation = @model.requireConfirmation
             $scope.readOnly = @model.readOnly
             $scope.minRange = @model.minRange
             $scope.maxRange = @model.maxRange
             $scope.nextXDays = @model.nextXDays
+            $scope.restrictRange = @model.restrictRange
 ]
 
 # ----------------------------------------

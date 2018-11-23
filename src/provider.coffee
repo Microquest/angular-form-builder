@@ -93,6 +93,7 @@ angular.module 'builder.provider', []
             readOnly: formObject.readOnly ? component.readOnly
             nextXDays: formObject.nextXDays ? component.nextXDays
             maxDate: formObject.maxDate ? component.maxDate
+            maxDate: formObject.minDate ? component.minDate
             requireConfirmation: formObject.requireConfirmation ? component.requireConfirmation
             minRange: formObject.minRange ? component.minRange
             maxRange: formObject.maxRange ? component.maxRange
@@ -100,6 +101,7 @@ angular.module 'builder.provider', []
             backgroundImage: formObject.backgroundImage ? component.backgroundImage
             imageWidth: formObject.imageWidth ? component.imageWidth
             imageHeight: formObject.imageHeight ? component.imageHeight
+            restrictRange: formObject.restrictRange ? component.restrictRange
         result
 
     @reindexFormObject = (name, row) =>

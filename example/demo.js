@@ -15,10 +15,10 @@
       $scope.testInput = [];
       $scope.defaultValue = {};
       $scope.submit = function() {
-        return $validator.validate($scope, 'default').success(function() {
-          return console.log('success');
-        }).error(function() {
-          return console.log('error');
+        return $validator.validate($scope, 'default').success(function(message) {
+          return console.log('success', message);
+        }).error(function(message, err) {
+          return console.log('error', message, err);
         });
       };
       $scope.testLoad = function() {

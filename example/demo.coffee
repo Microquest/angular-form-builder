@@ -42,8 +42,8 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
 
     $scope.submit = ->
         $validator.validate $scope, 'default'
-        .success -> console.log 'success'
-        .error -> console.log 'error'
+        .success (message) -> console.log 'success', message
+        .error (message, err) -> console.log 'error', message, err
 
     $scope.testLoad = ->
         json = [{"index":0,"formObjects":[{"id":3,"component":"text","editable":true,"index":0,"row":0,"label":"Text Input","label_inline":false,"label_visible":true,"description":"","placeholder":"placeholder","options":[],"required":false,"validation":"/.*/"},

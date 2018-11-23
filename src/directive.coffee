@@ -691,7 +691,7 @@ angular.module 'builder.directive', [
             # add validator
             $input = $template.find "[ng-model='inputText']"
             $input.attr
-                validator: '{{validation}}'
+              validator: '{{validation}}'
             # compile
             view = $compile($template) scope
             $(element).html view

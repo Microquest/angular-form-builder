@@ -67,7 +67,7 @@
         var component;
         copyObjectToScope(formObject, $scope);
         $scope.optionsText = formObject.options.join('\n');
-        $scope.$watch('[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, requireConfirmation, readOnly, minRange, maxRange, nextXDays]', function() {
+        $scope.$watch('[label,label_visible, label_inline, description, placeholder, backgroundImage, required, options, validation, multiple, minLength, maxLength, dateRangeStart, dateRangeEnd, disableWeekends, maxDate, restrictRange, requireConfirmation, readOnly, minRange, maxRange, nextXDays]', function() {
           formObject.label = $scope.label;
           formObject.label_visible = $scope.label_visible;
           formObject.label_inline = $scope.label_inline;
@@ -84,11 +84,13 @@
           formObject.dateRangeEnd = $scope.dateRangeEnd;
           formObject.disableWeekends = $scope.disableWeekends;
           formObject.maxDate = $scope.maxDate;
+          formObject.minDate = $scope.minDate;
           formObject.requireConfirmation = $scope.requireConfirmation;
           formObject.readOnly = $scope.readOnly;
           formObject.minRange = $scope.minRange;
           formObject.maxRange = $scope.maxRange;
-          return formObject.nextXDays = $scope.nextXDays;
+          formObject.nextXDays = $scope.nextXDays;
+          return formObject.restrictRange = $scope.restrictRange;
         }, true);
         $scope.$watch('optionsText', function(text) {
           var x;
@@ -133,11 +135,13 @@
             dateRangeEnd: $scope.dateRangeEnd,
             disableWeekends: $scope.disableWeekends,
             maxDate: $scope.maxDate,
+            minDate: $scope.minDate,
             requireConfirmation: $scope.requireConfirmation,
             readOnly: $scope.readOnly,
             minRange: $scope.minRange,
             maxRange: $scope.maxRange,
-            nextXDays: $scope.nextXDays
+            nextXDays: $scope.nextXDays,
+            restrictRange: $scope.restrictRange
           };
         },
         rollback: function() {
@@ -164,11 +168,13 @@
           $scope.dateRangeEnd = this.model.dateRangeEnd;
           $scope.disableWeekends = this.model.disableWeekends;
           $scope.maxDate = this.model.maxDate;
+          $scope.minDate = this.model.minDate;
           $scope.requireConfirmation = this.model.requireConfirmation;
           $scope.readOnly = this.model.readOnly;
           $scope.minRange = this.model.minRange;
           $scope.maxRange = this.model.maxRange;
-          return $scope.nextXDays = this.model.nextXDays;
+          $scope.nextXDays = this.model.nextXDays;
+          return $scope.restrictRange = this.model.restrictRange;
         }
       };
     }
@@ -1620,7 +1626,7 @@
       return result;
     };
     this.convertFormObject = function(name, formObject) {
-      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var component, result, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (formObject == null) {
         formObject = {};
       }
@@ -1651,13 +1657,15 @@
         readOnly: (_ref17 = formObject.readOnly) != null ? _ref17 : component.readOnly,
         nextXDays: (_ref18 = formObject.nextXDays) != null ? _ref18 : component.nextXDays,
         maxDate: (_ref19 = formObject.maxDate) != null ? _ref19 : component.maxDate,
-        requireConfirmation: (_ref20 = formObject.requireConfirmation) != null ? _ref20 : component.requireConfirmation,
-        minRange: (_ref21 = formObject.minRange) != null ? _ref21 : component.minRange,
-        maxRange: (_ref22 = formObject.maxRange) != null ? _ref22 : component.maxRange,
-        category: (_ref23 = formObject.category) != null ? _ref23 : component.category,
-        backgroundImage: (_ref24 = formObject.backgroundImage) != null ? _ref24 : component.backgroundImage,
-        imageWidth: (_ref25 = formObject.imageWidth) != null ? _ref25 : component.imageWidth,
-        imageHeight: (_ref26 = formObject.imageHeight) != null ? _ref26 : component.imageHeight
+        maxDate: (_ref20 = formObject.minDate) != null ? _ref20 : component.minDate,
+        requireConfirmation: (_ref21 = formObject.requireConfirmation) != null ? _ref21 : component.requireConfirmation,
+        minRange: (_ref22 = formObject.minRange) != null ? _ref22 : component.minRange,
+        maxRange: (_ref23 = formObject.maxRange) != null ? _ref23 : component.maxRange,
+        category: (_ref24 = formObject.category) != null ? _ref24 : component.category,
+        backgroundImage: (_ref25 = formObject.backgroundImage) != null ? _ref25 : component.backgroundImage,
+        imageWidth: (_ref26 = formObject.imageWidth) != null ? _ref26 : component.imageWidth,
+        imageHeight: (_ref27 = formObject.imageHeight) != null ? _ref27 : component.imageHeight,
+        restrictRange: (_ref28 = formObject.restrictRange) != null ? _ref28 : component.restrictRange
       };
       return result;
     };

@@ -1,8 +1,8 @@
 angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'pw.canvas-painter', 'ngFileUpload']
 
-.config ['$builderProvider', ($builderProvider) ->
+.config ['$builderProvider', '$validatorProvider', ($builderProvider, $validatorProvider) ->
 
-    # ----------------------------------------
+# ----------------------------------------
     # static text field
     # ----------------------------------------
     $builderProvider.registerComponent 'message',
@@ -66,6 +66,27 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     # ----------------------------------------
     # date picker
     # ----------------------------------------
+    $validatorProvider.register 'dateRange',
+      invoke: 'watch'
+      validator: (value, scope, element, attrs, $injector) ->
+        if(value)
+          if(scope.restrictRange)
+            if(scope.minDate && scope.minDate.getTime() > value.getTime())
+              return no
+            if(scope.maxDate && scope.maxDate.getTime() < value.getTime())
+              return no
+            return yes
+          else
+            yes
+        return yes
+      error: (val, scope) ->
+        if(scope.minDate && scope.maxDate)
+          return "Date must be between " + scope.minDate.toLocaleDateString() + " and " + scope.maxDate.toLocaleString()
+        if(scope.minDate)
+          return "Date must be after " + scope.minDate.toLocaleDateString()
+        if(scope.maxDate)
+          return "Date must be before " + scope.maxDate.toLocaleString()
+
     $builderProvider.registerComponent 'date',
         group: 'Basic'
         label: 'Date Picker'
@@ -75,13 +96,15 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         required: no
         disableWeekends: no
         readOnly: no
-        # minDate: '2000-01-01'
-        # maxDate: '2100-01-01'
+        restrictRange: no
+        minDate: Date.parse("1 Jan 1900")
+        maxDate: Date.now()
+        validation: '[dateRange]'
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
-                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <input type="date" class="form-control" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
                   </div>
                 <div class="col-sm-10">
@@ -93,8 +116,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
-                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                  <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
                   </div>
@@ -146,33 +169,22 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                             </div>
 
                             <div class='checkbox icheck-label m-t'>
-                              <label for="{{'disableweekends' + date + index}}"><input type="checkbox" id="{{'disableweekends' + date + index}}" ng-model="disableWeekends">
-                              Disable Weekends</label>
+                              <label for="{{'restrict' + date + index}}"><input type="checkbox" id="{{'restrict' + date + index}}" ng-model="restrictRange">
+                              Restrict Range</label>
                             </div>
 
-                            <div class="form-group" ng-if="validationOptions.length > 0">
-                                <label class='control-label'>Validation</label>
-                                <select ng-model="$parent.validation" class='form-control' ng-options="option.rule as option.label for option in validationOptions"></select>
-                            </div>
                             <div class="form-group m-t">
                                 <div class="row">
-                                    <p class="col-sm-12">
-                                        <strong>Enable Selection</strong>
-                                    </p>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <div class="input-group">
-                                            <span class="input-group-addon">From</span>
-                                            <select class="form-control" ng-model="dateRangeStart" ng-options="value for value in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]">
-                                                <option value="">---</option>
-                                            </select>
+                                            <span class="input-group-addon">Min Date</span>
+                                            <input type="date" class="form-control" ng-model='minDate'\>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <div class="input-group">
-                                            <span class="input-group-addon">To</span>
-                                            <select class="form-control" ng-model="dateRangeEnd" ng-options="value for value in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]">
-                                                <option value="">---</option>
-                                            </select>
+                                            <span class="input-group-addon">Max Date</span>
+                                            <input type="date" class="form-control" ng-model='maxDate'\>
                                         </div>
                                     </div>
                                 </div>
@@ -192,6 +204,17 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     # ----------------------------------------
     # Phone Input
     # ----------------------------------------
+    $validatorProvider.register 'phone',
+      invoke: 'watch'
+      validator: (value, scope, element, attrs, $injector) ->
+        if(value)
+          dict = JSON.parse(value)
+          if(dict['number'].match(/^\d{10}$/))
+            return yes
+          return no
+        return yes
+      error: 'Must be a valid phone number.'
+
     $builderProvider.registerComponent 'phone',
         group: 'Basic'
         label: 'Phone Number'
@@ -200,13 +223,14 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         description: ''
         required: no
         readOnly: no
+        validation: '[phone]'
         dictionaryToString: yes
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
+                  <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
-                  <div class="col-sm-3">
+                  <div ng-class="{'col-sm-3':!label_inline || !label_visible, 'col-sm-2':label_inline && label_visible}">
                     <select ng-show="!multiple" ng-readonly="readOnly" class="form-control m-b"
                         ng-model="inputDictionary['type']" ng-init="type='Home'" >
                         <option value="Home">Home</option>
@@ -215,10 +239,10 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
                         <option value="Other">Other</option>
                     </select>
                   </div>
-                  <div ng-class="{'col-sm-6':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
+                  <div ng-class="{'col-sm-5':!label_inline || !label_visible, 'col-sm-4':label_inline && label_visible}">
                     <input type="text" class="form-control" ng-model="inputDictionary['number']" validator-required="{{required}}" validator-group="{{formName}}" mask='(999) 999-9999' clean='true' placeholder='#'\>
                   </div>
-                  <div class="col-sm-3">
+                  <div ng-class="{'col-sm-3':!label_inline || !label_visible, 'col-sm-2':label_inline && label_visible}">
                     <input type="text" class="form-control" ng-model="inputDictionary['extension']" mask='999' clean='true' placeholder='ext.'"\>
                   </div>
                 <div class="col-sm-10">
@@ -230,8 +254,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                  <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
-                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                  <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
+                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                      <span ng-show="inputDictionary['number']"> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
                      <span ng-show="!inputDictionary['number']"><i>No Data</i></span>
                   </div>
@@ -325,8 +349,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row form-group" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <input type="text" ng-show="validation != '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                     <input type="tel" ng-show="validation === '[numberRange]'" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" placeholder="{{placeholder}}"/>
                 </div>
@@ -339,8 +363,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
@@ -453,8 +477,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <textarea type="text" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" rows='6' placeholder="{{placeholder}}"/>
                 </div>
                 <div class="col-sm-10">
@@ -466,8 +490,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <p>{{inputText}}</p>
                     <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
@@ -551,8 +575,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
                     <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
                       <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="readOnly" type="checkbox" checked="">
@@ -568,8 +592,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <div class='checkbox icheck-label' ng-repeat="item in options track by $index">
                       <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" ng-model="inputArray[$index]" ng-value='item' ng-disabled="true" type="checkbox" checked="">
                       {{item}}</label>
@@ -654,8 +678,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
 
                         <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" type="radio" ng-disabled="readOnly" name='{{formName+index}}' ng-model="$parent.inputText" validator-group="{{formName}}" ng-value='item'>
@@ -672,8 +696,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
 
                         <label for="{{formName+index+$index | nospace}}"><input id="{{formName+index+$index | nospace}}" type="radio" ng-disabled="true" name='{{formName+index}}' ng-model="$parent.inputText" validator-group="{{formName}}" ng-value='item'>
@@ -762,8 +786,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         template:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <select ng-show="!multiple" ng-readonly="readOnly" ng-options="value for value in options" class="form-control m-b"
                         ng-model="inputText" ng-init="inputText = ''" validator-required="{{required}}" validator-group="{{formName}}">
                         <option value="">{{placeholder}}</option>
@@ -778,8 +802,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         viewerTemplate:
             """
             <div class="row" id="{{formName+index | nospace}}">
-                <label for="{{formName+index}}" ng-class="{'col-sm-2 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-10':label_inline && label_visible}">
+                <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
+                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
