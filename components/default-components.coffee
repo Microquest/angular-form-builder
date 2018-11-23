@@ -135,9 +135,9 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
         viewerTemplate:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}}</label>
-                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
+                  <div class="form-control-static" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
                   </div>
@@ -276,7 +276,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
-                  <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
+                  <div class="form-control-static" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                      <span ng-show="inputDictionary['number']"> {{inputDictionary['type']}}: {{phoneFormatter.apply(inputDictionary['number'])}}, ext. {{inputDictionary['extension']}} </span>
                      <span ng-show="!inputDictionary['number']"><i>No Data</i></span>
                   </div>
@@ -385,7 +385,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                 <label ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'>{{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
+                <div class="form-control-static" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
@@ -512,7 +512,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
+                <div class="form-control-static" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <p>{{inputText}}</p>
                     <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
@@ -824,7 +824,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             """
             <div class="row" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
-                <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
+                <div class="form-control-static" class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <span>{{inputText}}</span>
                     <span ng-if='!inputText'><i>No Data</i></span>
                 </div>
