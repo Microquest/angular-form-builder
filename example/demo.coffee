@@ -48,7 +48,7 @@ angular.module 'app', ['builder', 'builder.components', 'validator.rules', 'ui.b
     $scope.testLoad = ->
         json = [{"index":0,"formObjects":[{"id":3,"component":"text","editable":true,"index":0,"row":0,"label":"Text Input","label_inline":false,"label_visible":true,"description":"","placeholder":"placeholder","options":[],"required":false,"validation":"/.*/"},
                                           {"id":5,"component":"phone","editable":true,"index":1,"row":0,"label":"Phone Number","label_inline":false,"label_visible":true,"description":"","placeholder":"","options":[],"required":false,"validation":"/.*/"}]},
-                {"index":1,"formObjects":[{"id":0,"component":"phone","editable":true,"index":0,"row":1,"label":"Phone Number","label_inline":false,"label_visible":true,"description":"","placeholder":"","options":[],"required":false,"validation":"/.*/"},
+                {"index":1,"formObjects":[{"id":1,"component":"date","editable":true,"index":1,"row":0,"label":"Range restricted","label_inline":false,"label_visible":true,"description":"","placeholder":"","options":[],"required":false,"validation":"[dateRange]","maxDate":"2018-11-30T07:00:00.000Z","restrictRange":true,"minDate":"2018-11-01T06:00:00.000Z"},
                                           {"id":2,"component":"text","editable":true,"index":0,"row":0,"label":"Text Input","label_inline":false,"label_visible":true,"description":"","placeholder":"placeholder","options":[],"required":false,"validation":"/.*/"}]},{"index":2,"formObjects":[]}]
         $builder.loadFromArray 'default', json
         $scope.form = $builder.forms['default']

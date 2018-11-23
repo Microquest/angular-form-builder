@@ -61,19 +61,22 @@
             "index": 1,
             "formObjects": [
               {
-                "id": 0,
-                "component": "phone",
+                "id": 1,
+                "component": "date",
                 "editable": true,
-                "index": 0,
-                "row": 1,
-                "label": "Phone Number",
+                "index": 1,
+                "row": 0,
+                "label": "Range restricted",
                 "label_inline": false,
                 "label_visible": true,
                 "description": "",
                 "placeholder": "",
                 "options": [],
                 "required": false,
-                "validation": "/.*/"
+                "validation": "[dateRange]",
+                "maxDate": "2018-11-30T07:00:00.000Z",
+                "restrictRange": true,
+                "minDate": "2018-11-01T06:00:00.000Z"
               }, {
                 "id": 2,
                 "component": "text",

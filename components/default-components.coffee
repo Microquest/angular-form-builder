@@ -11,7 +11,6 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         label: 'Rich Content'
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
                 <div class="col-sm-12 form-group text-left" style='margin:2px'>
                   <rich-text><strong>Static <i>Rich Text</i> Component</strong></rich-text>
                 </div>
@@ -67,7 +66,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     # date picker
     # ----------------------------------------
     $validatorProvider.register 'dateRange',
-      invoke: 'watch'
+      invoke: 'blur'
       validator: (value, scope, element, attrs, $injector) ->
         if(value)
           if(scope.restrictRange)
@@ -79,13 +78,34 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
           else
             yes
         return yes
-      error: (val, scope) ->
+      error: (value, scope, element, attrs) ->
+        err = ''
         if(scope.minDate && scope.maxDate)
-          return "Date must be between " + scope.minDate.toLocaleDateString() + " and " + scope.maxDate.toLocaleString()
-        if(scope.minDate)
-          return "Date must be after " + scope.minDate.toLocaleDateString()
-        if(scope.maxDate)
-          return "Date must be before " + scope.maxDate.toLocaleString()
+          err = "Date must be between " + scope.minDate.toDateString()+ " and " + scope.maxDate.toDateString()
+        else if(scope.minDate)
+          err = "Date must be after " + scope.minDate.toDateString()
+        else if(scope.maxDate)
+          err = "Date must be before " + scope.maxDate.toDateString()
+        parent = element.closest '.form-group'
+        if parent.length
+          parent.addClass 'has-error'
+          for label in parent.find('label') when $(label).hasClass 'error'
+            $(label).remove()
+          $label = $ "<label class='control-label error'>#{err}</label>"
+          $label.attr('for', attrs.id) if attrs.id
+          if element.parent().hasClass 'input-group'
+            element.parent().parent().append $label
+          else
+            element.parent().append $label
+      success: (value, scope, element, attrs) ->
+        parent = element.parent()
+        until parent.length is 0
+          if parent.hasClass 'has-error'
+            parent.removeClass 'has-error'
+            for label in parent.find('label') when $(label).hasClass 'error'
+              $(label).remove()
+            break
+          parent = parent.parent()
 
     $builderProvider.registerComponent 'date',
         group: 'Basic'
@@ -102,7 +122,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         validation: '[dateRange]'
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <input type="date" class="form-control" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
@@ -205,9 +225,10 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
     # Phone Input
     # ----------------------------------------
     $validatorProvider.register 'phone',
-      invoke: 'watch'
+      invoke: 'blur'
       validator: (value, scope, element, attrs, $injector) ->
         if(value)
+          console.log("whats going on")
           dict = JSON.parse(value)
           if(dict['number'].match(/^\d{10}$/))
             return yes
@@ -227,7 +248,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         dictionaryToString: yes
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
                   <div ng-class="{'col-sm-3':!label_inline || !label_visible, 'col-sm-2':label_inline && label_visible}">
@@ -476,7 +497,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         readOnly: no
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <textarea type="text" ng-readonly="readOnly" ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}" class="form-control m-b" rows='6' placeholder="{{placeholder}}"/>
@@ -574,7 +595,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         readOnly: no
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <input type='hidden' ng-model="inputText" validator-required="{{required}}" validator-group="{{formName}}"/>
@@ -677,7 +698,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         options: ['value one', 'value two']
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <div class='radio icheck-label' ng-repeat="item in options track by $index">
@@ -785,7 +806,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
         options: ['value one', 'value two']
         template:
             """
-            <div class="row" id="{{formName+index | nospace}}">
+            <div class="row form-group" id="{{formName+index | nospace}}">
                 <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'><i ng-if ="formObject.logic.component" id="hasLogic" class="fa fa-random label-logic"></i> {{label}} </label>
                 <div class="dropdown" ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
                     <select ng-show="!multiple" ng-readonly="readOnly" ng-options="value for value in options" class="form-control m-b"
