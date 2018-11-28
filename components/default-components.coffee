@@ -125,7 +125,7 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
             <div class="row form-group" id="{{formName+index | nospace}}">
                   <label for="{{formName+index}}" ng-class="{'fb-required':required,'col-sm-4 control-label':label_inline, 'col-sm-12':!label_inline}" ng-show='label_visible'> {{label}} </label>
                   <div ng-class="{'col-sm-12':!label_inline || !label_visible, 'col-sm-8':label_inline && label_visible}">
-                    <input type="date" class="form-control" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
+                    <input type="date" max="2999-12-31" class="form-control" ng-model='inputText' validator-required="{{required}}" validator-group="{{formName}}"\>
                   </div>
                 <div class="col-sm-10">
                   <small ng-show="description" class="help-block text-muted custom-small">{{description}}</small>
