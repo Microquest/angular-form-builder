@@ -228,9 +228,8 @@ angular.module 'builder.components', ['builder', 'validator.rules', 'ngMask', 'p
       invoke: 'blur'
       validator: (value, scope, element, attrs, $injector) ->
         if(value)
-          console.log("whats going on")
           dict = JSON.parse(value)
-          if(dict['number'].match(/^\d{10}$/))
+          if(dict['number'] and dict['number'].match(/^\d{10}$/))
             return yes
           return no
         return yes
