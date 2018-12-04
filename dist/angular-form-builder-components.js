@@ -101,9 +101,8 @@
         validator: function(value, scope, element, attrs, $injector) {
           var dict;
           if (value) {
-            console.log("whats going on");
             dict = JSON.parse(value);
-            if (dict['number'].match(/^\d{10}$/)) {
+            if (dict['number'] && dict['number'].match(/^\d{10}$/)) {
               return true;
             }
             return false;
